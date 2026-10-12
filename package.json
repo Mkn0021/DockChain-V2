@@ -1,0 +1,105 @@
+{
+  "name": "elysia-start",
+  "version": "1.0.50",
+  "description": "A modern, batteries-included starter kit for building fast backend servers with Elysia and Bun",
+  "keywords": [
+    "api",
+    "backend",
+    "bun",
+    "elysia",
+    "starter-kit",
+    "typescript"
+  ],
+  "homepage": "https://github.com/DobroslavRadosavljevic/elysia-start#readme",
+  "bugs": {
+    "url": "https://github.com/DobroslavRadosavljevic/elysia-start/issues"
+  },
+  "license": "MIT",
+  "author": "DobroslavRadosavljevic",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DobroslavRadosavljevic/elysia-start.git"
+  },
+  "module": "src/index.js",
+  "scripts": {
+    "start": "bun run src/index.ts",
+    "build": "bun build --target=bun --minify --sourcemap=external --outdir=dist ./src/index.ts",
+    "start:prod": "NODE_ENV=production bun dist/index.js",
+    "test": "bun test",
+    "dev": "bun run --watch src/index.ts",
+    "lint": "ultracite check",
+    "format": "ultracite fix",
+    "prepare": "husky",
+    "typecheck": "tsc --noEmit",
+    "email:build": "email build --dir ./src/email/templates",
+    "email:dev": "email dev --dir ./src/email/templates --port 3001",
+    "email:export": "email export --dir ./src/email/templates",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:push": "drizzle-kit push",
+    "db:pull": "drizzle-kit pull",
+    "db:studio": "drizzle-kit studio",
+    "db:check": "drizzle-kit check",
+    "db:up": "drizzle-kit up",
+    "db:drop": "drizzle-kit drop",
+    "docker:up": "docker compose -f docker-compose.local.yml up -d",
+    "docker:down": "docker compose -f docker-compose.local.yml down",
+    "docker:logs": "docker compose -f docker-compose.local.yml logs -f",
+    "docker:ps": "docker compose -f docker-compose.local.yml ps",
+    "docker:clean": "docker compose -f docker-compose.local.yml down -v",
+    "docker:build": "docker compose build",
+    "docker:prod": "docker compose up -d",
+    "ci:enable": "bun run scripts/ci-enable.ts",
+    "ci:disable": "bun run scripts/ci-disable.ts",
+    "auth:generate": "bunx @better-auth/cli generate --output src/db/schema/auth.schema.ts"
+  },
+  "dependencies": {
+    "@bull-board/api": "^6.16.4",
+    "@bull-board/elysia": "^6.16.4",
+    "@elysiajs/cors": "1.4.1",
+    "@elysiajs/cron": "1.4.1",
+    "@elysiajs/openapi": "1.4.14",
+    "@elysiajs/opentelemetry": "1.4.10",
+    "@elysiajs/server-timing": "1.4.0",
+    "@react-email/components": "1.0.6",
+    "@t3-oss/env-core": "0.13.10",
+    "better-auth": "^1.4.18",
+    "bullmq": "^5.67.2",
+    "drizzle-orm": "^1.0.0-beta.12-a5629fb",
+    "elysia": "1.4.22",
+    "ioredis": "^5.9.2",
+    "postgres": "^3.4.8",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "resend": "^6.9.1",
+    "zod": "4.3.6"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "20.4.0",
+    "@commitlint/config-conventional": "20.4.0",
+    "@react-email/preview-server": "5.2.5",
+    "@types/react": "^19.0.1",
+    "@types/react-dom": "^19.0.1",
+    "bun-types": "latest",
+    "drizzle-kit": "^1.0.0-beta.12-a5629fb",
+    "drizzle-zod": "^1.0.0-beta.12-a5629fb",
+    "husky": "9.1.7",
+    "lint-staged": "16.2.7",
+    "oxfmt": "0.27.0",
+    "oxlint": "1.42.0",
+    "react-email": "5.2.5",
+    "typescript": "5.9.3",
+    "ultracite": "7.1.1"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}": [
+      "bun x ultracite fix"
+    ]
+  },
+  "trustedDependencies": [
+    "esbuild",
+    "msgpackr-extract",
+    "protobufjs",
+    "sharp"
+  ]
+}

@@ -1,0 +1,1007 @@
+# 🦊 Elysia Starter Kit
+
+A modern, batteries-included starter kit for building fast backend servers with **Elysia** and **Bun**.
+
+## ✨ Features
+
+- 🚀 **Elysia** - Fast, type-safe web framework
+- ⚡ **Bun** - Incredibly fast JavaScript runtime
+- 🗄️ **Drizzle ORM** - Type-safe PostgreSQL with migrations
+- 🔴 **Redis** - ioredis client with KV utilities
+- 📦 **S3 Storage** - Bun native S3 client with presigned URLs (AWS S3, Cloudflare R2, MinIO)
+- 🔐 **Better Auth** - Type-safe authentication with Redis session storage
+- 📧 **Resend** - Reliable email delivery with tracking
+- 🎨 **React Email** - Beautiful email templates built with JSX
+- 📋 **BullMQ** - Redis-backed job queues with Bull Board UI
+- 📚 **OpenAPI** - Auto-generated API documentation
+- 🔒 **CORS** - Cross-origin resource sharing enabled
+- ⏰ **Cron Jobs** - Built-in task scheduling
+- 📊 **OpenTelemetry** - Observability and tracing
+- ⚡ **Server Timing** - Performance metrics
+- 🛠️ **TypeScript** - Full type safety
+- 🐳 **Docker** - Production-ready containerization with PostgreSQL & Redis
+- 🔄 **CI/CD** - Optional GitHub Actions pipelines (disabled by default)
+- 🧹 **Ultracite** - Zero-config linting & formatting (Oxlint + Oxfmt)
+- 🔗 **Husky + Commitlint** - Git hooks & conventional commits
+
+## 🤔 Why Elysia + Bun?
+
+- **Elysia** - End-to-end type safety with minimal runtime overhead
+- **Bun** - All-in-one runtime with native TypeScript, fast package manager, and built-in test runner
+
+---
+
+## 🚀 Quick Start
+
+### Prerequisites
+
+- [Bun](https://bun.sh) v1.0 or higher
+- [Docker](https://docker.com) (optional, for databases)
+
+### Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/DobroslavRadosavljevic/elysia-start.git
+cd elysia-start
+
+# Install dependencies
+bun install
+```
+
+### Development
+
+```bash
+# Start development server with hot reload
+bun run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) to see your server running.
+
+📚 API documentation available at [http://localhost:3000/openapi](http://localhost:3000/openapi)
+
+---
+
+## 🐳 Docker Setup
+
+### Local Development (Databases Only)
+
+Start PostgreSQL and Redis containers for local development:
+
+```bash
+# Start databases
+bun run docker:up
+
+# Check status
+bun run docker:ps
+
+# View logs
+bun run docker:logs
+
+# Stop databases
+bun run docker:down
+
+# Stop and remove volumes (fresh start)
+bun run docker:clean
+```
+
+**Default local credentials** (no `.env` needed):
+
+| Service    | Host      | Port | User   | Password          | Database   |
+| ---------- | --------- | ---- | ------ | ----------------- | ---------- |
+| PostgreSQL | localhost | 5432 | elysia | elysia_local_pass | elysia_dev |
+| Redis      | localhost | 6379 | -      | (none)            | -          |
+
+### 🏭 Production Deployment
+
+The production setup includes the Elysia app, PostgreSQL, and Redis in a single stack.
+
+#### 1. Configure Environment
+
+```bash
+# Copy the example environment file
+cp .env.example .env
+
+# Edit with your production values
+nano .env
+```
+
+Required environment variables for production:
+
+```bash
+# Server
+NODE_ENV=production
+PORT=3000
+
+# PostgreSQL (required)
+POSTGRES_USER=elysia
+POSTGRES_PASSWORD=your_secure_password    # REQUIRED
+POSTGRES_DB=elysia_db
+
+# Redis (required)
+REDIS_PASSWORD=your_redis_password        # REQUIRED
+```
+
+#### 2. Build and Deploy
+
+```bash
+# Build the production image
+bun run docker:build
+
+# Start the full stack (app + databases)
+bun run docker:prod
+
+# Check all services
+docker compose ps
+```
+
+#### 3. Verify Deployment
+
+```bash
+# Health check
+curl http://localhost:3000/health
+
+# API docs
+open http://localhost:3000/openapi
+```
+
+### 📦 Docker Images
+
+| Image                | Version | Size   | Purpose     |
+| -------------------- | ------- | ------ | ----------- |
+| `oven/bun:1-alpine`  | 1.x     | ~95MB  | App runtime |
+| `postgres:18-alpine` | 18      | ~240MB | Database    |
+| `redis:8-alpine`     | 8       | ~40MB  | Cache/Queue |
+
+The Elysia app is compiled to a standalone binary with bytecode using `bun build --compile --bytecode`, reducing memory usage and improving startup time.
+
+---
+
+## 🗄️ Database (Drizzle ORM)
+
+This project uses **Drizzle ORM** for type-safe PostgreSQL access with automatic Zod schema generation.
+
+### Setup
+
+```bash
+# Start PostgreSQL
+bun run docker:up
+
+# Push schema to database (development)
+bun run db:push
+
+# Or use migrations (production)
+bun run db:generate   # Generate migration files
+bun run db:migrate    # Apply migrations
+```
+
+### Database Scripts
+
+| Command               | Description                           |
+| --------------------- | ------------------------------------- |
+| `bun run db:push`     | Push schema directly to DB (dev only) |
+| `bun run db:generate` | Generate SQL migration files          |
+| `bun run db:migrate`  | Apply pending migrations              |
+| `bun run db:pull`     | Introspect DB and generate schema     |
+| `bun run db:studio`   | Open Drizzle Studio GUI               |
+| `bun run db:check`    | Check for schema conflicts            |
+| `bun run db:drop`     | Drop a migration file                 |
+
+### Schema Definition
+
+Define tables in `src/db/schema/*.schema.ts`:
+
+```typescript
+import { pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
+import { createInsertSchema, createSelectSchema } from "drizzle-zod";
+
+export const users = pgTable("users", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  email: text("email").notNull().unique(),
+  name: text("name").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+// Auto-generated Zod schemas
+export const UserInsert = createInsertSchema(users);
+export const UserSelect = createSelectSchema(users);
+```
+
+### Usage in Services
+
+```typescript
+import { eq } from "drizzle-orm";
+import { db, users } from "../db";
+
+// Insert
+const [user] = await db.insert(users).values({ email, name }).returning();
+
+// Query
+const [user] = await db.select().from(users).where(eq(users.id, id));
+
+// Update
+await db.update(users).set({ name }).where(eq(users.id, id));
+
+// Delete
+await db.delete(users).where(eq(users.id, id));
+```
+
+---
+
+## 🔴 Redis (ioredis)
+
+Redis client with lazy connection and KV utilities for common operations.
+
+### KV Utilities
+
+```typescript
+import { kv } from "../redis";
+
+// Store JSON data with optional TTL (seconds)
+await kv.set("user:123", { name: "John", role: "admin" }, 3600);
+
+// Retrieve and parse JSON
+const user = await kv.get<{ name: string; role: string }>("user:123");
+
+// Check existence
+const exists = await kv.exists("user:123");
+
+// Delete
+await kv.del("user:123");
+
+// Counters
+await kv.incr("page:views");
+await kv.decr("stock:item:42");
+
+// TTL operations
+await kv.expire("session:abc", 1800);
+const ttl = await kv.ttl("session:abc");
+
+// Pattern matching
+const keys = await kv.keys("user:*");
+```
+
+### Direct Redis Access
+
+For advanced operations, access the ioredis client directly:
+
+```typescript
+import { redis } from "../redis";
+
+// Transactions
+const results = await redis
+  .multi()
+  .set("key1", "value1")
+  .set("key2", "value2")
+  .exec();
+
+// Pub/Sub, Streams, etc.
+await redis.publish("channel", "message");
+```
+
+---
+
+## 📦 S3 Storage (Bun Native)
+
+This project uses **Bun's native S3 client** for file storage, supporting AWS S3 and S3-compatible services (Cloudflare R2, MinIO, etc.).
+
+### Features
+
+- 🚀 **Native Bun API** - No AWS SDK needed, uses Bun's built-in S3 support
+- 🔗 **Presigned URLs** - Generate secure upload/download URLs for direct client access
+- 📤 **Multipart Uploads** - Stream large files with automatic chunking
+- 🌐 **S3-Compatible** - Works with AWS S3, Cloudflare R2, MinIO, and more
+
+### S3 Service
+
+```typescript
+import { s3Service } from "../s3";
+
+// Upload a file
+await s3Service.upload("documents/report.pdf", fileData, {
+  contentType: "application/pdf",
+});
+
+// Check if file exists
+const exists = await s3Service.exists("documents/report.pdf");
+
+// Get file metadata
+const info = await s3Service.getInfo("documents/report.pdf");
+// { key, size, type }
+
+// Read file contents
+const text = await s3Service.getText("config.json");
+const json = await s3Service.getJson<Config>("config.json");
+const buffer = await s3Service.getArrayBuffer("image.png");
+
+// Delete files
+await s3Service.delete("old-file.txt");
+await s3Service.deleteMany(["file1.txt", "file2.txt"]);
+
+// Copy and move
+await s3Service.copy("source.txt", "destination.txt");
+await s3Service.move("old-path.txt", "new-path.txt");
+
+// Get public URL (if CDN configured)
+const publicUrl = s3Service.getPublicUrl("images/photo.jpg");
+```
+
+### Presigned URLs
+
+Generate secure URLs for direct client uploads/downloads without exposing credentials:
+
+```typescript
+import { s3Service } from "../s3";
+
+// Generate upload URL (client uploads directly to S3)
+const uploadUrl = s3Service.presignUpload("uploads/user-file.pdf", {
+  expiresIn: 3600, // 1 hour
+  acl: "private",
+});
+
+// Generate download URL
+const downloadUrl = s3Service.presignDownload("documents/report.pdf", {
+  expiresIn: 3600,
+  contentDisposition: 'attachment; filename="report.pdf"',
+});
+```
+
+### Multipart Uploads (Large Files)
+
+Stream large files with automatic chunking:
+
+```typescript
+import { s3Service } from "../s3";
+
+const writer = s3Service.createMultipartUpload("videos/large-file.mp4", {
+  partSize: 10 * 1024 * 1024, // 10MB chunks
+  queueSize: 4, // 4 concurrent uploads
+  retry: 3, // Retry failed parts
+});
+
+for await (const chunk of readableStream) {
+  writer.write(chunk);
+}
+await writer.end();
+```
+
+### REST API Endpoints
+
+The uploads feature provides REST endpoints for file operations:
+
+| Endpoint                    | Method | Description                         |
+| --------------------------- | ------ | ----------------------------------- |
+| `/uploads/presign/upload`   | POST   | Get presigned URL for upload        |
+| `/uploads/presign/download` | POST   | Get presigned URL for download      |
+| `/uploads/info/:key`        | GET    | Get file metadata                   |
+| `/uploads/:key`             | DELETE | Delete a file                       |
+| `/uploads/bulk-delete`      | POST   | Delete multiple files               |
+| `/uploads/direct`           | POST   | Direct multipart upload (100MB max) |
+
+### Generate Unique Keys
+
+```typescript
+import { s3Service } from "../s3";
+
+// Generate unique key with prefix
+const key = s3Service.generateKey({
+  prefix: "avatars",
+  filename: "profile.png",
+});
+// "avatars/profile.png"
+
+// Auto-generate with timestamp
+const key = s3Service.generateKey({ prefix: "uploads" });
+// "uploads/1706745600000-a1b2c3d4"
+```
+
+---
+
+## 🔐 Authentication (Better Auth)
+
+This project uses **Better Auth** for type-safe authentication with Redis-backed session storage.
+
+### Features
+
+- 📧 **Email & Password** - Built-in email/password authentication
+- 🚀 **Redis Session Storage** - Sessions stored in Redis for fast lookups
+- 🍪 **Cookie Caching** - 5-minute session cache to reduce Redis queries
+- 🔒 **Type-safe** - Full TypeScript support with inferred types
+
+### Auth Endpoints
+
+Better Auth automatically mounts these endpoints at `/auth/*`:
+
+| Endpoint                | Method | Description            |
+| ----------------------- | ------ | ---------------------- |
+| `/auth/sign-up/email`   | POST   | Register new user      |
+| `/auth/sign-in/email`   | POST   | Login with email       |
+| `/auth/sign-out`        | POST   | Logout                 |
+| `/auth/get-session`     | GET    | Get current session    |
+| `/auth/forget-password` | POST   | Request password reset |
+| `/auth/reset-password`  | POST   | Reset password         |
+
+### Protecting Routes
+
+Use the `auth` macro to protect routes:
+
+```typescript
+import { Elysia } from "elysia";
+import { authPlugin } from "../shared/plugins";
+
+const app = new Elysia().use(authPlugin).get(
+  "/protected",
+  ({ user, session }) => {
+    return { message: `Hello ${user.name}!`, sessionId: session.id };
+  },
+  {
+    auth: true, // Route requires authentication
+  }
+);
+```
+
+### Session & User Types
+
+```typescript
+import type { Session, User } from "../auth";
+
+// User type includes: id, email, name, emailVerified, image, createdAt, updatedAt
+// Session type includes: id, userId, token, expiresAt, ipAddress, userAgent
+```
+
+---
+
+## 📧 Email (React Email + Resend)
+
+This project uses **React Email** for building beautiful email templates and **Resend** for reliable email delivery.
+
+### Features
+
+- 🎨 **React Components** - Build emails using familiar React patterns
+- 👀 **Live Preview** - Hot-reload email development server
+- 📱 **Responsive** - Templates work across all email clients
+- 🚀 **Resend API** - Fast, reliable email delivery with tracking
+
+### Email Scripts
+
+| Command                | Description                            |
+| ---------------------- | -------------------------------------- |
+| `bun run email:dev`    | Start email preview server (port 3001) |
+| `bun run email:build`  | Build email templates for production   |
+| `bun run email:export` | Export templates to HTML               |
+
+### Development Preview
+
+Start the email development server to preview templates with hot reload:
+
+```bash
+bun run email:dev
+```
+
+Open [http://localhost:3001](http://localhost:3001) to preview your email templates.
+
+### Creating Email Templates
+
+Create templates in `src/email/templates/`:
+
+```tsx
+import {
+  Body,
+  Button,
+  Container,
+  Head,
+  Html,
+  Preview,
+  Text,
+} from "@react-email/components";
+
+interface WelcomeEmailProps {
+  name: string;
+}
+
+export const WelcomeEmail = ({ name }: WelcomeEmailProps) => (
+  <Html>
+    <Head />
+    <Body style={{ fontFamily: "sans-serif" }}>
+      <Preview>Welcome to our platform!</Preview>
+      <Container>
+        <Text>Hello {name},</Text>
+        <Text>Thanks for signing up!</Text>
+        <Button href="https://example.com/dashboard">Go to Dashboard</Button>
+      </Container>
+    </Body>
+  </Html>
+);
+
+export default WelcomeEmail;
+```
+
+### Sending Emails
+
+Use the email service with React Email templates:
+
+```typescript
+import { render } from '@react-email/components';
+import { emailService } from '../email';
+import { WelcomeEmail } from '../email/templates/welcome';
+
+// Render React component to HTML
+const html = await render(<WelcomeEmail name="John" />);
+
+// Send via Resend
+await emailService.send({
+  from: 'hello@example.com',
+  to: 'user@example.com',
+  subject: 'Welcome!',
+  html,
+});
+
+// Or send directly with React component
+await emailService.send({
+  from: 'hello@example.com',
+  to: 'user@example.com',
+  subject: 'Welcome!',
+  react: <WelcomeEmail name="John" />,
+});
+```
+
+### Batch Sending
+
+Send multiple emails in a single API call:
+
+```typescript
+await emailService.sendBatch([
+  {
+    from: 'hello@example.com',
+    to: 'user1@example.com',
+    subject: 'Welcome!',
+    react: <WelcomeEmail name="User 1" />,
+  },
+  {
+    from: 'hello@example.com',
+    to: 'user2@example.com',
+    subject: 'Welcome!',
+    react: <WelcomeEmail name="User 2" />,
+  },
+]);
+```
+
+### Included Templates
+
+The starter includes example templates from React Email:
+
+- `notion-magic-link.tsx` - Magic link authentication
+- `stripe-welcome.tsx` - Welcome email
+- `plaid-verify-identity.tsx` - Identity verification
+- `vercel-invite-user.tsx` - Team invitation
+
+---
+
+## 📋 Queue Jobs (BullMQ)
+
+This project includes **BullMQ** for background job processing with **Bull Board** for monitoring.
+
+### Bull Board UI
+
+Access the queue dashboard at [http://localhost:3000/admin/queues](http://localhost:3000/admin/queues)
+
+**Default credentials:**
+
+- Username: `admin`
+- Password: `admin123!` (change in production!)
+
+### Creating Queues
+
+Define queues in `src/queues/queues/`:
+
+```typescript
+import { Queue } from "bullmq";
+import { z } from "zod";
+import { bullMQConnection } from "../connection";
+
+// Define job data schema with Zod
+export const EmailJobData = z.object({
+  to: z.string().email(),
+  subject: z.string(),
+  body: z.string(),
+});
+
+export type EmailJobDataType = z.infer<typeof EmailJobData>;
+
+export const emailQueue = new Queue<EmailJobDataType>("email", {
+  connection: bullMQConnection,
+  defaultJobOptions: {
+    attempts: 3,
+    backoff: { type: "exponential", delay: 1000 },
+  },
+});
+```
+
+### Creating Workers
+
+Define workers in `src/queues/workers/`:
+
+```typescript
+import { type Job, Worker } from "bullmq";
+import { createBullMQConnection } from "../connection";
+import type { EmailJobDataType } from "../queues/email.queue";
+
+export const emailWorker = new Worker<EmailJobDataType>(
+  "email",
+  async (job: Job<EmailJobDataType>) => {
+    const { to, subject, body } = job.data;
+    // Send email logic here
+    await job.updateProgress(100);
+    return { sent: true };
+  },
+  { connection: createBullMQConnection(), concurrency: 5 }
+);
+
+emailWorker.on("completed", (job) => console.log(`Job ${job.id} completed`));
+emailWorker.on("failed", (job, err) =>
+  console.error(`Job ${job?.id} failed:`, err)
+);
+```
+
+### Adding Jobs
+
+```typescript
+import { emailQueue } from "../queues";
+
+// Add a job
+const job = await emailQueue.add("send", {
+  to: "user@example.com",
+  subject: "Welcome!",
+  body: "Hello from BullMQ",
+});
+
+// Add with options
+await emailQueue.add("send", data, {
+  delay: 5000, // 5 second delay
+  priority: 1, // Higher priority
+  attempts: 5, // Override default attempts
+});
+
+// Add recurring job
+await emailQueue.upsertJobScheduler(
+  "daily-report",
+  { pattern: "0 9 * * *" }, // 9 AM daily
+  { name: "report", data: { type: "daily" } }
+);
+```
+
+### Registering New Queues
+
+1. Create queue file in `src/queues/queues/`
+2. Create worker file in `src/queues/workers/`
+3. Export from `src/queues/queues/index.ts`:
+   ```typescript
+   export { emailQueue } from "./email.queue";
+   export const allQueues = [exampleQueue, emailQueue];
+   ```
+4. Export from `src/queues/workers/index.ts`:
+   ```typescript
+   export const allWorkers = [exampleWorker, emailWorker];
+   ```
+
+---
+
+## 🔐 Environment Variables
+
+Environment variables are validated at startup using [t3-env](https://github.com/t3-oss/t3-env). **All variables are required** - the server won't start if any are missing.
+
+| Variable               | Type   | Description                            |
+| ---------------------- | ------ | -------------------------------------- |
+| `NODE_ENV`             | enum   | `development`, `production`, or `test` |
+| `PORT`                 | number | Server port                            |
+| `DATABASE_URL`         | url    | PostgreSQL connection URL              |
+| `REDIS_URL`            | url    | Redis connection URL                   |
+| `BETTER_AUTH_URL`      | url    | Base URL for auth endpoints            |
+| `BETTER_AUTH_SECRET`   | string | Auth secret key (min 32 chars)         |
+| `BULL_BOARD_USERNAME`  | string | Bull Board dashboard username          |
+| `BULL_BOARD_PASSWORD`  | string | Bull Board dashboard password (min 8)  |
+| `RESEND_API_KEY`       | string | Resend API key for email delivery      |
+| `RESEND_FROM_EMAIL`    | email  | Default sender email address           |
+| `S3_ACCESS_KEY_ID`     | string | S3 access key ID                       |
+| `S3_SECRET_ACCESS_KEY` | string | S3 secret access key                   |
+| `S3_BUCKET`            | string | S3 bucket name                         |
+| `S3_REGION`            | string | S3 region (e.g., `us-east-1`, `auto`)  |
+| `S3_ENDPOINT`          | url    | S3 endpoint URL                        |
+| `S3_PUBLIC_URL`        | url    | Public/CDN URL for the bucket          |
+
+### Removing Unused Features
+
+If you don't need certain features, remove both the env variable from `src/config/env.ts` and the related code:
+
+| Feature        | Env Variables   | Code to Remove                                |
+| -------------- | --------------- | --------------------------------------------- |
+| Authentication | `BETTER_AUTH_*` | `src/auth/`, auth plugin                      |
+| Email          | `RESEND_*`      | `src/email/`, email plugin                    |
+| Queue Jobs     | `BULL_BOARD_*`  | `src/queues/`, Bull Board routes              |
+| S3 Storage     | `S3_*`          | `src/s3/`, `src/features/uploads/`, s3 plugin |
+
+---
+
+## 📜 Scripts
+
+| Command                | Description                              |
+| ---------------------- | ---------------------------------------- |
+| `bun run dev`          | Start development server with hot reload |
+| `bun run start`        | Start production server                  |
+| `bun run build`        | Build TypeScript to JavaScript for prod  |
+| `bun run start:prod`   | Run built production server              |
+| `bun test`             | Run tests                                |
+| `bun run lint`         | Check for linting issues                 |
+| `bun run format`       | Fix linting and formatting issues        |
+| `bun run typecheck`    | Run TypeScript type checking             |
+| `bun run db:push`      | Push schema to database (dev)            |
+| `bun run db:generate`  | Generate migration files                 |
+| `bun run db:migrate`   | Apply pending migrations                 |
+| `bun run db:studio`    | Open Drizzle Studio GUI                  |
+| `bun run docker:up`    | Start local PostgreSQL & Redis           |
+| `bun run docker:down`  | Stop local databases                     |
+| `bun run docker:logs`  | Follow database logs                     |
+| `bun run docker:ps`    | Show running containers                  |
+| `bun run docker:clean` | Stop databases and remove volumes        |
+| `bun run docker:build` | Build production Docker image            |
+| `bun run docker:prod`  | Start full production stack              |
+| `bun run email:dev`    | Start email preview server (port 3001)   |
+| `bun run email:build`  | Build email templates for production     |
+| `bun run email:export` | Export templates to HTML                 |
+| `bun run ci:enable`    | Enable GitHub Actions & Dependabot       |
+| `bun run ci:disable`   | Disable GitHub Actions & Dependabot      |
+
+---
+
+## 📁 Project Structure
+
+```
+elysia-start/
+├── src/
+│   ├── index.ts              # Entry point - starts server
+│   ├── app.ts                # Elysia app with plugins
+│   ├── auth/                 # Authentication (Better Auth)
+│   │   └── index.ts          # Auth config with Redis sessions
+│   ├── config/
+│   │   └── env.ts            # Environment configuration (t3-env)
+│   ├── db/                   # Database layer (Drizzle ORM)
+│   │   ├── client.ts         # PostgreSQL connection
+│   │   ├── schema/           # Table definitions
+│   │   │   ├── auth.schema.ts    # Auth tables (users, sessions, etc.)
+│   │   │   └── todos.schema.ts   # Todo table
+│   │   └── migrations/       # Generated migrations
+│   ├── redis/                # Redis layer (ioredis)
+│   │   ├── client.ts         # Redis connection
+│   │   └── kv.service.ts     # KV service class
+│   ├── s3/                   # S3 storage layer (Bun native)
+│   │   ├── client.ts         # S3 client configuration
+│   │   ├── s3.service.ts     # S3 service class
+│   │   └── s3.model.ts       # Zod schemas for S3
+│   ├── email/                # Email layer (React Email + Resend)
+│   │   ├── client.ts         # Resend client
+│   │   ├── email.service.ts  # Email service class
+│   │   ├── email.model.ts    # Zod schemas for email
+│   │   └── templates/        # React Email templates
+│   ├── queues/               # Queue layer (BullMQ)
+│   │   ├── connection.ts     # BullMQ Redis connection
+│   │   ├── board.ts          # Bull Board setup
+│   │   ├── queues/           # Queue definitions
+│   │   └── workers/          # Worker definitions
+│   ├── features/             # Feature-based modules
+│   │   ├── health/           # Health check feature
+│   │   │   ├── health.controller.ts
+│   │   │   ├── health.service.ts
+│   │   │   └── health.model.ts
+│   │   └── uploads/          # File uploads feature
+│   │       ├── upload.controller.ts
+│   │       ├── upload.service.ts
+│   │       └── upload.model.ts
+│   ├── shared/
+│   │   ├── errors/           # Custom error classes
+│   │   ├── models/           # Shared Zod schemas
+│   │   ├── plugins/          # Reusable Elysia plugins (db, redis, s3, auth, email)
+│   │   └── utils/            # Utility functions
+│   └── types/                # Global TypeScript types
+├── tests/
+│   └── index.test.ts         # Test suite
+├── scripts/
+│   ├── ci-enable.ts          # Enable CI/CD workflows
+│   └── ci-disable.ts         # Disable CI/CD workflows
+├── drizzle.config.ts         # Drizzle Kit configuration
+├── Dockerfile                # Production multi-stage build
+├── docker-compose.yml        # Production stack (app + databases)
+├── docker-compose.local.yml  # Local development (databases only)
+├── .env.example              # Environment template
+├── .dockerignore             # Docker build exclusions
+├── package.json
+├── tsconfig.json
+└── bunfig.toml
+```
+
+### Feature Structure
+
+Each feature folder follows this pattern:
+
+- `*.controller.ts` - HTTP routing and request validation
+- `*.service.ts` - Business logic (framework-agnostic)
+- `*.model.ts` - Zod validation schemas
+
+---
+
+## 🛠️ Code Quality
+
+This project uses **Ultracite** for zero-config code quality:
+
+```bash
+# Check for issues
+bun run lint
+
+# Auto-fix issues
+bun run format
+```
+
+Pre-commit hooks automatically format staged files.
+
+### Commit Convention
+
+Commits follow [Conventional Commits](https://conventionalcommits.org):
+
+```
+type(scope): message
+```
+
+Types: `feat`, `fix`, `docs`, `style`, `refactor`, `test`, `chore`
+
+---
+
+## 🔄 CI/CD (Optional)
+
+This starter kit includes pre-configured CI/CD pipelines that are **disabled by default**. Enable them when you're ready for automated testing, Docker builds, and releases.
+
+### Enable CI/CD
+
+```bash
+bun run ci:enable
+```
+
+This enables:
+
+| Workflow       | Trigger              | Description                               |
+| -------------- | -------------------- | ----------------------------------------- |
+| **CI**         | Push to `main`, PRs  | Lint, typecheck, test, build validation   |
+| **Docker**     | Push to `main`, tags | Build multi-platform images, push to GHCR |
+| **Migrations** | PRs (schema changes) | Validate database migrations              |
+| **Release**    | Version tags (`v*`)  | Create GitHub releases with changelog     |
+| **Dependabot** | Weekly               | Automated dependency updates              |
+
+### Disable CI/CD
+
+```bash
+bun run ci:disable
+```
+
+### Manual Enable/Disable
+
+Alternatively, rename files in `.github/` manually:
+
+```bash
+# Enable a workflow
+mv .github/workflows/ci.yml.disabled .github/workflows/ci.yml
+
+# Disable a workflow
+mv .github/workflows/ci.yml .github/workflows/ci.yml.disabled
+```
+
+### Creating Releases
+
+With CI/CD enabled, create releases by pushing version tags:
+
+```bash
+git tag v1.0.0
+git push origin v1.0.0
+```
+
+This generates a changelog and creates a GitHub Release automatically.
+
+---
+
+## 🧪 Testing
+
+```bash
+# Run all tests
+bun test
+
+# Run tests in watch mode
+bun test --watch
+```
+
+Tests use Bun's built-in test runner with `bun:test`.
+
+---
+
+## 🌐 Deployment Options
+
+### Option 1: Docker Compose (Recommended)
+
+Full stack deployment with `docker compose`:
+
+```bash
+cp .env.example .env
+# Edit .env with production values
+bun run docker:prod
+```
+
+### Option 2: Standalone Binary
+
+Build a portable binary that runs without Bun installed:
+
+```bash
+bun build --compile --minify-whitespace --minify-syntax \
+  --bytecode --sourcemap=external \
+  --target bun --outfile server ./src/index.ts
+
+# Run the binary
+./server
+```
+
+### Option 3: 🏃 Classic Build & Run
+
+Build TypeScript to JavaScript and run with Bun (requires Bun installed on server):
+
+```bash
+# Build for production
+bun run build
+
+# Run production server
+bun run start:prod
+```
+
+Or manually:
+
+```bash
+bun build --target=bun --minify --sourcemap=external --outdir=dist ./src/index.ts
+NODE_ENV=production bun dist/index.js
+```
+
+**Pros:**
+
+- ⚡ Faster build times than standalone binary
+- 📦 Smaller output (no embedded Bun runtime)
+- 🔄 Easy to update Bun version independently
+
+**Cons:**
+
+- Requires Bun installed on the target server
+
+### Option 4: ☁️ Cloud Platforms
+
+The Dockerfile is compatible with:
+
+- ☁️ **Railway** - Auto-detects Dockerfile
+- 🪰 **Fly.io** - Use `fly launch`
+- 🌐 **Google Cloud Run** - Use `gcloud run deploy`
+- 🟠 **AWS ECS/Fargate** - Build and push to ECR
+- 🌊 **DigitalOcean App Platform** - Auto-detects Dockerfile
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'feat: add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+---
+
+## 📄 License
+
+This project is open source and available under the [MIT License](LICENSE).
+
+---
+
+Made with 💜 using [Elysia](https://elysiajs.com) and [Bun](https://bun.sh)
