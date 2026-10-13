@@ -8,6 +8,7 @@ import { z } from "zod";
 
 import { authOpenAPI } from "./auth";
 import { healthController } from "./features/health/health.controller";
+import { organizationController } from "./features/organizations/organization.controller";
 import { todoController } from "./features/todos/todo.controller";
 import { uploadController } from "./features/uploads/upload.controller";
 import { exampleQueue } from "./queues";
@@ -15,6 +16,8 @@ import {
   authPlugin,
   bullBoardPlugin,
   dbPlugin,
+  orgContextPlugin,
+  permissionPlugin,
   redisPlugin,
   s3Plugin,
 } from "./shared/plugins";
@@ -31,6 +34,8 @@ export const app = new Elysia({
   .use(s3Plugin)
   .use(authPlugin)
   .use(bullBoardPlugin)
+  .use(permissionPlugin)
+  .use(orgContextPlugin)
   .use(
     cron({
       name: "heartbeat",
@@ -67,4 +72,5 @@ export const app = new Elysia({
   })
   .use(healthController)
   .use(todoController)
+  .use(organizationController)
   .use(uploadController);

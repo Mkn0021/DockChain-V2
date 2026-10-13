@@ -1,30 +1,48 @@
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { openAPI } from "better-auth/plugins";
+import { openAPI, organization } from "better-auth/plugins";
 
 import { env } from "../config";
 import { db } from "../db";
 import { redis } from "../redis";
+import {
+  organizationAccessControl,
+  organizationRoles,
+} from "./organization-permissions";
 
 export const auth = betterAuth({
   basePath: "/auth",
   baseURL: env.BETTER_AUTH_URL,
+
   database: drizzleAdapter(db, {
     provider: "pg",
     usePlural: true,
   }),
+
   emailAndPassword: {
     enabled: true,
   },
-  plugins: [openAPI()],
+
+  plugins: [
+    organization({
+      ac: organizationAccessControl,
+      creatorRole: "owner",
+      defaultRole: "viewer",
+      roles: organizationRoles,
+    }),
+    openAPI(),
+  ],
+
   secondaryStorage: {
     delete: async (key) => {
       await redis.del(key);
     },
+
     get: async (key) => {
       const value = await redis.get(key);
       return value ?? null;
     },
+
     set: async (key, value, ttl) => {
       if (ttl) {
         await redis.set(key, value, "EX", ttl);
@@ -33,20 +51,23 @@ export const auth = betterAuth({
       }
     },
   },
+
   secret: env.BETTER_AUTH_SECRET,
+
   session: {
     cookieCache: {
       enabled: true,
-      maxAge: 5 * 60, // 5 minutes
+      maxAge: 5 * 60,
     },
   },
+
   trustedOrigins: [env.BETTER_AUTH_URL],
 });
 
 export type Session = typeof auth.$Infer.Session;
 export type User = typeof auth.$Infer.Session.user;
 
-// OpenAPI schema utilities for merging with Elysia's OpenAPI
+// OpenAPI schema utilities for merging with Elysia's OpenAPI.
 let _schema: Awaited<ReturnType<typeof auth.api.generateOpenAPISchema>>;
 
 const getSchema = async () => {
