@@ -13,6 +13,8 @@
         "allowArrowFunctions": true
       }
     ],
+    // Database entrypoints intentionally re-export the generated schema.
+    "oxc/no-barrel-file": "off",
     "max-statements": "off",
     "jest/require-hook": "off",
     "jsdoc/require-param-type": "off",
