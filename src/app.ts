@@ -16,6 +16,8 @@ import {
   authPlugin,
   bullBoardPlugin,
   dbPlugin,
+  orgContextPlugin,
+  permissionPlugin,
   redisPlugin,
   s3Plugin,
 } from "./shared/plugins";
@@ -32,6 +34,8 @@ export const app = new Elysia({
   .use(s3Plugin)
   .use(authPlugin)
   .use(bullBoardPlugin)
+  .use(permissionPlugin)
+  .use(orgContextPlugin)
   .use(
     cron({
       name: "heartbeat",

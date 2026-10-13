@@ -1,7 +1,10 @@
 import { Elysia } from "elysia";
 
-import { auth } from "../../auth";
-import { hasOrganizationPermission } from "../../auth/organization-access";
+import {
+  authPlugin,
+  orgContextPlugin,
+  permissionPlugin,
+} from "../../shared/plugins";
 import {
   InvitationCreateSchema,
   MemberIdParamsSchema,
@@ -18,26 +21,15 @@ import { OrganizationService } from "./organization.service";
 export const organizationController = new Elysia({
   prefix: "/organizations",
 })
-
-  // --------------------------------------------------
-  // CREATE ORGANIZATION
-  // POST /organizations
-  // --------------------------------------------------
+  .use(authPlugin)
+  .use(orgContextPlugin)
+  .use(permissionPlugin)
 
   .post(
     "/",
-    async ({ request, body, status }) => {
-      const session = await auth.api.getSession({
-        headers: request.headers,
-      });
-
-      if (!session) {
-        return status(401, { message: "Unauthorized" });
-      }
-
-      return OrganizationService.create(request.headers, body);
-    },
+    ({ request, body }) => OrganizationService.create(request.headers, body),
     {
+      auth: true,
       body: OrganizationCreateSchema,
       detail: {
         summary: "Create an organization",
@@ -46,54 +38,20 @@ export const organizationController = new Elysia({
     }
   )
 
-  // --------------------------------------------------
-  // LIST USER'S ORGANIZATIONS
-  // GET /organizations
-  // --------------------------------------------------
-
-  .get(
-    "/",
-    async ({ request, status }) => {
-      const session = await auth.api.getSession({
-        headers: request.headers,
-      });
-
-      if (!session) {
-        return status(401, { message: "Unauthorized" });
-      }
-
-      return OrganizationService.list(request.headers);
+  .get("/", ({ request }) => OrganizationService.list(request.headers), {
+    auth: true,
+    detail: {
+      summary: "List organizations available to the current user",
+      tags: ["Organizations"],
     },
-    {
-      detail: {
-        summary: "List organizations available to the current user",
-        tags: ["Organizations"],
-      },
-    }
-  )
-
-  // --------------------------------------------------
-  // SET ACTIVE ORGANIZATION
-  // PUT /organizations/active
-  // --------------------------------------------------
+  })
 
   .put(
     "/active",
-    async ({ request, body, status }) => {
-      const session = await auth.api.getSession({
-        headers: request.headers,
-      });
-
-      if (!session) {
-        return status(401, { message: "Unauthorized" });
-      }
-
-      return OrganizationService.setActive(
-        request.headers,
-        body.organizationId
-      );
-    },
+    ({ request, body }) =>
+      OrganizationService.setActive(request.headers, body.organizationId),
     {
+      auth: true,
       body: SetActiveOrganizationSchema,
       detail: {
         summary: "Set or clear the active organization",
@@ -102,391 +60,184 @@ export const organizationController = new Elysia({
     }
   )
 
-  // --------------------------------------------------
-  // GET ORGANIZATION DETAILS
-  // GET /organizations/:organizationId
-  // --------------------------------------------------
-
   .get(
     "/:organizationId",
-    async ({ request, params, status }) => {
-      const session = await auth.api.getSession({
-        headers: request.headers,
-      });
-
-      if (!session) {
-        return status(401, { message: "Unauthorized" });
-      }
-
-      return OrganizationService.getFullOrganization(
+    ({ request, params }) =>
+      OrganizationService.getFullOrganization(
         request.headers,
         params.organizationId
-      );
-    },
+      ),
     {
+      auth: true,
       detail: {
         summary: "Get organization details and related information",
         tags: ["Organizations"],
       },
+      orgContext: true,
       params: OrganizationIdParamsSchema,
     }
   )
 
-  // --------------------------------------------------
-  // UPDATE ORGANIZATION
-  // PATCH /organizations/:organizationId
-  // --------------------------------------------------
-
   .patch(
     "/:organizationId",
-    async ({ request, params, body, status }) => {
-      const session = await auth.api.getSession({
-        headers: request.headers,
-      });
-
-      if (!session) {
-        return status(401, { message: "Unauthorized" });
-      }
-
-      const allowed = await hasOrganizationPermission(
-        request.headers,
-        params.organizationId,
-        {
-          organization: ["update"],
-        }
-      );
-
-      if (!allowed) {
-        return status(403, { message: "Forbidden" });
-      }
-
-      return OrganizationService.update(
-        request.headers,
-        params.organizationId,
-        body
-      );
-    },
+    ({ request, params, body }) =>
+      OrganizationService.update(request.headers, params.organizationId, body),
     {
+      auth: true,
       body: OrganizationUpdateSchema,
       detail: {
         summary: "Update an organization",
         tags: ["Organizations"],
       },
       params: OrganizationIdParamsSchema,
+      permission: { organization: ["update"] },
     }
   )
 
-  // --------------------------------------------------
-  // DELETE ORGANIZATION
-  // DELETE /organizations/:organizationId
-  // --------------------------------------------------
-
   .delete(
     "/:organizationId",
-    async ({ request, params, status }) => {
-      const session = await auth.api.getSession({
-        headers: request.headers,
-      });
-
-      if (!session) {
-        return status(401, { message: "Unauthorized" });
-      }
-
-      const allowed = await hasOrganizationPermission(
-        request.headers,
-        params.organizationId,
-        {
-          organization: ["delete"],
-        }
-      );
-
-      if (!allowed) {
-        return status(403, { message: "Forbidden" });
-      }
-
-      return OrganizationService.delete(request.headers, params.organizationId);
-    },
+    ({ request, params }) =>
+      OrganizationService.delete(request.headers, params.organizationId),
     {
+      auth: true,
       detail: {
         summary: "Delete an organization",
         tags: ["Organizations"],
       },
       params: OrganizationIdParamsSchema,
+      permission: { organization: ["delete"] },
     }
   )
 
-  // --------------------------------------------------
-  // LIST MEMBERS
-  // GET /organizations/:organizationId/members
-  // --------------------------------------------------
-
   .get(
     "/:organizationId/members",
-    async ({ request, params, query, status }) => {
-      const session = await auth.api.getSession({
-        headers: request.headers,
-      });
-
-      if (!session) {
-        return status(401, { message: "Unauthorized" });
-      }
-
-      return OrganizationService.listMembers(
+    ({ request, params, query }) =>
+      OrganizationService.listMembers(
         request.headers,
         params.organizationId,
         query.limit,
         query.offset
-      );
-    },
+      ),
     {
+      auth: true,
       detail: {
         summary: "List organization members",
         tags: ["Organizations", "Members"],
       },
+      orgContext: true,
       params: OrganizationIdParamsSchema,
       query: OrganizationListMembersQuerySchema,
     }
   )
 
-  // --------------------------------------------------
-  // UPDATE MEMBER ROLE
-  // PATCH /organizations/:organizationId/members/:memberId
-  // --------------------------------------------------
-
   .patch(
     "/:organizationId/members/:memberId",
-    async ({ request, params, body, status }) => {
-      const session = await auth.api.getSession({
-        headers: request.headers,
-      });
-
-      if (!session) {
-        return status(401, { message: "Unauthorized" });
-      }
-
-      const allowed = await hasOrganizationPermission(
-        request.headers,
-        params.organizationId,
-        {
-          member: ["update"],
-        }
-      );
-
-      if (!allowed) {
-        return status(403, { message: "Forbidden" });
-      }
-
-      return OrganizationService.updateMemberRole(
+    ({ request, params, body }) =>
+      OrganizationService.updateMemberRole(
         request.headers,
         params.organizationId,
         params.memberId,
         body
-      );
-    },
+      ),
     {
+      auth: true,
       body: MemberRoleUpdateSchema,
       detail: {
         summary: "Update an organization member's role",
         tags: ["Organizations", "Members"],
       },
       params: MemberIdParamsSchema,
+      permission: { member: ["update"] },
     }
   )
 
-  // --------------------------------------------------
-  // REMOVE MEMBER
-  // DELETE /organizations/:organizationId/members/:memberId
-  // --------------------------------------------------
-
   .delete(
     "/:organizationId/members/:memberId",
-    async ({ request, params, status }) => {
-      const session = await auth.api.getSession({
-        headers: request.headers,
-      });
-
-      if (!session) {
-        return status(401, { message: "Unauthorized" });
-      }
-
-      const allowed = await hasOrganizationPermission(
-        request.headers,
-        params.organizationId,
-        {
-          member: ["delete"],
-        }
-      );
-
-      if (!allowed) {
-        return status(403, { message: "Forbidden" });
-      }
-
-      return OrganizationService.removeMember(
+    ({ request, params }) =>
+      OrganizationService.removeMember(
         request.headers,
         params.organizationId,
         params.memberId
-      );
-    },
+      ),
     {
+      auth: true,
       detail: {
         summary: "Remove a member from an organization",
         tags: ["Organizations", "Members"],
       },
       params: MemberIdParamsSchema,
+      permission: { member: ["delete"] },
     }
   )
 
-  // --------------------------------------------------
-  // LEAVE ORGANIZATION
-  // POST /organizations/:organizationId/leave
-  // --------------------------------------------------
-
   .post(
     "/:organizationId/leave",
-    async ({ request, params, status }) => {
-      const session = await auth.api.getSession({
-        headers: request.headers,
-      });
-
-      if (!session) {
-        return status(401, { message: "Unauthorized" });
-      }
-
-      return OrganizationService.leave(request.headers, params.organizationId);
-    },
+    ({ request, params }) =>
+      OrganizationService.leave(request.headers, params.organizationId),
     {
+      auth: true,
       detail: {
         summary: "Leave an organization",
         tags: ["Organizations"],
       },
+      orgContext: true,
       params: OrganizationIdParamsSchema,
     }
   )
 
-  // --------------------------------------------------
-  // CREATE INVITATION
-  // POST /organizations/:organizationId/invitations
-  // --------------------------------------------------
-
   .post(
     "/:organizationId/invitations",
-    async ({ request, params, body, status }) => {
-      const session = await auth.api.getSession({
-        headers: request.headers,
-      });
-
-      if (!session) {
-        return status(401, { message: "Unauthorized" });
-      }
-
-      const allowed = await hasOrganizationPermission(
-        request.headers,
-        params.organizationId,
-        {
-          invitation: ["create"],
-        }
-      );
-
-      if (!allowed) {
-        return status(403, { message: "Forbidden" });
-      }
-
-      return OrganizationService.createInvitation(
+    ({ request, params, body }) =>
+      OrganizationService.createInvitation(
         request.headers,
         params.organizationId,
         body
-      );
-    },
+      ),
     {
+      auth: true,
       body: InvitationCreateSchema,
       detail: {
         summary: "Invite a user to an organization",
         tags: ["Organizations", "Invitations"],
       },
       params: OrganizationIdParamsSchema,
+      permission: { invitation: ["create"] },
     }
   )
 
-  // --------------------------------------------------
-  // LIST INVITATIONS
-  // GET /organizations/:organizationId/invitations
-  // --------------------------------------------------
-
   .get(
     "/:organizationId/invitations",
-    async ({ request, params, status }) => {
-      const session = await auth.api.getSession({
-        headers: request.headers,
-      });
-
-      if (!session) {
-        return status(401, { message: "Unauthorized" });
-      }
-
-      const allowed = await hasOrganizationPermission(
-        request.headers,
-        params.organizationId,
-        {
-          invitation: ["create"],
-        }
-      );
-
-      if (!allowed) {
-        return status(403, { message: "Forbidden" });
-      }
-
-      return OrganizationService.listInvitations(
+    ({ request, params }) =>
+      OrganizationService.listInvitations(
         request.headers,
         params.organizationId
-      );
-    },
+      ),
     {
+      auth: true,
       detail: {
         summary: "List organization invitations",
         tags: ["Organizations", "Invitations"],
       },
       params: OrganizationIdParamsSchema,
+      permission: { invitation: ["create"] },
     }
   )
 
-  // --------------------------------------------------
-  // CANCEL INVITATION
-  // DELETE /organizations/:organizationId/invitations/:invitationId
-  // --------------------------------------------------
-
   .delete(
     "/:organizationId/invitations/:invitationId",
-    async ({ request, params, status }) => {
-      const session = await auth.api.getSession({
-        headers: request.headers,
-      });
-
-      if (!session) {
-        return status(401, { message: "Unauthorized" });
-      }
-
-      const allowed = await hasOrganizationPermission(
+    ({ request, params }) =>
+      OrganizationService.cancelInvitation(
         request.headers,
         params.organizationId,
-        {
-          invitation: ["cancel"],
-        }
-      );
-
-      if (!allowed) {
-        return status(403, { message: "Forbidden" });
-      }
-
-      return OrganizationService.cancelInvitation(
-        request.headers,
         params.invitationId
-      );
-    },
+      ),
     {
+      auth: true,
       detail: {
         summary: "Cancel an organization invitation",
         tags: ["Organizations", "Invitations"],
       },
       params: OrganizationInvitationParamsSchema,
+      permission: { invitation: ["cancel"] },
     }
   );

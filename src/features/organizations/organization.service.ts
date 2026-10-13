@@ -6,13 +6,25 @@ import type {
 } from "./organization.model";
 
 import { auth } from "../../auth";
+import { NotFoundError } from "../../shared/errors";
 
 export const OrganizationService = {
-  cancelInvitation(headers: Headers, invitationId: string) {
+  async cancelInvitation(
+    headers: Headers,
+    organizationId: string,
+    invitationId: string
+  ) {
+    const invitations = await auth.api.listInvitations({
+      headers,
+      query: { organizationId },
+    });
+
+    if (!invitations.some((invitation) => invitation.id === invitationId)) {
+      throw new NotFoundError("Invitation not found");
+    }
+
     return auth.api.cancelInvitation({
-      body: {
-        invitationId,
-      },
+      body: { invitationId },
       headers,
     });
   },
@@ -44,9 +56,7 @@ export const OrganizationService = {
 
   delete(headers: Headers, organizationId: string) {
     return auth.api.deleteOrganization({
-      body: {
-        organizationId,
-      },
+      body: { organizationId },
       headers,
     });
   },
@@ -54,33 +64,25 @@ export const OrganizationService = {
   getFullOrganization(headers: Headers, organizationId: string) {
     return auth.api.getFullOrganization({
       headers,
-      query: {
-        organizationId,
-      },
+      query: { organizationId },
     });
   },
 
   leave(headers: Headers, organizationId: string) {
     return auth.api.leaveOrganization({
-      body: {
-        organizationId,
-      },
+      body: { organizationId },
       headers,
     });
   },
 
   list(headers: Headers) {
-    return auth.api.listOrganizations({
-      headers,
-    });
+    return auth.api.listOrganizations({ headers });
   },
 
   listInvitations(headers: Headers, organizationId: string) {
     return auth.api.listInvitations({
       headers,
-      query: {
-        organizationId,
-      },
+      query: { organizationId },
     });
   },
 
@@ -92,11 +94,7 @@ export const OrganizationService = {
   ) {
     return auth.api.listMembers({
       headers,
-      query: {
-        limit,
-        offset,
-        organizationId,
-      },
+      query: { limit, offset, organizationId },
     });
   },
 
@@ -106,19 +104,14 @@ export const OrganizationService = {
     memberIdOrEmail: string
   ) {
     return auth.api.removeMember({
-      body: {
-        memberIdOrEmail,
-        organizationId,
-      },
+      body: { memberIdOrEmail, organizationId },
       headers,
     });
   },
 
   setActive(headers: Headers, organizationId: string | null) {
     return auth.api.setActiveOrganization({
-      body: {
-        organizationId,
-      },
+      body: { organizationId },
       headers,
     });
   },

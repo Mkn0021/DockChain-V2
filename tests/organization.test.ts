@@ -203,12 +203,8 @@ describe("MemberRoleUpdateSchema", () => {
     ).toBe(false);
   });
 
-  it("rejects a missing member ID", () => {
-    expect(
-      MemberRoleUpdateSchema.safeParse({
-        role: "viewer",
-      }).success
-    ).toBe(false);
+  it("rejects a missing role", () => {
+    expect(MemberRoleUpdateSchema.safeParse({}).success).toBe(false);
   });
 });
 
