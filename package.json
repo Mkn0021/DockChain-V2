@@ -1,26 +1,26 @@
 {
-  "name": "elysia-start",
-  "version": "1.0.50",
-  "description": "A modern, batteries-included starter kit for building fast backend servers with Elysia and Bun",
+  "name": "dockchain-v2",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Blockchain-based document issuance, management, and verification system",
   "keywords": [
-    "api",
-    "backend",
+    "blockchain",
     "bun",
+    "dockchain",
+    "document-verification",
     "elysia",
-    "starter-kit",
+    "postgresql",
     "typescript"
   ],
-  "homepage": "https://github.com/DobroslavRadosavljevic/elysia-start#readme",
+  "homepage": "https://github.com/Mkn0021/dockchain-v2#readme",
   "bugs": {
-    "url": "https://github.com/DobroslavRadosavljevic/elysia-start/issues"
+    "url": "https://github.com/Mkn0021/dockchain-v2/issues"
   },
-  "license": "MIT",
-  "author": "DobroslavRadosavljevic",
+  "author": "Mkn0021",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/DobroslavRadosavljevic/elysia-start.git"
+    "url": "https://github.com/Mkn0021/dockchain-v2.git"
   },
-  "module": "src/index.js",
   "scripts": {
     "start": "bun run src/index.ts",
     "build": "bun build --target=bun --minify --sourcemap=external --outdir=dist ./src/index.ts",
