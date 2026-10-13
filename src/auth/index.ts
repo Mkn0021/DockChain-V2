@@ -26,9 +26,8 @@ export const auth = betterAuth({
   plugins: [
     organization({
       ac: organizationAccessControl,
-      allowUserToCreateOrganization: true,
       creatorRole: "owner",
-      membershipLimit: 100,
+      defaultRole: "viewer",
       roles: organizationRoles,
     }),
     openAPI(),

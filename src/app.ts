@@ -8,6 +8,7 @@ import { z } from "zod";
 
 import { authOpenAPI } from "./auth";
 import { healthController } from "./features/health/health.controller";
+import { organizationController } from "./features/organizations/organization.controller";
 import { todoController } from "./features/todos/todo.controller";
 import { uploadController } from "./features/uploads/upload.controller";
 import { exampleQueue } from "./queues";
@@ -67,4 +68,5 @@ export const app = new Elysia({
   })
   .use(healthController)
   .use(todoController)
+  .use(organizationController)
   .use(uploadController);
