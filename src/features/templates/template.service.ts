@@ -9,11 +9,7 @@ import type {
 
 import { db } from "../../db";
 import { templateVersions, templates } from "../../db/schema/template.schema";
-import {
-  ConflictError,
-  NotFoundError,
-  ValidationError,
-} from "../../shared/errors";
+import { AppError, isPgUniqueViolation } from "../../shared/errors";
 
 const requireTemplate = async (
   organizationId: string,
@@ -36,7 +32,7 @@ const requireTemplate = async (
     .limit(1);
 
   if (!template) {
-    throw new NotFoundError("Template not found");
+    throw AppError.notFound("Template not found");
   }
 
   return template;
@@ -58,7 +54,7 @@ const requireTemplateVersion = async (
     .limit(1);
 
   if (!version) {
-    throw new NotFoundError("Template version not found");
+    throw AppError.notFound("Template version not found");
   }
 
   return version;
@@ -86,41 +82,54 @@ export const TemplateService = {
       .returning();
 
     if (!template) {
-      throw new NotFoundError("Template not found");
+      throw AppError.notFound("Template not found");
     }
 
     return template;
   },
 
-  create(organizationId: string, createdBy: string, data: TemplateCreateType) {
-    return db.transaction(async (tx) => {
-      const [template] = await tx
-        .insert(templates)
-        .values({
-          createdBy,
-          description: data.description ?? null,
-          name: data.name,
-          organizationId,
-        })
-        .returning();
+  async create(
+    organizationId: string,
+    createdBy: string,
+    data: TemplateCreateType
+  ) {
+    try {
+      return await db.transaction(async (tx) => {
+        const [template] = await tx
+          .insert(templates)
+          .values({
+            createdBy,
+            description: data.description ?? null,
+            name: data.name,
+            organizationId,
+          })
+          .returning();
 
-      const [version] = await tx
-        .insert(templateVersions)
-        .values({
-          compilerVersion: data.compilerVersion,
-          contractName: data.contractName,
-          createdBy,
-          sourceCode: data.sourceCode,
-          templateId: template.id,
-          version: 1,
-        })
-        .returning();
+        const [version] = await tx
+          .insert(templateVersions)
+          .values({
+            compilerVersion: data.compilerVersion,
+            contractName: data.contractName,
+            createdBy,
+            sourceCode: data.sourceCode,
+            templateId: template.id,
+            version: 1,
+          })
+          .returning();
 
-      return {
-        ...template,
-        versions: [version],
-      };
-    });
+        return {
+          ...template,
+          versions: [version],
+        };
+      });
+    } catch (error) {
+      if (isPgUniqueViolation(error)) {
+        throw AppError.conflict(
+          "A template with this name already exists in the organization"
+        );
+      }
+      throw error;
+    }
   },
 
   async createVersion(
@@ -231,11 +240,11 @@ export const TemplateService = {
     const version = await requireTemplateVersion(templateId, versionId);
 
     if (version.status !== "draft") {
-      throw new ConflictError("Only draft versions can be published");
+      throw AppError.conflict("Only draft versions can be published");
     }
 
     if (!version.sourceCode.trim()) {
-      throw new ValidationError("Cannot publish a version with empty source");
+      throw AppError.validation("Cannot publish a version with empty source");
     }
 
     return db.transaction(async (tx) => {
@@ -256,7 +265,7 @@ export const TemplateService = {
         .returning();
 
       if (!published) {
-        throw new ConflictError("The version could not be published");
+        throw AppError.conflict("The version could not be published");
       }
 
       await tx
@@ -291,7 +300,7 @@ export const TemplateService = {
       .returning();
 
     if (!template) {
-      throw new NotFoundError("Template not found");
+      throw AppError.notFound("Template not found");
     }
 
     return template;
@@ -308,7 +317,7 @@ export const TemplateService = {
     const version = await requireTemplateVersion(templateId, versionId);
 
     if (version.status !== "draft") {
-      throw new ConflictError("Published versions cannot be modified");
+      throw AppError.conflict("Published versions cannot be modified");
     }
 
     const [updated] = await db
@@ -327,7 +336,7 @@ export const TemplateService = {
       .returning();
 
     if (!updated) {
-      throw new ConflictError("The version is no longer editable");
+      throw AppError.conflict("The version is no longer editable");
     }
 
     return updated;

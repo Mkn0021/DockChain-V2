@@ -10,6 +10,7 @@ import { authOpenAPI } from "./auth";
 import { healthController } from "./features/health/health.controller";
 import { organizationController } from "./features/organizations/organization.controller";
 import { templateController } from "./features/templates/template.controller";
+import { httpPlugin } from "./shared/http";
 import {
   authPlugin,
   bullBoardPlugin,
@@ -26,6 +27,7 @@ export const app = new Elysia({
     maxRequestBodySize: 1024 * 1024 * 128,
   },
 })
+  .use(httpPlugin)
   .use(cors())
   .use(dbPlugin)
   .use(redisPlugin)

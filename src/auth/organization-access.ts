@@ -17,13 +17,28 @@ export const hasOrganizationPermission = async (
   organizationId: string,
   permissions: OrganizationPermissions
 ): Promise<boolean> => {
-  const result = await auth.api.hasPermission({
-    body: {
-      organizationId,
-      permissions,
-    },
-    headers,
-  });
+  try {
+    const result = await auth.api.hasPermission({
+      body: { organizationId, permissions },
+      headers,
+    });
+    return result.success;
+  } catch {
+    return false;
+  }
+};
 
-  return result.success;
+export const isOrganizationMember = async (
+  headers: Headers,
+  organizationId: string
+): Promise<boolean> => {
+  try {
+    const result = await auth.api.getFullOrganization({
+      headers,
+      query: { organizationId },
+    });
+    return Boolean(result);
+  } catch {
+    return false;
+  }
 };
