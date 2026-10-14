@@ -69,8 +69,8 @@ export const TemplateService = {
     const [template] = await db
       .update(templates)
       .set({
-        archivedAt: now,
-        updatedAt: now,
+        archivedAt: now.toISOString(),
+        updatedAt: now.toISOString(),
       })
       .where(
         and(
@@ -166,7 +166,7 @@ export const TemplateService = {
 
       await tx
         .update(templates)
-        .set({ updatedAt: new Date() })
+        .set({ updatedAt: new Date().toISOString() })
         .where(eq(templates.id, templateId));
 
       return version;
@@ -251,9 +251,9 @@ export const TemplateService = {
       const [published] = await tx
         .update(templateVersions)
         .set({
-          publishedAt: new Date(),
+          publishedAt: new Date().toISOString(),
           status: "published",
-          updatedAt: new Date(),
+          updatedAt: new Date().toISOString(),
         })
         .where(
           and(
@@ -270,7 +270,7 @@ export const TemplateService = {
 
       await tx
         .update(templates)
-        .set({ updatedAt: new Date() })
+        .set({ updatedAt: new Date().toISOString() })
         .where(eq(templates.id, templateId));
 
       return published;
@@ -288,7 +288,7 @@ export const TemplateService = {
       .update(templates)
       .set({
         ...data,
-        updatedAt: new Date(),
+        updatedAt: new Date().toISOString(),
       })
       .where(
         and(
@@ -324,7 +324,7 @@ export const TemplateService = {
       .update(templateVersions)
       .set({
         ...data,
-        updatedAt: new Date(),
+        updatedAt: new Date().toISOString(),
       })
       .where(
         and(
