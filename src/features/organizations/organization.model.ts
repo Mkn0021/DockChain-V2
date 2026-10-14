@@ -68,6 +68,7 @@ export const OrganizationUpdateSchema = OrganizationDatabaseUpdateSchema.pick({
   slug: true,
 })
   .extend({
+    logo: z.url().optional(),
     name: organizationName.optional(),
     slug: organizationSlug.optional(),
   })

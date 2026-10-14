@@ -4,10 +4,10 @@ import {
   pgEnum,
   pgTable,
   text,
-  timestamp,
   uniqueIndex,
 } from "drizzle-orm/pg-core";
 
+import { timestamp } from "../utils";
 import { organizations, users } from "./auth.schema";
 
 export const templateVersionStatus = pgEnum("template_version_status", [
@@ -38,7 +38,7 @@ export const templates = pgTable(
 
     updatedAt: timestamp("updated_at")
       .defaultNow()
-      .$onUpdate(() => new Date())
+      .$onUpdate(() => new Date().toISOString())
       .notNull(),
   },
   (table) => [
@@ -77,7 +77,7 @@ export const templateVersions = pgTable(
       .references(() => templates.id, { onDelete: "cascade" }),
     updatedAt: timestamp("updated_at")
       .defaultNow()
-      .$onUpdate(() => new Date())
+      .$onUpdate(() => new Date().toISOString())
       .notNull(),
 
     version: integer("version").notNull(),
