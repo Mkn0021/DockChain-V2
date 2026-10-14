@@ -1,2 +1,2 @@
 export * from "./auth.schema";
-export * from "./todos.schema";
+export * from "./template.schema";

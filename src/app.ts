@@ -9,9 +9,7 @@ import { z } from "zod";
 import { authOpenAPI } from "./auth";
 import { healthController } from "./features/health/health.controller";
 import { organizationController } from "./features/organizations/organization.controller";
-import { todoController } from "./features/todos/todo.controller";
-import { uploadController } from "./features/uploads/upload.controller";
-import { exampleQueue } from "./queues";
+import { templateController } from "./features/templates/template.controller";
 import {
   authPlugin,
   bullBoardPlugin,
@@ -62,15 +60,6 @@ export const app = new Elysia({
   )
   .use(opentelemetry())
   .use(serverTiming())
-  .get("/", () => "Hello Elysia")
-  // Test endpoint to add a job to the example queue
-  .get("/add-job", async ({ query }) => {
-    const job = await exampleQueue.add("process", {
-      message: query.message ?? "Hello from queue!",
-    });
-    return { jobId: job.id, status: "queued" };
-  })
   .use(healthController)
-  .use(todoController)
   .use(organizationController)
-  .use(uploadController);
+  .use(templateController);
