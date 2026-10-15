@@ -2,12 +2,11 @@ import { relations } from "drizzle-orm";
 import {
   pgTable,
   text,
+  timestamp,
   boolean,
   index,
   uniqueIndex,
 } from "drizzle-orm/pg-core";
-
-import { timestamp } from "../utils";
 
 export const users = pgTable("users", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
@@ -18,7 +17,7 @@ export const users = pgTable("users", {
   name: text("name").notNull(),
   updatedAt: timestamp("updated_at")
     .defaultNow()
-    .$onUpdate(() => new Date().toISOString())
+    .$onUpdate(() => /* @__PURE__ */ new Date())
     .notNull(),
 });
 
@@ -37,7 +36,7 @@ export const accounts = pgTable(
     refreshTokenExpiresAt: timestamp("refresh_token_expires_at"),
     scope: text("scope"),
     updatedAt: timestamp("updated_at")
-      .$onUpdate(() => new Date().toISOString())
+      .$onUpdate(() => /* @__PURE__ */ new Date())
       .notNull(),
     userId: text("user_id")
       .notNull()
@@ -55,7 +54,7 @@ export const verifications = pgTable(
     identifier: text("identifier").notNull(),
     updatedAt: timestamp("updated_at")
       .defaultNow()
-      .$onUpdate(() => new Date().toISOString())
+      .$onUpdate(() => /* @__PURE__ */ new Date())
       .notNull(),
     value: text("value").notNull(),
   },

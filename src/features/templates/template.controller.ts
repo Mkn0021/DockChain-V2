@@ -9,12 +9,14 @@ import {
   TemplateIdParamsSchema,
   TemplateListQuerySchema,
   TemplateListResponseSchema,
+  TemplatePreviewResponseSchema,
+  TemplatePreviewSchema,
   TemplateSelectSchema,
   TemplateUpdateSchema,
   TemplateVersionCreateSchema,
   TemplateVersionParamsSchema,
-  TemplateVersionSelectSchema,
   TemplateVersionsResponseSchema,
+  TemplateVersionSelectSchema,
   TemplateVersionUpdateSchema,
 } from "./template.model";
 import { TemplateService } from "./template.service";
@@ -34,7 +36,7 @@ export const templateController = new Elysia({
       body: TemplateCreateSchema,
       detail: {
         description: "Creates template metadata and its initial draft version.",
-        summary: "Create a contract template",
+        summary: "Create a template",
         tags: ["Templates"],
       },
       params: OrganizationParamsSchema,
@@ -44,6 +46,7 @@ export const templateController = new Elysia({
         400: ErrorResponse,
         401: ErrorResponse,
         403: ErrorResponse,
+        422: ErrorResponse,
       },
     }
   )
@@ -96,7 +99,7 @@ export const templateController = new Elysia({
       auth: true,
       body: TemplateUpdateSchema,
       detail: {
-        description: "Does not modify existing template-version source code.",
+        description: "Does not modify existing template-version layouts.",
         summary: "Update template metadata",
         tags: ["Templates"],
       },
@@ -188,7 +191,7 @@ export const templateController = new Elysia({
       auth: true,
       detail: {
         description:
-          "Marks a draft version as published and makes it immutable.",
+          "Marks a draft version as published, computes its schema hash, and makes it immutable.",
         summary: "Publish a template version",
         tags: ["Templates"],
       },
@@ -198,6 +201,34 @@ export const templateController = new Elysia({
         200: TemplateVersionSelectSchema,
         404: ErrorResponse,
         409: ErrorResponse,
+      },
+    }
+  )
+
+  .post(
+    "/:templateId/versions/:versionId/preview",
+    ({ body, params }) =>
+      TemplateService.preview(
+        params.organizationId,
+        params.templateId,
+        params.versionId,
+        body
+      ),
+    {
+      auth: true,
+      body: TemplatePreviewSchema,
+      detail: {
+        description:
+          "Renders the version's SVG layout with the provided values, XML-escaped.",
+        summary: "Preview a template version",
+        tags: ["Templates"],
+      },
+      params: TemplateVersionParamsSchema,
+      permission: { template: ["read"] },
+      response: {
+        200: TemplatePreviewResponseSchema,
+        404: ErrorResponse,
+        422: ErrorResponse,
       },
     }
   )

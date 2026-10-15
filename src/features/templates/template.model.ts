@@ -1,6 +1,12 @@
 import { createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
 
+import type {
+  FieldDefinition,
+  FieldSchemaJson,
+  FieldType,
+} from "./template.types";
+
 import {
   templateVersionStatus,
   templateVersions,
@@ -12,17 +18,72 @@ export const TemplateVersionSelectSchema = createSelectSchema(templateVersions);
 
 const templateName = z.string().trim().min(2).max(120);
 
-const contractName = z
+export const FieldTypeSchema = z.enum([
+  "text",
+  "number",
+  "date",
+  "email",
+  "enum",
+]) satisfies z.ZodType<FieldType, FieldType>;
+
+export const FieldDefinitionSchema = z
+  .object({
+    key: z
+      .string()
+      .regex(
+        /^[a-z][a-z0-9_]{0,63}$/,
+        "Field key must start with a lowercase letter and contain only lowercase letters, digits, and underscores"
+      ),
+    label: z.string().trim().min(1).max(100),
+    maxLength: z.number().int().positive().max(10_000).optional(),
+    options: z.array(z.string().min(1).max(200)).min(1).max(50).optional(),
+    pattern: z
+      .string()
+      .max(200)
+      .refine(
+        (value) => {
+          try {
+            const pattern = new RegExp(value);
+            return pattern.test("");
+          } catch {
+            return false;
+          }
+        },
+        { message: "pattern must be a valid regular expression" }
+      )
+      .optional(),
+    required: z.boolean().default(true),
+    type: FieldTypeSchema,
+  })
+  .refine(
+    (field) => {
+      if (field.type === "enum") {
+        return Array.isArray(field.options) && field.options.length > 0;
+      }
+      return field.options === undefined;
+    },
+    { message: "options is required for enum fields and forbidden otherwise" }
+  ) satisfies z.ZodType<FieldDefinition, unknown>;
+
+export const FieldSchemaSchema = z
+  .object({
+    fields: z.array(FieldDefinitionSchema).min(1).max(100),
+  })
+  .refine(
+    (data) => {
+      const keys = data.fields.map((f) => f.key);
+      return new Set(keys).size === keys.length;
+    },
+    { message: "Field keys must be unique within a template version" }
+  ) satisfies z.ZodType<FieldSchemaJson, unknown>;
+
+export const LayoutSchema = z
   .string()
   .min(1)
-  .max(100)
-  .regex(/^[A-Za-z_$][A-Za-z0-9_$]*$/);
-
-const compilerVersion = z
-  .string()
-  .regex(/^\d+\.\d+\.\d+$/, "Use a compiler version such as 0.8.24");
-
-const sourceCode = z.string().min(1).max(200_000);
+  .max(500 * 1024)
+  .refine((value) => value.trimStart().startsWith("<svg"), {
+    message: "Layout must be an SVG document",
+  });
 
 export const OrganizationParamsSchema = z.object({
   organizationId: z.string().min(1),
@@ -42,12 +103,10 @@ export const TemplateListQuerySchema = z.object({
 });
 
 export const TemplateCreateSchema = z.object({
-  compilerVersion,
-  contractName,
-
   description: z.string().trim().max(2000).nullable().optional(),
+  fieldSchema: FieldSchemaSchema.optional(),
+  layout: LayoutSchema,
   name: templateName,
-  sourceCode,
 });
 
 export const TemplateUpdateSchema = z
@@ -60,20 +119,29 @@ export const TemplateUpdateSchema = z
   });
 
 export const TemplateVersionCreateSchema = z.object({
-  compilerVersion,
-  contractName,
-  sourceCode,
+  fieldSchema: FieldSchemaSchema.optional(),
+  layout: LayoutSchema,
 });
 
 export const TemplateVersionUpdateSchema = z
   .object({
-    compilerVersion: compilerVersion.optional(),
-    contractName: contractName.optional(),
-    sourceCode: sourceCode.optional(),
+    fieldSchema: FieldSchemaSchema.optional(),
+    layout: LayoutSchema.optional(),
   })
   .refine((data) => Object.keys(data).length > 0, {
     message: "At least one field must be provided",
   });
+
+export const TemplatePreviewSchema = z.object({
+  data: z.record(
+    z.string(),
+    z.union([z.string(), z.number(), z.boolean(), z.null()])
+  ),
+});
+
+export const TemplatePreviewResponseSchema = z.object({
+  svg: z.string(),
+});
 
 export const TemplateListResponseSchema = z.object({
   data: z.array(TemplateSelectSchema),
@@ -96,6 +164,10 @@ export const TemplateVersionStatusSchema = z.enum(
   templateVersionStatus.enumValues
 );
 
+export type FieldDefinitionType = z.infer<typeof FieldDefinitionSchema>;
+export type FieldSchemaType = z.infer<typeof FieldSchemaSchema>;
+export type FieldTypeType = z.infer<typeof FieldTypeSchema>;
+
 export type TemplateCreateType = z.infer<typeof TemplateCreateSchema>;
 export type TemplateUpdateType = z.infer<typeof TemplateUpdateSchema>;
 export type TemplateVersionCreateType = z.infer<
@@ -104,6 +176,7 @@ export type TemplateVersionCreateType = z.infer<
 export type TemplateVersionUpdateType = z.infer<
   typeof TemplateVersionUpdateSchema
 >;
+export type TemplatePreviewType = z.infer<typeof TemplatePreviewSchema>;
 
 export type Template = typeof templates.$inferSelect;
 export type NewTemplate = typeof templates.$inferInsert;
