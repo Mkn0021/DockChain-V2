@@ -16,6 +16,7 @@ export const env = createEnv({
   runtimeEnv: process.env,
 
   server: {
+    APP_PUBLIC_URL: z.url(),
     BETTER_AUTH_SECRET: z.string().min(32),
     BETTER_AUTH_URL: z.url(),
     BULL_BOARD_PASSWORD: z.string().min(8),

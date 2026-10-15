@@ -6,10 +6,11 @@ export type OrganizationPermissions = Partial<{
   invitation: ("create" | "cancel")[];
   team: ("create" | "update" | "delete")[];
   ac: ("create" | "read" | "update" | "delete")[];
-
-  template: ("create" | "read" | "update" | "publish" | "delete")[];
-  document: ("create" | "read" | "revoke")[];
   asset: ("create" | "read" | "delete")[];
+  document: ("create" | "read" | "revoke")[];
+  settings: ("read" | "update")[];
+  template: ("create" | "read" | "update" | "publish" | "delete")[];
+  wallet: ("create" | "read" | "update" | "delete")[];
 }>;
 
 export const hasOrganizationPermission = async (
