@@ -9,6 +9,7 @@ import { z } from "zod";
 import { authOpenAPI } from "./auth";
 import { healthController } from "./features/health/health.controller";
 import { organizationController } from "./features/organizations/organization.controller";
+import { settingsController } from "./features/settings/settings.controller";
 import { templateController } from "./features/templates/template.controller";
 import { httpPlugin } from "./shared/http";
 import {
@@ -64,4 +65,5 @@ export const app = new Elysia({
   .use(serverTiming())
   .use(healthController)
   .use(organizationController)
+  .use(settingsController)
   .use(templateController);
