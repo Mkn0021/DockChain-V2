@@ -40,8 +40,9 @@ export const WalletCreateSchema = z.object({
 
 export const WalletListResponseSchema = z.array(WalletSelectSchema);
 
-export const WalletVerifyDomainResponseSchema = WalletSelectSchema.extend({
+export const WalletVerifyDomainResponseSchema = z.object({
   foundRecords: z.array(z.string()),
+  wallet: WalletSelectSchema,
 });
 
 export type WalletChallengeType = z.infer<typeof WalletChallengeSchema>;

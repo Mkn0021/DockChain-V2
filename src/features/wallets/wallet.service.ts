@@ -1,5 +1,6 @@
 import { and, eq } from "drizzle-orm";
 
+import type { TxtResolver } from "./wallet.dns";
 import type { WalletChallengeType, WalletCreateType } from "./wallet.model";
 
 import { db } from "../../db";
@@ -8,6 +9,7 @@ import { organizationSettings } from "../../db/schema/settings.schema";
 import { issuerWallets } from "../../db/schema/wallet.schema";
 import { AppError, isPgUniqueViolation } from "../../shared/errors";
 import { createChallenge, verifyChallenge } from "./wallet.challenge";
+import { normalizeDomain, verifyDomainOwnership } from "./wallet.domain";
 
 const CHALLENGE_PREFIX = "wallet-challenge";
 
@@ -169,5 +171,46 @@ export const WalletService = {
     })();
 
     return wallet;
+  },
+
+  async verifyDomain(
+    organizationId: string,
+    walletId: string,
+    resolver?: TxtResolver
+  ) {
+    const wallet = await WalletService.getById(organizationId, walletId);
+
+    if (!wallet.domain) {
+      throw AppError.validation("Wallet has no domain to verify");
+    }
+
+    const domain = normalizeDomain(wallet.domain);
+    const foundRecords = await verifyDomainOwnership({
+      chainId: wallet.chainId,
+      domain,
+      resolver,
+      walletAddress: wallet.address,
+    });
+
+    const [updated] = await db
+      .update(issuerWallets)
+      .set({
+        domain,
+        domainVerifiedAt: new Date(),
+        updatedAt: new Date(),
+      })
+      .where(
+        and(
+          eq(issuerWallets.id, walletId),
+          eq(issuerWallets.organizationId, organizationId)
+        )
+      )
+      .returning();
+
+    if (!updated) {
+      throw AppError.notFound("Wallet not found");
+    }
+
+    return { foundRecords, wallet: updated };
   },
 };

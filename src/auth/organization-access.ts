@@ -10,7 +10,7 @@ export type OrganizationPermissions = Partial<{
   document: ("create" | "read" | "revoke")[];
   settings: ("read" | "update")[];
   template: ("create" | "read" | "update" | "publish" | "delete")[];
-  wallet: ("create" | "read" | "delete")[];
+  wallet: ("create" | "read" | "update" | "delete")[];
 }>;
 
 export const hasOrganizationPermission = async (

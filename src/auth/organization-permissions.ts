@@ -8,7 +8,7 @@ const statement = {
   document: ["create", "read", "revoke"],
   settings: ["read", "update"],
   template: ["create", "read", "update", "publish", "delete"],
-  wallet: ["create", "read", "delete"],
+  wallet: ["create", "read", "update", "delete"],
 } as const;
 
 const ac = createAccessControl(statement);
@@ -23,7 +23,7 @@ const owner = ac.newRole({
   settings: ["read", "update"],
   team: ["create", "update", "delete"],
   template: ["create", "read", "update", "publish", "delete"],
-  wallet: ["create", "read", "delete"],
+  wallet: ["create", "read", "update", "delete"],
 });
 
 const admin = ac.newRole({
@@ -36,7 +36,7 @@ const admin = ac.newRole({
   settings: ["read", "update"],
   team: ["create", "update", "delete"],
   template: ["create", "read", "update", "publish", "delete"],
-  wallet: ["create", "read", "delete"],
+  wallet: ["create", "read", "update", "delete"],
 });
 
 const issuer = ac.newRole({

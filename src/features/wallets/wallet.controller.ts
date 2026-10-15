@@ -10,6 +10,7 @@ import {
   WalletIdParamsSchema,
   WalletListResponseSchema,
   WalletSelectSchema,
+  WalletVerifyDomainResponseSchema,
 } from "./wallet.model";
 import { WalletService } from "./wallet.service";
 
@@ -91,6 +92,30 @@ export const walletController = new Elysia({
       response: {
         200: WalletSelectSchema,
         404: ErrorResponse,
+      },
+    }
+  )
+
+  .post(
+    "/:walletId/verify-domain",
+    ({ params }) =>
+      WalletService.verifyDomain(params.organizationId, params.walletId),
+    {
+      auth: true,
+      detail: {
+        description:
+          "Looks up a TXT record at _dockchain.<domain> to bind the wallet's domain to its chain and address.",
+        summary: "Verify wallet domain ownership",
+        tags: ["Wallets"],
+      },
+      params: WalletIdParamsSchema,
+      permission: { wallet: ["update"] },
+      response: {
+        200: WalletVerifyDomainResponseSchema,
+        401: ErrorResponse,
+        403: ErrorResponse,
+        404: ErrorResponse,
+        422: ErrorResponse,
       },
     }
   )
