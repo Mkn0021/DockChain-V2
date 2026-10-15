@@ -10,7 +10,7 @@ export const extractPlaceholders = (layout: string): string[] => {
   PLACEHOLDER_REGEX.lastIndex = 0;
 
   while ((match = PLACEHOLDER_REGEX.exec(layout)) !== null) {
-    const [placeholder] = match;
+    const [, placeholder] = match;
     if (placeholder !== undefined) {
       found.add(placeholder);
     }
