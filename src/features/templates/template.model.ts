@@ -1,6 +1,12 @@
 import { createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
 
+import type {
+  FieldDefinition,
+  FieldSchemaJson,
+  FieldType,
+} from "./template.types";
+
 import {
   templateVersionStatus,
   templateVersions,
@@ -18,7 +24,7 @@ export const FieldTypeSchema = z.enum([
   "date",
   "email",
   "enum",
-]);
+]) satisfies z.ZodType<FieldType, FieldType>;
 
 export const FieldDefinitionSchema = z
   .object({
@@ -37,7 +43,8 @@ export const FieldDefinitionSchema = z
       .refine(
         (value) => {
           try {
-            return new RegExp(value) instanceof RegExp;
+            const pattern = new RegExp(value);
+            return pattern.test("");
           } catch {
             return false;
           }
@@ -56,7 +63,7 @@ export const FieldDefinitionSchema = z
       return field.options === undefined;
     },
     { message: "options is required for enum fields and forbidden otherwise" }
-  );
+  ) satisfies z.ZodType<FieldDefinition, unknown>;
 
 export const FieldSchemaSchema = z
   .object({
@@ -68,7 +75,7 @@ export const FieldSchemaSchema = z
       return new Set(keys).size === keys.length;
     },
     { message: "Field keys must be unique within a template version" }
-  );
+  ) satisfies z.ZodType<FieldSchemaJson, unknown>;
 
 export const LayoutSchema = z
   .string()

@@ -1,7 +1,9 @@
 import { and, count, desc, eq, isNull, max, sql } from "drizzle-orm";
 
 import type {
+  FieldSchemaType,
   TemplateCreateType,
+  TemplatePreviewType,
   TemplateUpdateType,
   TemplateVersionCreateType,
   TemplateVersionUpdateType,
@@ -10,6 +12,13 @@ import type {
 import { db } from "../../db";
 import { templateVersions, templates } from "../../db/schema/template.schema";
 import { AppError, isPgUniqueViolation } from "../../shared/errors";
+import { extractFields } from "./template.extract";
+import { computeSchemaHash } from "./template.hash";
+import {
+  renderLayout,
+  sanitizeLayout,
+  validateLayoutAgainstSchema,
+} from "./template.layout";
 
 const requireTemplate = async (
   organizationId: string,
@@ -60,18 +69,25 @@ const requireTemplateVersion = async (
   return version;
 };
 
+const resolveFieldSchema = (
+  layout: string,
+  explicit: FieldSchemaType | undefined = undefined
+): FieldSchemaType => {
+  if (explicit) {
+    return explicit;
+  }
+  return { fields: extractFields(layout) };
+};
+
 export const TemplateService = {
   async archive(organizationId: string, templateId: string) {
     await requireTemplate(organizationId, templateId);
 
-    const now = new Date();
+    const now = new Date().toISOString();
 
     const [template] = await db
       .update(templates)
-      .set({
-        archivedAt: now.toISOString(),
-        updatedAt: now.toISOString(),
-      })
+      .set({ archivedAt: now, updatedAt: now })
       .where(
         and(
           eq(templates.id, templateId),
@@ -93,6 +109,11 @@ export const TemplateService = {
     createdBy: string,
     data: TemplateCreateType
   ) {
+    const sanitized = sanitizeLayout(data.layout);
+    const fieldSchema = resolveFieldSchema(sanitized, data.fieldSchema);
+
+    validateLayoutAgainstSchema(sanitized, fieldSchema);
+
     try {
       return await db.transaction(async (tx) => {
         const [template] = await tx
@@ -108,19 +129,15 @@ export const TemplateService = {
         const [version] = await tx
           .insert(templateVersions)
           .values({
-            compilerVersion: data.compilerVersion,
-            contractName: data.contractName,
             createdBy,
-            sourceCode: data.sourceCode,
+            fieldSchema,
+            layout: sanitized,
             templateId: template.id,
             version: 1,
           })
           .returning();
 
-        return {
-          ...template,
-          versions: [version],
-        };
+        return { ...template, versions: [version] };
       });
     } catch (error) {
       if (isPgUniqueViolation(error)) {
@@ -140,6 +157,11 @@ export const TemplateService = {
   ) {
     await requireTemplate(organizationId, templateId);
 
+    const sanitized = sanitizeLayout(data.layout);
+    const fieldSchema = resolveFieldSchema(sanitized, data.fieldSchema);
+
+    validateLayoutAgainstSchema(sanitized, fieldSchema);
+
     return db.transaction(async (tx) => {
       await tx.execute(
         sql`SELECT id FROM ${templates} WHERE ${templates.id} = ${templateId} FOR UPDATE`
@@ -155,10 +177,9 @@ export const TemplateService = {
       const [version] = await tx
         .insert(templateVersions)
         .values({
-          compilerVersion: data.compilerVersion,
-          contractName: data.contractName,
           createdBy,
-          sourceCode: data.sourceCode,
+          fieldSchema,
+          layout: sanitized,
           templateId,
           version: nextVersion,
         })
@@ -184,10 +205,7 @@ export const TemplateService = {
       .where(eq(templateVersions.templateId, templateId))
       .orderBy(desc(templateVersions.version));
 
-    return {
-      ...template,
-      versions,
-    };
+    return { ...template, versions };
   },
 
   async list(organizationId: string, limit: number, offset: number) {
@@ -210,11 +228,7 @@ export const TemplateService = {
 
     return {
       data,
-      meta: {
-        limit,
-        offset,
-        total: Number(total),
-      },
+      meta: { limit, offset, total: Number(total) },
     };
   },
 
@@ -230,6 +244,41 @@ export const TemplateService = {
       .orderBy(desc(templateVersions.version));
   },
 
+  async preview(
+    organizationId: string,
+    templateId: string,
+    versionId: string,
+    data: TemplatePreviewType
+  ) {
+    await requireTemplate(organizationId, templateId, {
+      allowArchived: true,
+    });
+
+    const version = await requireTemplateVersion(templateId, versionId);
+
+    const schema = version.fieldSchema;
+    const missing: string[] = [];
+
+    for (const field of schema.fields) {
+      if (!field.required) {
+        continue;
+      }
+      const value = data.data[field.key];
+      if (value === undefined || value === null || value === "") {
+        missing.push(field.key);
+      }
+    }
+
+    if (missing.length > 0) {
+      throw AppError.validation(
+        `Missing required values: ${missing.join(", ")}`
+      );
+    }
+
+    const svg = renderLayout(version.layout, data.data);
+    return { svg };
+  },
+
   async publishVersion(
     organizationId: string,
     templateId: string,
@@ -243,15 +292,17 @@ export const TemplateService = {
       throw AppError.conflict("Only draft versions can be published");
     }
 
-    if (!version.sourceCode.trim()) {
-      throw AppError.validation("Cannot publish a version with empty source");
-    }
+    const schemaHash = await computeSchemaHash(
+      version.fieldSchema,
+      version.layout
+    );
 
     return db.transaction(async (tx) => {
       const [published] = await tx
         .update(templateVersions)
         .set({
           publishedAt: new Date().toISOString(),
+          schemaHash,
           status: "published",
           updatedAt: new Date().toISOString(),
         })
@@ -286,10 +337,7 @@ export const TemplateService = {
 
     const [template] = await db
       .update(templates)
-      .set({
-        ...data,
-        updatedAt: new Date().toISOString(),
-      })
+      .set({ ...data, updatedAt: new Date().toISOString() })
       .where(
         and(
           eq(templates.id, templateId),
@@ -320,10 +368,26 @@ export const TemplateService = {
       throw AppError.conflict("Published versions cannot be modified");
     }
 
+    const nextLayout = data.layout
+      ? sanitizeLayout(data.layout)
+      : version.layout;
+
+    let nextFieldSchema: FieldSchemaType;
+    if (data.fieldSchema) {
+      nextFieldSchema = data.fieldSchema;
+    } else if (data.layout) {
+      nextFieldSchema = resolveFieldSchema(nextLayout);
+    } else {
+      nextFieldSchema = version.fieldSchema;
+    }
+
+    validateLayoutAgainstSchema(nextLayout, nextFieldSchema);
+
     const [updated] = await db
       .update(templateVersions)
       .set({
-        ...data,
+        fieldSchema: nextFieldSchema,
+        layout: nextLayout,
         updatedAt: new Date().toISOString(),
       })
       .where(

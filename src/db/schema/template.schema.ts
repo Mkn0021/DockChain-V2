@@ -8,6 +8,8 @@ import {
   uniqueIndex,
 } from "drizzle-orm/pg-core";
 
+import type { FieldSchemaJson } from "../../features/templates/template.types";
+
 import { timestamp } from "../utils";
 import { organizations, users } from "./auth.schema";
 
@@ -63,7 +65,7 @@ export const templateVersions = pgTable(
       onDelete: "set null",
     }),
 
-    fieldSchema: jsonb("field_schema").notNull(),
+    fieldSchema: jsonb("field_schema").$type<FieldSchemaJson>().notNull(),
 
     id: text("id")
       .primaryKey()
