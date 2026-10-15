@@ -11,6 +11,7 @@ import { healthController } from "./features/health/health.controller";
 import { organizationController } from "./features/organizations/organization.controller";
 import { settingsController } from "./features/settings/settings.controller";
 import { templateController } from "./features/templates/template.controller";
+import { walletController } from "./features/wallets/wallet.controller";
 import { httpPlugin } from "./shared/http";
 import {
   authPlugin,
@@ -66,4 +67,5 @@ export const app = new Elysia({
   .use(healthController)
   .use(organizationController)
   .use(settingsController)
-  .use(templateController);
+  .use(templateController)
+  .use(walletController);
