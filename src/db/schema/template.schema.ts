@@ -1,6 +1,7 @@
 import {
   index,
   integer,
+  jsonb,
   pgEnum,
   pgTable,
   text,
@@ -25,6 +26,7 @@ export const templates = pgTable(
     createdBy: text("created_by").references(() => users.id, {
       onDelete: "set null",
     }),
+
     description: text("description"),
 
     id: text("id")
@@ -32,6 +34,7 @@ export const templates = pgTable(
       .$defaultFn(() => crypto.randomUUID()),
 
     name: text("name").notNull(),
+
     organizationId: text("organization_id")
       .notNull()
       .references(() => organizations.id, { onDelete: "cascade" }),
@@ -54,27 +57,30 @@ export const templates = pgTable(
 export const templateVersions = pgTable(
   "template_versions",
   {
-    compilerVersion: text("compiler_version").notNull(),
-
-    contractName: text("contract_name").notNull(),
-
     createdAt: timestamp("created_at").defaultNow().notNull(),
 
     createdBy: text("created_by").references(() => users.id, {
       onDelete: "set null",
     }),
+
+    fieldSchema: jsonb("field_schema").notNull(),
+
     id: text("id")
       .primaryKey()
       .$defaultFn(() => crypto.randomUUID()),
+
+    layout: text("layout").notNull(),
+
     publishedAt: timestamp("published_at"),
 
-    sourceCode: text("source_code").notNull(),
+    schemaHash: text("schema_hash"),
 
     status: templateVersionStatus("status").default("draft").notNull(),
 
     templateId: text("template_id")
       .notNull()
       .references(() => templates.id, { onDelete: "cascade" }),
+
     updatedAt: timestamp("updated_at")
       .defaultNow()
       .$onUpdate(() => new Date().toISOString())
