@@ -83,11 +83,14 @@ export const TemplateService = {
   async archive(organizationId: string, templateId: string) {
     await requireTemplate(organizationId, templateId);
 
-    const now = new Date().toISOString();
+    const now = new Date();
 
     const [template] = await db
       .update(templates)
-      .set({ archivedAt: now, updatedAt: now })
+      .set({
+        archivedAt: now,
+        updatedAt: now,
+      })
       .where(
         and(
           eq(templates.id, templateId),
@@ -187,7 +190,7 @@ export const TemplateService = {
 
       await tx
         .update(templates)
-        .set({ updatedAt: new Date().toISOString() })
+        .set({ updatedAt: new Date() })
         .where(eq(templates.id, templateId));
 
       return version;
@@ -301,10 +304,10 @@ export const TemplateService = {
       const [published] = await tx
         .update(templateVersions)
         .set({
-          publishedAt: new Date().toISOString(),
+          publishedAt: new Date(),
           schemaHash,
           status: "published",
-          updatedAt: new Date().toISOString(),
+          updatedAt: new Date(),
         })
         .where(
           and(
@@ -321,7 +324,7 @@ export const TemplateService = {
 
       await tx
         .update(templates)
-        .set({ updatedAt: new Date().toISOString() })
+        .set({ updatedAt: new Date() })
         .where(eq(templates.id, templateId));
 
       return published;
@@ -337,7 +340,10 @@ export const TemplateService = {
 
     const [template] = await db
       .update(templates)
-      .set({ ...data, updatedAt: new Date().toISOString() })
+      .set({
+        ...data,
+        updatedAt: new Date(),
+      })
       .where(
         and(
           eq(templates.id, templateId),
@@ -386,9 +392,10 @@ export const TemplateService = {
     const [updated] = await db
       .update(templateVersions)
       .set({
+        ...data,
         fieldSchema: nextFieldSchema,
         layout: nextLayout,
-        updatedAt: new Date().toISOString(),
+        updatedAt: new Date(),
       })
       .where(
         and(

@@ -5,12 +5,12 @@ import {
   pgEnum,
   pgTable,
   text,
+  timestamp,
   uniqueIndex,
 } from "drizzle-orm/pg-core";
 
 import type { FieldSchemaJson } from "../../features/templates/template.types";
 
-import { timestamp } from "../utils";
 import { organizations, users } from "./auth.schema";
 
 export const templateVersionStatus = pgEnum("template_version_status", [
@@ -43,7 +43,7 @@ export const templates = pgTable(
 
     updatedAt: timestamp("updated_at")
       .defaultNow()
-      .$onUpdate(() => new Date().toISOString())
+      .$onUpdate(() => new Date())
       .notNull(),
   },
   (table) => [
@@ -85,7 +85,7 @@ export const templateVersions = pgTable(
 
     updatedAt: timestamp("updated_at")
       .defaultNow()
-      .$onUpdate(() => new Date().toISOString())
+      .$onUpdate(() => new Date())
       .notNull(),
 
     version: integer("version").notNull(),
