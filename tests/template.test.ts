@@ -8,29 +8,52 @@ import {
   type TestUser,
 } from "./helpers/test-app";
 
-const validContract = {
-  compilerVersion: "0.8.24",
-  contractName: "UniversityCertificate",
-  sourceCode: `// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.24;
+const validLayout = `<svg xmlns="http://www.w3.org/2000/svg" width="400" height="200">
+  <rect width="400" height="200" fill="#f5f5f5" />
+  <text x="20" y="40">Certificate</text>
+  <text x="20" y="80">{{recipient_name}}</text>
+  <text x="20" y="120">{{course_title}}</text>
+  <text x="20" y="160">{{issued_date}}</text>
+</svg>`;
 
-contract UniversityCertificate {
-  address public owner;
-  constructor() { owner = msg.sender; }
-}`,
+const validFieldSchema = {
+  fields: [
+    {
+      key: "recipient_name",
+      label: "Recipient Name",
+      type: "text",
+      required: true,
+    },
+    {
+      key: "course_title",
+      label: "Course Title",
+      type: "text",
+      required: true,
+    },
+    {
+      key: "issued_date",
+      label: "Issued Date",
+      type: "date",
+      required: true,
+    },
+  ],
 };
 
 async function createTemplate(
   user: TestUser,
   organizationId: string,
-  overrides: Partial<
-    typeof validContract & { name: string; description?: string }
-  > = {}
+  overrides: Partial<{
+    name: string;
+    description: string | null;
+    layout: string;
+    fieldSchema: typeof validFieldSchema;
+  }> = {}
 ) {
   const payload = {
     name: `Template ${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
     description: "Test template",
-    ...validContract,
+    layout: validLayout,
+    fieldSchema: validFieldSchema,
     ...overrides,
   };
   const response = await request(
@@ -67,9 +90,9 @@ describe("POST /organizations/:organizationId/templates", () => {
         id: string;
         version: number;
         status: string;
-        contractName: string;
-        compilerVersion: string;
-        sourceCode: string;
+        layout: string;
+        fieldSchema: typeof validFieldSchema;
+        schemaHash: string | null;
       }>;
     }>(response);
 
@@ -79,17 +102,22 @@ describe("POST /organizations/:organizationId/templates", () => {
     expect(body.versions).toHaveLength(1);
     expect(body.versions[0]!.version).toBe(1);
     expect(body.versions[0]!.status).toBe("draft");
-    expect(body.versions[0]!.contractName).toBe(validContract.contractName);
-    expect(body.versions[0]!.compilerVersion).toBe(
-      validContract.compilerVersion
-    );
+    expect(body.versions[0]!.layout).toContain("<svg");
+    expect(body.versions[0]!.fieldSchema.fields).toHaveLength(3);
+    expect(body.versions[0]!.schemaHash).toBeNull();
   });
 
   it("returns 401 when unauthenticated", async () => {
     const response = await request(
       "POST",
       `/organizations/${orgId}/templates`,
-      { body: { name: "NoAuth", ...validContract } }
+      {
+        body: {
+          name: "NoAuth",
+          layout: validLayout,
+          fieldSchema: validFieldSchema,
+        },
+      }
     );
     expect(response.status).toBe(401);
   });
@@ -104,66 +132,94 @@ describe("POST /organizations/:organizationId/templates", () => {
     expect(response.status).toBe(422);
   });
 
-  it("returns 422 for an invalid contractName starting with a digit", async () => {
+  it("returns 422 for non-SVG layout", async () => {
     const { response } = await createTemplate(user, orgId, {
-      contractName: "123Invalid",
+      layout: "<html><body>not svg</body></html>",
     });
     expect(response.status).toBe(422);
   });
 
-  it("returns 422 for a contractName with spaces", async () => {
+  it("returns 422 for a layout with a script tag", async () => {
     const { response } = await createTemplate(user, orgId, {
-      contractName: "Invalid Name",
+      layout: `<svg xmlns="http://www.w3.org/2000/svg"><script>alert(1)</script><text>{{recipient_name}}</text><text>{{course_title}}</text><text>{{issued_date}}</text></svg>`,
     });
     expect(response.status).toBe(422);
   });
 
-  it("returns 200 for a contractName starting with underscore", async () => {
+  it("returns 422 for a layout with an external href", async () => {
     const { response } = await createTemplate(user, orgId, {
-      contractName: "_PrivateContract",
-    });
-    expect(response.status).toBe(200);
-  });
-
-  it("returns 200 for a contractName with $", async () => {
-    const { response } = await createTemplate(user, orgId, {
-      contractName: "$Contract",
-    });
-    expect(response.status).toBe(200);
-  });
-
-  it("returns 422 for an invalid compilerVersion format", async () => {
-    const { response } = await createTemplate(user, orgId, {
-      compilerVersion: "0.8",
+      layout: `<svg xmlns="http://www.w3.org/2000/svg"><image href="https://evil.com/x.png" /><text>{{recipient_name}}</text><text>{{course_title}}</text><text>{{issued_date}}</text></svg>`,
     });
     expect(response.status).toBe(422);
   });
 
-  it("returns 422 for a non-numeric compilerVersion", async () => {
+  it("returns 422 when a required field is missing from the layout", async () => {
     const { response } = await createTemplate(user, orgId, {
-      compilerVersion: "latest",
+      layout: `<svg xmlns="http://www.w3.org/2000/svg"><text>{{recipient_name}}</text><text>{{course_title}}</text></svg>`,
     });
     expect(response.status).toBe(422);
   });
 
-  it("returns 422 for an empty sourceCode", async () => {
-    const { response } = await createTemplate(user, orgId, { sourceCode: "" });
+  it("returns 422 when the layout references an unknown field", async () => {
+    const { response } = await createTemplate(user, orgId, {
+      layout: `<svg xmlns="http://www.w3.org/2000/svg"><text>{{recipient_name}}</text><text>{{course_title}}</text><text>{{issued_date}}</text><text>{{mystery}}</text></svg>`,
+    });
     expect(response.status).toBe(422);
   });
 
-  it("returns 422 when contractName is missing", async () => {
+  it("derives the field schema from the layout when omitted", async () => {
+    const payload = {
+      name: `Derived ${Date.now()}`,
+      layout: `<svg xmlns="http://www.w3.org/2000/svg"><text>{{recipient_name}}</text><text>{{issued_date}}</text></svg>`,
+    };
     const response = await request(
       "POST",
       `/organizations/${orgId}/templates`,
-      {
-        user,
-        body: {
-          name: "Missing Contract",
-          compilerVersion: "0.8.24",
-          sourceCode: "contract X {}",
-        },
-      }
+      { user, body: payload }
     );
+    expect(response.status).toBe(200);
+
+    const body = await json<{
+      versions: Array<{
+        fieldSchema: { fields: Array<{ key: string; type: string }> };
+      }>;
+    }>(response);
+
+    const fields = body.versions[0]!.fieldSchema.fields;
+    expect(fields.map((f) => f.key).sort()).toEqual([
+      "issued_date",
+      "recipient_name",
+    ]);
+    const dateField = fields.find((f) => f.key === "issued_date");
+    expect(dateField?.type).toBe("date");
+  });
+
+  it("returns 422 for a duplicate field key", async () => {
+    const { response } = await createTemplate(user, orgId, {
+      fieldSchema: {
+        fields: [
+          { key: "recipient_name", label: "A", type: "text", required: true },
+          { key: "recipient_name", label: "B", type: "text", required: true },
+        ],
+      },
+    });
+    expect(response.status).toBe(422);
+  });
+
+  it("returns 422 for an enum without options", async () => {
+    const { response } = await createTemplate(user, orgId, {
+      fieldSchema: {
+        fields: [
+          {
+            key: "grade",
+            label: "Grade",
+            type: "enum",
+            required: true,
+          },
+          { key: "recipient_name", label: "R", type: "text", required: true },
+        ],
+      },
+    });
     expect(response.status).toBe(422);
   });
 
@@ -219,6 +275,7 @@ describe("GET /organizations/:organizationId/templates", () => {
       meta: { limit: number; offset: number; total: number };
     }>(response);
     expect(body.data.length).toBeGreaterThanOrEqual(3);
+    expect(body.meta.total).toBeGreaterThanOrEqual(3);
   });
 
   it("returns 200 and respects limit/offset", async () => {
@@ -292,7 +349,8 @@ describe("GET /organizations/:organizationId/templates/:templateId", () => {
     orgId = (await createOrganization(user, "Tpl Get Org")).id;
 
     const created = await createTemplate(user, orgId);
-    templateId = (await json<{ id: string }>(created.response)).id;
+    const body = await json<{ id: string }>(created.response);
+    templateId = body.id;
   });
 
   it("returns 200 with the template and versions", async () => {
@@ -367,7 +425,8 @@ describe("PATCH /organizations/:organizationId/templates/:templateId", () => {
     orgId = (await createOrganization(user, "Tpl Patch Org")).id;
 
     const created = await createTemplate(user, orgId);
-    templateId = (await json<{ id: string }>(created.response)).id;
+    const body = await json<{ id: string }>(created.response);
+    templateId = body.id;
   });
 
   it("returns 200 when updating name", async () => {
@@ -453,7 +512,8 @@ describe("POST .../templates/:templateId/versions", () => {
     orgId = (await createOrganization(user, "Tpl Version Org")).id;
 
     const created = await createTemplate(user, orgId);
-    templateId = (await json<{ id: string }>(created.response)).id;
+    const body = await json<{ id: string }>(created.response);
+    templateId = body.id;
   });
 
   it("returns 200 and creates version 2", async () => {
@@ -463,8 +523,8 @@ describe("POST .../templates/:templateId/versions", () => {
       {
         user,
         body: {
-          ...validContract,
-          sourceCode: "contract UniversityCertificate { uint256 public n; }",
+          layout: validLayout.replace("Certificate", "Version 2"),
+          fieldSchema: validFieldSchema,
         },
       }
     );
@@ -484,8 +544,8 @@ describe("POST .../templates/:templateId/versions", () => {
           {
             user,
             body: {
-              ...validContract,
-              sourceCode: `contract Concurrent${i} {}`,
+              layout: validLayout.replace("Certificate", `Concurrent ${i}`),
+              fieldSchema: validFieldSchema,
             },
           }
         )
@@ -501,11 +561,14 @@ describe("POST .../templates/:templateId/versions", () => {
     expect(new Set(numbers).size).toBe(numbers.length);
   });
 
-  it("returns 422 for an invalid contractName", async () => {
+  it("returns 422 for a non-SVG layout", async () => {
     const response = await request(
       "POST",
       `/organizations/${orgId}/templates/${templateId}/versions`,
-      { user, body: { ...validContract, contractName: "123Bad" } }
+      {
+        user,
+        body: { layout: "<div>nope</div>" },
+      }
     );
     expect(response.status).toBe(422);
   });
@@ -514,7 +577,7 @@ describe("POST .../templates/:templateId/versions", () => {
     const response = await request(
       "POST",
       `/organizations/${orgId}/templates/does-not-exist/versions`,
-      { user, body: validContract }
+      { user, body: { layout: validLayout } }
     );
     expect(response.status).toBe(404);
   });
@@ -528,7 +591,7 @@ describe("POST .../templates/:templateId/versions", () => {
     const response = await request(
       "POST",
       `/organizations/${orgId}/templates/${otherBody.id}/versions`,
-      { user, body: validContract }
+      { user, body: { layout: validLayout } }
     );
     expect(response.status).toBe(404);
   });
@@ -537,7 +600,7 @@ describe("POST .../templates/:templateId/versions", () => {
     const response = await request(
       "POST",
       `/organizations/${orgId}/templates/${templateId}/versions`,
-      { body: validContract }
+      { body: { layout: validLayout } }
     );
     expect(response.status).toBe(401);
   });
@@ -557,12 +620,13 @@ describe("GET .../templates/:templateId/versions", () => {
     orgId = (await createOrganization(user, "Tpl Versions List Org")).id;
 
     const created = await createTemplate(user, orgId);
-    templateId = (await json<{ id: string }>(created.response)).id;
+    const body = await json<{ id: string }>(created.response);
+    templateId = body.id;
 
     await request(
       "POST",
       `/organizations/${orgId}/templates/${templateId}/versions`,
-      { user, body: validContract }
+      { user, body: { layout: validLayout, fieldSchema: validFieldSchema } }
     );
   });
 
@@ -625,32 +689,25 @@ describe("PATCH .../templates/:templateId/versions/:versionId", () => {
     versionId = body.versions[0]!.id;
   });
 
-  it("returns 200 when updating draft source", async () => {
+  it("returns 200 when updating draft layout", async () => {
     const response = await request(
       "PATCH",
       `/organizations/${orgId}/templates/${templateId}/versions/${versionId}`,
-      { user, body: { sourceCode: "contract UpdatedDraft {}" } }
-    );
-    expect(response.status).toBe(200);
-
-    const body = await json<{ sourceCode: string }>(response);
-    expect(body.sourceCode).toBe("contract UpdatedDraft {}");
-  });
-
-  it("returns 200 when updating compilerVersion", async () => {
-    const response = await request(
-      "PATCH",
-      `/organizations/${orgId}/templates/${templateId}/versions/${versionId}`,
-      { user, body: { compilerVersion: "0.8.25" } }
+      {
+        user,
+        body: {
+          layout: validLayout.replace("Certificate", "Updated"),
+        },
+      }
     );
     expect(response.status).toBe(200);
   });
 
-  it("returns 200 when updating contractName", async () => {
+  it("returns 200 when updating field schema", async () => {
     const response = await request(
       "PATCH",
       `/organizations/${orgId}/templates/${templateId}/versions/${versionId}`,
-      { user, body: { contractName: "RenamedContract" } }
+      { user, body: { fieldSchema: validFieldSchema } }
     );
     expect(response.status).toBe(200);
   });
@@ -668,7 +725,7 @@ describe("PATCH .../templates/:templateId/versions/:versionId", () => {
     const response = await request(
       "PATCH",
       `/organizations/${orgId}/templates/${templateId}/versions/does-not-exist`,
-      { user, body: { sourceCode: "contract X {}" } }
+      { user, body: { layout: validLayout } }
     );
     expect(response.status).toBe(404);
   });
@@ -684,7 +741,7 @@ describe("PATCH .../templates/:templateId/versions/:versionId", () => {
     const edit = await request(
       "PATCH",
       `/organizations/${orgId}/templates/${templateId}/versions/${versionId}`,
-      { user, body: { sourceCode: "contract ShouldFail {}" } }
+      { user, body: { layout: validLayout } }
     );
     expect(edit.status).toBe(409);
   });
@@ -693,7 +750,7 @@ describe("PATCH .../templates/:templateId/versions/:versionId", () => {
     const response = await request(
       "PATCH",
       `/organizations/${orgId}/templates/${templateId}/versions/${versionId}`,
-      { body: { sourceCode: "contract X {}" } }
+      { body: { layout: validLayout } }
     );
     expect(response.status).toBe(401);
   });
@@ -722,7 +779,7 @@ describe("POST .../templates/:templateId/versions/:versionId/publish", () => {
     versionId = body.versions[0]!.id;
   });
 
-  it("returns 200 and sets publishedAt", async () => {
+  it("returns 200, sets publishedAt and computes schemaHash", async () => {
     const response = await request(
       "POST",
       `/organizations/${orgId}/templates/${templateId}/versions/${versionId}/publish`,
@@ -733,18 +790,64 @@ describe("POST .../templates/:templateId/versions/:versionId/publish", () => {
     const body = await json<{
       status: string;
       publishedAt: string | null;
+      schemaHash: string | null;
     }>(response);
     expect(body.status).toBe("published");
     expect(body.publishedAt).not.toBeNull();
+    expect(body.schemaHash).not.toBeNull();
+    expect(body.schemaHash).toMatch(/^0x[0-9a-f]{64}$/);
+  });
+
+  it("keeps schemaHash immutable after publish", async () => {
+    const fresh = await createTemplate(user, orgId, {
+      name: `Immutable ${Date.now()}`,
+    });
+    const freshBody = await json<{
+      id: string;
+      versions: Array<{ id: string }>;
+    }>(fresh.response);
+
+    const first = await request(
+      "POST",
+      `/organizations/${orgId}/templates/${freshBody.id}/versions/${freshBody.versions[0]!.id}/publish`,
+      { user }
+    );
+    expect(first.status).toBe(200);
+    const firstHash = (await json<{ schemaHash: string }>(first)).schemaHash;
+
+    const second = await request(
+      "GET",
+      `/organizations/${orgId}/templates/${freshBody.id}`,
+      { user }
+    );
+    const secondBody = await json<{
+      versions: Array<{ schemaHash: string }>;
+    }>(second);
+    expect(secondBody.versions[0]!.schemaHash).toBe(firstHash);
   });
 
   it("returns 409 when publishing twice", async () => {
-    const response = await request(
+    const fresh = await createTemplate(user, orgId, {
+      name: `Twice ${Date.now()}`,
+    });
+    const freshBody = await json<{
+      id: string;
+      versions: Array<{ id: string }>;
+    }>(fresh.response);
+
+    const first = await request(
       "POST",
-      `/organizations/${orgId}/templates/${templateId}/versions/${versionId}/publish`,
+      `/organizations/${orgId}/templates/${freshBody.id}/versions/${freshBody.versions[0]!.id}/publish`,
       { user }
     );
-    expect(response.status).toBe(409);
+    expect(first.status).toBe(200);
+
+    const second = await request(
+      "POST",
+      `/organizations/${orgId}/templates/${freshBody.id}/versions/${freshBody.versions[0]!.id}/publish`,
+      { user }
+    );
+    expect(second.status).toBe(409);
   });
 
   it("returns 404 for a nonexistent version", async () => {
@@ -757,17 +860,122 @@ describe("POST .../templates/:templateId/versions/:versionId/publish", () => {
   });
 
   it("returns 401 when unauthenticated", async () => {
-    const fresh = await createTemplate(user, orgId, {
-      name: `NoAuth ${Date.now()}`,
-    });
-    const freshBody = await json<{
-      id: string;
-      versions: Array<{ id: string }>;
-    }>(fresh.response);
-
     const response = await request(
       "POST",
-      `/organizations/${orgId}/templates/${freshBody.id}/versions/${freshBody.versions[0]!.id}/publish`
+      `/organizations/${orgId}/templates/${templateId}/versions/does-not-exist/publish`
+    );
+    expect(response.status).toBe(401);
+  });
+});
+
+// ===========================================================================
+// POST .../templates/:templateId/versions/:versionId/preview
+// ===========================================================================
+
+describe("POST .../templates/:templateId/versions/:versionId/preview", () => {
+  let user: TestUser;
+  let orgId: string;
+  let templateId: string;
+  let versionId: string;
+
+  beforeAll(async () => {
+    user = await createTestUser("tpl-preview");
+    orgId = (await createOrganization(user, "Tpl Preview Org")).id;
+
+    const created = await createTemplate(user, orgId);
+    const body = await json<{
+      id: string;
+      versions: Array<{ id: string }>;
+    }>(created.response);
+    templateId = body.id;
+    versionId = body.versions[0]!.id;
+  });
+
+  it("returns 200 and renders the SVG with values", async () => {
+    const response = await request(
+      "POST",
+      `/organizations/${orgId}/templates/${templateId}/versions/${versionId}/preview`,
+      {
+        user,
+        body: {
+          data: {
+            course_title: "Computer Science",
+            issued_date: "2026-01-15",
+            recipient_name: "Ada Lovelace",
+          },
+        },
+      }
+    );
+    expect(response.status).toBe(200);
+
+    const body = await json<{ svg: string }>(response);
+    expect(body.svg).toContain("Ada Lovelace");
+    expect(body.svg).toContain("Computer Science");
+    expect(body.svg).not.toContain("{{recipient_name}}");
+  });
+
+  it("escapes XML characters in values", async () => {
+    const response = await request(
+      "POST",
+      `/organizations/${orgId}/templates/${templateId}/versions/${versionId}/preview`,
+      {
+        user,
+        body: {
+          data: {
+            course_title: "Web",
+            issued_date: "2026-01-15",
+            recipient_name: '<script>alert("x")</script>',
+          },
+        },
+      }
+    );
+    expect(response.status).toBe(200);
+
+    const body = await json<{ svg: string }>(response);
+    expect(body.svg).not.toContain("<script>");
+    expect(body.svg).toContain("&lt;script&gt;");
+  });
+
+  it("returns 422 when a required value is missing", async () => {
+    const response = await request(
+      "POST",
+      `/organizations/${orgId}/templates/${templateId}/versions/${versionId}/preview`,
+      { user, body: { data: { recipient_name: "Ada" } } }
+    );
+    expect(response.status).toBe(422);
+  });
+
+  it("returns 404 for a nonexistent version", async () => {
+    const response = await request(
+      "POST",
+      `/organizations/${orgId}/templates/${templateId}/versions/does-not-exist/preview`,
+      {
+        user,
+        body: {
+          data: {
+            course_title: "X",
+            issued_date: "2026-01-15",
+            recipient_name: "Y",
+          },
+        },
+      }
+    );
+    expect(response.status).toBe(404);
+  });
+
+  it("returns 401 when unauthenticated", async () => {
+    const response = await request(
+      "POST",
+      `/organizations/${orgId}/templates/${templateId}/versions/${versionId}/preview`,
+      {
+        body: {
+          data: {
+            course_title: "X",
+            issued_date: "2026-01-15",
+            recipient_name: "Y",
+          },
+        },
+      }
     );
     expect(response.status).toBe(401);
   });
@@ -787,7 +995,8 @@ describe("DELETE /organizations/:organizationId/templates/:templateId", () => {
     orgId = (await createOrganization(user, "Tpl Archive Org")).id;
 
     const created = await createTemplate(user, orgId);
-    templateId = (await json<{ id: string }>(created.response)).id;
+    const body = await json<{ id: string }>(created.response);
+    templateId = body.id;
   });
 
   it("returns 200 and sets archivedAt", async () => {
@@ -802,7 +1011,7 @@ describe("DELETE /organizations/:organizationId/templates/:templateId", () => {
     expect(body.archivedAt).not.toBeNull();
   });
 
-  it("returns 200 and hides archived templates from the list", async () => {
+  it("hides the template from the list", async () => {
     const response = await request("GET", `/organizations/${orgId}/templates`, {
       user,
     });
@@ -811,7 +1020,7 @@ describe("DELETE /organizations/:organizationId/templates/:templateId", () => {
     expect(body.data.find((t) => t.id === templateId)).toBeUndefined();
   });
 
-  it("returns 200 when fetching the archived template by ID", async () => {
+  it("still returns the archived template via GET", async () => {
     const response = await request(
       "GET",
       `/organizations/${orgId}/templates/${templateId}`,
@@ -833,27 +1042,22 @@ describe("DELETE /organizations/:organizationId/templates/:templateId", () => {
     const response = await request(
       "POST",
       `/organizations/${orgId}/templates/${templateId}/versions`,
-      { user, body: validContract }
+      { user, body: { layout: validLayout } }
     );
     expect(response.status).toBe(404);
   });
 
   it("returns 401 when unauthenticated", async () => {
-    const fresh = await createTemplate(user, orgId, {
-      name: `Archive NoAuth ${Date.now()}`,
-    });
-    const freshBody = await json<{ id: string }>(fresh.response);
-
     const response = await request(
       "DELETE",
-      `/organizations/${orgId}/templates/${freshBody.id}`
+      `/organizations/${orgId}/templates/${templateId}`
     );
     expect(response.status).toBe(401);
   });
 });
 
 // ===========================================================================
-// Template isolation
+// Template isolation across organizations
 // ===========================================================================
 
 describe("Template isolation across organizations", () => {
