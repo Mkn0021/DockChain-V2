@@ -32,8 +32,8 @@ URI: ${env.APP_PUBLIC_URL}
 Version: 1
 Chain ID: ${input.chainId}
 Nonce: ${input.nonce}
-Issued At: ${input.issuedAt}
-Expiration Time: ${input.expirationTime}`;
+Issued At: ${input.issuedAt.toISOString()}
+Expiration Time: ${input.expirationTime.toISOString()}`;
 
 export const createChallenge = (input: {
   address: string;
