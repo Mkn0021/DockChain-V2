@@ -8,6 +8,7 @@ import { z } from "zod";
 
 import { authOpenAPI } from "./auth";
 import { batchController } from "./features/batches/batch.controller";
+import { runBatchScheduler } from "./features/batches/batch.scheduler";
 import { documentController } from "./features/documents/document.controller";
 import { healthController } from "./features/health/health.controller";
 import { organizationController } from "./features/organizations/organization.controller";
@@ -42,10 +43,10 @@ export const app = new Elysia({
   .use(orgContextPlugin)
   .use(
     cron({
-      name: "heartbeat",
-      pattern: "*/30 * * * * *",
-      run() {
-        console.log("Heartbeat");
+      name: "batch-scheduler",
+      pattern: "* * * * *",
+      async run() {
+        await runBatchScheduler();
       },
     })
   )

@@ -1,7 +1,7 @@
-import { exampleWorker } from "./example.worker";
+import { batchRelayWorker } from "./batch-relay.worker";
 
 // All workers array
-export const allWorkers = [exampleWorker];
+export const allWorkers = [batchRelayWorker];
 
 // Graceful shutdown for all workers
 export const closeAllWorkers = async () => {
@@ -10,5 +10,4 @@ export const closeAllWorkers = async () => {
   console.log("Queue workers closed");
 };
 
-// Export individual workers
-export { exampleWorker };
+export { batchRelayWorker };
