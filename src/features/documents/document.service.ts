@@ -192,7 +192,8 @@ export const DocumentService = {
   ) {
     const context = await resolveContext(
       organizationId,
-      data.templateVersionId
+      data.templateVersionId,
+      data.issuerWalletId
     );
 
     const errors: { index: number; message: string }[] = [];

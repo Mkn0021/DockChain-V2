@@ -82,8 +82,15 @@ export const DocumentUpdateSchema = z
   );
 
 export const DocumentBulkCreateSchema = z.object({
+  issuerWalletId: z.string().min(1).optional(),
   items: z
-    .array(DocumentCreateSchema.omit({ mode: true, templateVersionId: true }))
+    .array(
+      DocumentCreateSchema.omit({
+        issuerWalletId: true,
+        mode: true,
+        templateVersionId: true,
+      })
+    )
     .min(1)
     .max(500),
   mode: z.enum(["draft", "ready"]).default("ready"),
