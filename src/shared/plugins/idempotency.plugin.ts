@@ -21,6 +21,16 @@ const extractOrganizationId = (path: string): string | undefined => {
   return match?.[1];
 };
 
+const getResponseStatus = (status: unknown, response: unknown): number => {
+  if (typeof status === "number") {
+    return status;
+  }
+  if (response instanceof Response) {
+    return response.status;
+  }
+  return 200;
+};
+
 export const idempotencyPlugin = new Elysia({ name: "plugin.idempotency" })
   .onBeforeHandle({ as: "scoped" }, async (ctx) => {
     if (ctx.request.method !== "POST") {
@@ -74,8 +84,9 @@ export const idempotencyPlugin = new Elysia({ name: "plugin.idempotency" })
         );
       }
 
-      ctx.set.status = existing.responseStatus;
-      return existing.responseBody;
+      return Response.json(existing.responseBody, {
+        status: existing.responseStatus,
+      });
     }
 
     try {
@@ -100,7 +111,7 @@ export const idempotencyPlugin = new Elysia({ name: "plugin.idempotency" })
       ctx as { idempotencyKeyRecord?: { key: string; organizationId: string } }
     ).idempotencyKeyRecord = { key, organizationId };
   })
-  .onAfterResponse({ as: "scoped" }, async (ctx) => {
+  .onAfterHandle({ as: "scoped" }, async (ctx) => {
     const record = (
       ctx as {
         idempotencyKeyRecord?: { key: string; organizationId: string };
@@ -110,20 +121,20 @@ export const idempotencyPlugin = new Elysia({ name: "plugin.idempotency" })
       return;
     }
 
-    const { status } = ctx.set;
-    if (typeof status !== "number" || status < 200 || status >= 300) {
+    const status = getResponseStatus(ctx.set.status, ctx.responseValue);
+    if (status < 200 || status >= 300) {
       return;
     }
 
     let body: unknown;
-    if (ctx.response instanceof Response) {
+    if (ctx.responseValue instanceof Response) {
       try {
-        body = await ctx.response.clone().json();
+        body = await ctx.responseValue.clone().json();
       } catch {
         return;
       }
     } else {
-      body = ctx.response;
+      body = ctx.responseValue;
     }
 
     await db
