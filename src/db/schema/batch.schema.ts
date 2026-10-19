@@ -10,6 +10,8 @@ import {
   uniqueIndex,
 } from "drizzle-orm/pg-core";
 
+import type { AnchorTypedDataJson } from "../../features/batches/batch.typed-data";
+
 import { organizations } from "./auth.schema";
 import { issuerWallets } from "./wallet.schema";
 
@@ -78,7 +80,7 @@ export const batches = pgTable(
 
     txHash: text("tx_hash"),
 
-    typedData: jsonb("typed_data"),
+    typedData: jsonb("typed_data").$type<AnchorTypedDataJson>(),
 
     updatedAt: timestamp("updated_at")
       .defaultNow()

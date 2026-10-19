@@ -5,6 +5,8 @@ import { batches, type batchStatus } from "../../db/schema/batch.schema";
 
 export const BatchSelectSchema = createSelectSchema(batches);
 
+const HexSchema = z.string().regex(/^0x[0-9a-fA-F]+$/);
+
 export const BatchStatusSchema = z.enum([
   "open",
   "awaiting_signature",
@@ -36,6 +38,27 @@ export const BatchSealSchema = z.object({
 
 export const BatchSignatureSchema = z.object({
   signature: z.string().regex(/^0x[0-9a-fA-F]+$/, "Signature must be hex"),
+});
+
+export const BatchTypedDataSchema = z.object({
+  domain: z.object({
+    chainId: z.number(),
+    name: z.string(),
+    verifyingContract: HexSchema,
+    version: z.string(),
+  }),
+  message: z.object({
+    count: z.number(),
+    dataHash: HexSchema,
+    issuer: HexSchema,
+    root: HexSchema,
+    windowEnd: z.string(),
+    windowStart: z.string(),
+  }),
+  primaryType: z.literal("Anchor"),
+  types: z.object({
+    Anchor: z.array(z.object({ name: z.string(), type: z.string() })),
+  }),
 });
 
 export const BatchListResponseSchema = z.object({

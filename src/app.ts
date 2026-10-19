@@ -7,6 +7,7 @@ import { Elysia } from "elysia";
 import { z } from "zod";
 
 import { authOpenAPI } from "./auth";
+import { batchController } from "./features/batches/batch.controller";
 import { documentController } from "./features/documents/document.controller";
 import { healthController } from "./features/health/health.controller";
 import { organizationController } from "./features/organizations/organization.controller";
@@ -65,6 +66,7 @@ export const app = new Elysia({
   )
   .use(opentelemetry())
   .use(serverTiming())
+  .use(batchController)
   .use(documentController)
   .use(healthController)
   .use(organizationController)

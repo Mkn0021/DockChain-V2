@@ -5,6 +5,7 @@ const statement = {
   ...defaultStatements,
 
   asset: ["create", "read", "delete"],
+  batch: ["read", "seal", "sign", "cancel"],
   document: ["create", "read", "revoke"],
   settings: ["read", "update"],
   template: ["create", "read", "update", "publish", "delete"],
@@ -16,6 +17,7 @@ const ac = createAccessControl(statement);
 const owner = ac.newRole({
   ac: ["create", "read", "update", "delete"],
   asset: ["create", "read", "delete"],
+  batch: ["read", "seal", "sign", "cancel"],
   document: ["create", "read", "revoke"],
   invitation: ["create", "cancel"],
   member: ["create", "update", "delete"],
@@ -29,6 +31,7 @@ const owner = ac.newRole({
 const admin = ac.newRole({
   ac: ["create", "read", "update", "delete"],
   asset: ["create", "read", "delete"],
+  batch: ["read", "seal", "sign", "cancel"],
   document: ["create", "read", "revoke"],
   invitation: ["create", "cancel"],
   member: ["create", "update", "delete"],
@@ -42,6 +45,7 @@ const admin = ac.newRole({
 const issuer = ac.newRole({
   ac: ["read"],
   asset: ["create", "read", "delete"],
+  batch: ["read", "seal", "sign", "cancel"],
   document: ["create", "read", "revoke"],
   invitation: [],
   member: [],
@@ -55,6 +59,7 @@ const issuer = ac.newRole({
 const viewer = ac.newRole({
   ac: ["read"],
   asset: ["read"],
+  batch: ["read"],
   document: ["read"],
   invitation: [],
   member: [],
