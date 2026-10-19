@@ -19,6 +19,7 @@ export const env = createEnv({
 
   server: {
     APP_PUBLIC_URL: z.url(),
+    BATCH_MAX_SIZE: z.coerce.number().int().positive().max(5000).default(500),
     BETTER_AUTH_SECRET: z.string().min(32),
     BETTER_AUTH_URL: z.url(),
     BULL_BOARD_PASSWORD: z.string().min(8),
