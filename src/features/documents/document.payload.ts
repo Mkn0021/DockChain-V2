@@ -1,4 +1,6 @@
 import {
+  bytesFromBase64,
+  bytesFromUtf8,
   decryptWithKey,
   encryptWithKey,
   getActiveKek,
@@ -16,9 +18,6 @@ export interface DocumentPayload {
 
 const toBase64 = (bytes: Uint8Array): string =>
   Buffer.from(bytes).toString("base64");
-
-const fromBase64 = (value: string): Uint8Array =>
-  new Uint8Array(Buffer.from(value, "base64"));
 
 export const createDraftPayload = (input: {
   fields: Record<string, unknown>;
@@ -55,7 +54,7 @@ export const encryptPayload = async (
   payload: DocumentPayload
 ): Promise<{ payloadEnc: string; kekId: string }> => {
   const { id: kekId, key: kek } = getActiveKek();
-  const bytes = new TextEncoder().encode(JSON.stringify(payload));
+  const bytes = bytesFromUtf8(JSON.stringify(payload));
   const encrypted = await encryptWithKey(kek, bytes);
   return { kekId, payloadEnc: toBase64(encrypted) };
 };
@@ -65,7 +64,7 @@ export const decryptPayload = async (
   kekId: string
 ): Promise<DocumentPayload> => {
   const kek = getKek(kekId);
-  const encrypted = fromBase64(payloadEnc);
+  const encrypted = bytesFromBase64(payloadEnc);
   const decrypted = await decryptWithKey(kek, encrypted);
   return JSON.parse(new TextDecoder().decode(decrypted)) as DocumentPayload;
 };

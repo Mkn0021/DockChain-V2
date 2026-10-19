@@ -7,6 +7,7 @@ export type OrganizationPermissions = Partial<{
   team: ("create" | "update" | "delete")[];
   ac: ("create" | "read" | "update" | "delete")[];
   asset: ("create" | "read" | "delete")[];
+  batch: ("read" | "seal" | "sign" | "cancel")[];
   document: ("create" | "read" | "revoke")[];
   settings: ("read" | "update")[];
   template: ("create" | "read" | "update" | "publish" | "delete")[];

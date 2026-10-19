@@ -1,5 +1,7 @@
 import canonicalize from "canonicalize";
 
+import { bytesFromUtf8, type Bytes } from "./bytes";
+
 export const canonicalJson = (value: unknown): string => {
   const result = canonicalize(value);
   if (result === undefined) {
@@ -8,5 +10,5 @@ export const canonicalJson = (value: unknown): string => {
   return result;
 };
 
-export const canonicalBytes = (value: unknown): Uint8Array =>
-  new TextEncoder().encode(canonicalJson(value));
+export const canonicalBytes = (value: unknown): Bytes =>
+  bytesFromUtf8(canonicalJson(value));

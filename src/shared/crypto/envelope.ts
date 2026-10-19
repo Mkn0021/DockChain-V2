@@ -1,14 +1,15 @@
 import { env } from "../../config";
+import { bytesFromBase64, type Bytes } from "./bytes";
 
-const decodeKey = (base64: string): Uint8Array => {
-  const bytes = Buffer.from(base64, "base64");
+const decodeKey = (base64: string): Bytes => {
+  const bytes = bytesFromBase64(base64);
   if (bytes.length !== 32) {
     throw new Error(`Encryption key must be 32 bytes, got ${bytes.length}`);
   }
-  return new Uint8Array(bytes);
+  return bytes;
 };
 
-export const getActiveKek = (): { id: string; key: Uint8Array } => {
+export const getActiveKek = (): { id: string; key: Bytes } => {
   const id = env.DOCUMENT_ENCRYPTION_ACTIVE_KEY_ID;
   const base64 = env.DOCUMENT_ENCRYPTION_KEYS[id];
   if (!base64) {
@@ -17,7 +18,7 @@ export const getActiveKek = (): { id: string; key: Uint8Array } => {
   return { id, key: decodeKey(base64) };
 };
 
-export const getKek = (id: string): Uint8Array => {
+export const getKek = (id: string): Bytes => {
   const base64 = env.DOCUMENT_ENCRYPTION_KEYS[id];
   if (!base64) {
     throw new Error(`KEK "${id}" not found in DOCUMENT_ENCRYPTION_KEYS`);

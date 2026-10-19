@@ -1,10 +1,5 @@
-import { exampleQueue } from "./example.queue";
+import { batchRelayQueue } from "./batch-relay.queue";
 
-export {
-  exampleQueue,
-  ExampleJobData,
-  type ExampleJobDataType,
-} from "./example.queue";
+export * from "./batch-relay.queue";
 
-// All queues array for Bull Board registration
-export const allQueues = [exampleQueue];
+export const allQueues = [batchRelayQueue];
