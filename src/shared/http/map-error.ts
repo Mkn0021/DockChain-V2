@@ -72,7 +72,8 @@ const statusFromMessage = (message: string): number | undefined => {
   }
   if (
     normalized.includes("unauthorized") ||
-    normalized.includes("not authenticated")
+    normalized.includes("not authenticated") ||
+    normalized.includes("invalid api key")
   ) {
     return 401;
   }
