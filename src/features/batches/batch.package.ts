@@ -1,13 +1,17 @@
 import { keccak256 } from "viem";
 
 import {
+  bytesFromBase64,
+  bytesFromUtf8,
+  bytesToBase64,
   canonicalJson,
   decryptWithKey,
   encryptWithKey,
+  type Bytes,
 } from "../../shared/crypto";
 
 interface PackageEntry {
-  ct: string; // base64 ciphertext
+  ct: string;
   leaf: `0x${string}`;
 }
 
@@ -16,42 +20,14 @@ interface PackagePayload {
   v: 1;
 }
 
-const toBase64 = (bytes: Uint8Array): string =>
-  Buffer.from(bytes).toString("base64");
-
-const fromBase64 = (value: string): Uint8Array<ArrayBuffer> => {
-  const buf = Buffer.from(value, "base64");
-  const out = new Uint8Array(new ArrayBuffer(buf.length));
-  out.set(buf);
-  return out;
-};
-
-const encodeUtf8 = (value: string): Uint8Array<ArrayBuffer> => {
-  const encoded = new TextEncoder().encode(value);
-  const out = new Uint8Array(new ArrayBuffer(encoded.length));
-  out.set(encoded);
-  return out;
-};
-
 export interface BuiltPackage {
-  bytes: Uint8Array<ArrayBuffer>;
+  bytes: Bytes;
   dataHash: `0x${string}`;
 }
 
-/**
- * Build the encrypted package for a batch.
- *
- * Each entry is the ciphertext of `{ fields, salt, claimedIssuedAt,
- * expiresAt, schemaHash }`, encrypted under the document's holderKey. The
- * package is `{ v: 1, entries: [...] }` sorted by leaf, canonicalised,
- * gzipped, then hashed.
- *
- * When `mode === "offchain_only"`, the package is empty and the dataHash is
- * keccak256 of empty bytes.
- */
 export const buildPackage = async (input: {
   documents: {
-    holderKey: string; // base64
+    holderKey: string;
     leaf: `0x${string}`;
     payloadForOnChain: Record<string, unknown>;
   }[];
@@ -68,10 +44,10 @@ export const buildPackage = async (input: {
   const entries: PackageEntry[] = [];
 
   for (const doc of input.documents) {
-    const key = fromBase64(doc.holderKey);
-    const plaintext = encodeUtf8(canonicalJson(doc.payloadForOnChain));
+    const key = bytesFromBase64(doc.holderKey);
+    const plaintext = bytesFromUtf8(canonicalJson(doc.payloadForOnChain));
     const ct = await encryptWithKey(key, plaintext);
-    entries.push({ ct: toBase64(ct), leaf: doc.leaf });
+    entries.push({ ct: bytesToBase64(ct), leaf: doc.leaf });
   }
 
   entries.sort((a, b) =>
@@ -79,7 +55,7 @@ export const buildPackage = async (input: {
   );
 
   const payload: PackagePayload = { entries, v: 1 };
-  const serialized = encodeUtf8(canonicalJson(payload));
+  const serialized = bytesFromUtf8(canonicalJson(payload));
   const compressed = Bun.gzipSync(serialized);
 
   return {
@@ -89,7 +65,7 @@ export const buildPackage = async (input: {
 };
 
 export const unpackPackage = async (
-  compressed: Uint8Array<ArrayBuffer>,
+  compressed: Bytes,
   documents: {
     holderKey: string;
     leaf: `0x${string}`;
@@ -112,8 +88,8 @@ export const unpackPackage = async (
     if (!holderKey) {
       throw new Error(`No holder key for leaf ${entry.leaf}`);
     }
-    const key = fromBase64(holderKey);
-    const ct = fromBase64(entry.ct);
+    const key = bytesFromBase64(holderKey);
+    const ct = bytesFromBase64(entry.ct);
     const plaintext = await decryptWithKey(key, ct);
     out.push(JSON.parse(new TextDecoder().decode(plaintext)));
   }

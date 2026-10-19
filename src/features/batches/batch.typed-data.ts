@@ -1,27 +1,6 @@
 export const EIP712_DOMAIN_NAME = "DockChainRegistry";
 export const EIP712_DOMAIN_VERSION = "1";
 
-export interface AnchorTypedData {
-  domain: {
-    chainId: number;
-    name: string;
-    verifyingContract: `0x${string}`;
-    version: string;
-  };
-  message: {
-    count: number;
-    dataHash: `0x${string}`;
-    issuer: `0x${string}`;
-    root: `0x${string}`;
-    windowEnd: string;
-    windowStart: string;
-  };
-  primaryType: "Anchor";
-  types: {
-    Anchor: { name: string; type: string }[];
-  };
-}
-
 export const ANCHOR_TYPES = {
   Anchor: [
     { name: "root", type: "bytes32" },
@@ -33,6 +12,41 @@ export const ANCHOR_TYPES = {
   ],
 } as const;
 
+export interface AnchorMessage {
+  count: number;
+  dataHash: `0x${string}`;
+  issuer: `0x${string}`;
+  root: `0x${string}`;
+  windowEnd: bigint;
+  windowStart: bigint;
+}
+
+export interface AnchorTypedData {
+  domain: {
+    chainId: number;
+    name: string;
+    verifyingContract: `0x${string}`;
+    version: string;
+  };
+  message: AnchorMessage;
+  primaryType: "Anchor";
+  types: { Anchor: { name: string; type: string }[] };
+}
+
+export interface AnchorTypedDataJson {
+  domain: AnchorTypedData["domain"];
+  message: {
+    count: number;
+    dataHash: `0x${string}`;
+    issuer: `0x${string}`;
+    root: `0x${string}`;
+    windowEnd: string;
+    windowStart: string;
+  };
+  primaryType: "Anchor";
+  types: AnchorTypedData["types"];
+}
+
 export const buildAnchorTypedData = (input: {
   chainId: number;
   count: number;
@@ -40,8 +54,8 @@ export const buildAnchorTypedData = (input: {
   issuer: `0x${string}`;
   registryAddress: `0x${string}`;
   root: `0x${string}`;
-  windowEnd: number;
-  windowStart: number;
+  windowEnd: bigint;
+  windowStart: bigint;
 }): AnchorTypedData => ({
   domain: {
     chainId: input.chainId,
@@ -54,11 +68,37 @@ export const buildAnchorTypedData = (input: {
     dataHash: input.dataHash,
     issuer: input.issuer,
     root: input.root,
-    windowEnd: String(input.windowEnd),
-    windowStart: String(input.windowStart),
+    windowEnd: input.windowEnd,
+    windowStart: input.windowStart,
   },
   primaryType: "Anchor",
-  types: {
-    Anchor: [...ANCHOR_TYPES.Anchor],
+  types: { Anchor: [...ANCHOR_TYPES.Anchor] },
+});
+
+export const toJson = (typedData: AnchorTypedData): AnchorTypedDataJson => ({
+  domain: typedData.domain,
+  message: {
+    count: typedData.message.count,
+    dataHash: typedData.message.dataHash,
+    issuer: typedData.message.issuer,
+    root: typedData.message.root,
+    windowEnd: typedData.message.windowEnd.toString(),
+    windowStart: typedData.message.windowStart.toString(),
   },
+  primaryType: typedData.primaryType,
+  types: typedData.types,
+});
+
+export const fromJson = (json: AnchorTypedDataJson): AnchorTypedData => ({
+  domain: json.domain,
+  message: {
+    count: json.message.count,
+    dataHash: json.message.dataHash,
+    issuer: json.message.issuer,
+    root: json.message.root,
+    windowEnd: BigInt(json.message.windowEnd),
+    windowStart: BigInt(json.message.windowStart),
+  },
+  primaryType: json.primaryType,
+  types: json.types,
 });

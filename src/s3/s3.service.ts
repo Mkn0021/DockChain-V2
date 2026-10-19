@@ -6,25 +6,22 @@ import type {
 
 import { s3, s3Config } from "./client";
 
+const toArrayBuffer = (bytes: Uint8Array): ArrayBuffer => {
+  const copy = new Uint8Array(new ArrayBuffer(bytes.byteLength));
+  copy.set(bytes);
+  return copy.buffer;
+};
+
 export class S3Service {
-  /**
-   * Get a lazy reference to an S3 file (doesn't fetch until accessed)
-   */
   file(key: string) {
     return s3.file(key);
   }
 
-  /**
-   * Check if a file exists in the bucket
-   */
   exists(key: string) {
     const file = s3.file(key);
     return file.exists();
   }
 
-  /**
-   * Get file size in bytes (returns undefined if file doesn't exist)
-   */
   async size(key: string) {
     const file = s3.file(key);
     if (!(await file.exists())) {
@@ -33,9 +30,6 @@ export class S3Service {
     return file.size;
   }
 
-  /**
-   * Get file metadata
-   */
   async getInfo(key: string) {
     const file = s3.file(key);
     if (!(await file.exists())) {
@@ -48,9 +42,6 @@ export class S3Service {
     };
   }
 
-  /**
-   * Read file as text
-   */
   async getText(key: string) {
     const file = s3.file(key);
     if (!(await file.exists())) {
@@ -59,9 +50,6 @@ export class S3Service {
     return file.text();
   }
 
-  /**
-   * Read file as JSON
-   */
   async getJson<T>(key: string) {
     const file = s3.file(key);
     if (!(await file.exists())) {
@@ -70,9 +58,6 @@ export class S3Service {
     return file.json() as Promise<T>;
   }
 
-  /**
-   * Read file as ArrayBuffer
-   */
   async getArrayBuffer(key: string) {
     const file = s3.file(key);
     if (!(await file.exists())) {
@@ -81,9 +66,6 @@ export class S3Service {
     return file.arrayBuffer();
   }
 
-  /**
-   * Read file as ReadableStream
-   */
   async getStream(key: string) {
     const file = s3.file(key);
     if (!(await file.exists())) {
@@ -92,9 +74,6 @@ export class S3Service {
     return file.stream();
   }
 
-  /**
-   * Read file as Blob
-   */
   async getBlob(key: string) {
     const file = s3.file(key);
     if (!(await file.exists())) {
@@ -103,34 +82,29 @@ export class S3Service {
     return file.slice();
   }
 
-  /**
-   * Upload data to S3 (small files)
-   * Supports: string, ArrayBuffer, Blob, File
-   * For streaming uploads, use createMultipartUpload()
-   */
   async upload(
     key: string,
-    data: string | ArrayBuffer | Blob | File,
+    data: string | ArrayBuffer | Uint8Array | Blob | File,
     options?: UploadOptionsType
   ) {
     const file = s3.file(key);
-    const written = await file.write(data, {
+    const payload: string | ArrayBuffer | Blob | File =
+      data instanceof Uint8Array ? toArrayBuffer(data) : data;
+
+    const written = await file.write(payload, {
       type: options?.contentType,
     });
+
     return { key, size: written };
   }
 
-  /**
-   * Upload large file using multipart streaming
-   * Returns a FileSink writer for chunked uploads
-   */
   createMultipartUpload(
     key: string,
     options?: {
       contentType?: string;
-      partSize?: number; // Size of each part (min 5MB for S3)
-      queueSize?: number; // Number of concurrent uploads
-      retry?: number; // Retry count on failure
+      partSize?: number;
+      queueSize?: number;
+      retry?: number;
     }
   ) {
     const file = s3.file(key);
@@ -142,9 +116,6 @@ export class S3Service {
     });
   }
 
-  /**
-   * Delete a file from S3
-   */
   async delete(key: string) {
     const file = s3.file(key);
     if (!(await file.exists())) {
@@ -154,9 +125,6 @@ export class S3Service {
     return true;
   }
 
-  /**
-   * Delete multiple files from S3
-   */
   async deleteMany(keys: string[]) {
     const results = await Promise.allSettled(
       keys.map(async (key) => {
@@ -179,33 +147,24 @@ export class S3Service {
     return { deleted, failed };
   }
 
-  /**
-   * Generate a presigned URL for download
-   */
   presignDownload(key: string, options?: PresignOptionsType) {
     const file = s3.file(key);
     return file.presign({
       contentDisposition: options?.contentDisposition,
-      expiresIn: options?.expiresIn ?? 3600, // Default 1 hour
+      expiresIn: options?.expiresIn ?? 3600,
       method: "GET",
     });
   }
 
-  /**
-   * Generate a presigned URL for upload (PUT)
-   */
   presignUpload(key: string, options?: PresignUploadOptionsType) {
     const file = s3.file(key);
     return file.presign({
       acl: options?.acl,
-      expiresIn: options?.expiresIn ?? 3600, // Default 1 hour
+      expiresIn: options?.expiresIn ?? 3600,
       method: "PUT",
     });
   }
 
-  /**
-   * Copy file within the bucket
-   */
   async copy(sourceKey: string, destinationKey: string) {
     const sourceFile = s3.file(sourceKey);
     if (!(await sourceFile.exists())) {
@@ -216,9 +175,6 @@ export class S3Service {
     return true;
   }
 
-  /**
-   * Move file within the bucket (copy + delete)
-   */
   async move(sourceKey: string, destinationKey: string) {
     const copied = await this.copy(sourceKey, destinationKey);
     if (!copied) {
@@ -228,9 +184,6 @@ export class S3Service {
     return true;
   }
 
-  /**
-   * Get public URL for a file (if bucket is public or CDN configured)
-   */
   getPublicUrl(key: string) {
     if (!s3Config.publicUrl) {
       return null;
@@ -238,9 +191,6 @@ export class S3Service {
     return `${s3Config.publicUrl}/${key}`;
   }
 
-  /**
-   * Generate a unique key with optional prefix and extension
-   */
   generateKey(options?: {
     extension?: string;
     filename?: string;
