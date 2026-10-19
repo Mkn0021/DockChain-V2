@@ -83,6 +83,7 @@ vault.json
 *.secret
 !*.secret.example
 !webhook.secret.ts
+!src/features/**
 
 # ===================
 # DATABASE

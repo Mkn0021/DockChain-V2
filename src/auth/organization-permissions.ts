@@ -4,6 +4,7 @@ import { defaultStatements } from "better-auth/plugins/organization/access";
 const statement = {
   ...defaultStatements,
 
+  apiKey: ["read", "manage"],
   asset: ["create", "read", "delete"],
   batch: ["read", "seal", "sign", "cancel"],
   document: ["create", "read", "revoke"],
@@ -17,6 +18,7 @@ const ac = createAccessControl(statement);
 
 const owner = ac.newRole({
   ac: ["create", "read", "update", "delete"],
+  apiKey: ["read", "manage"],
   asset: ["create", "read", "delete"],
   batch: ["read", "seal", "sign", "cancel"],
   document: ["create", "read", "revoke"],
@@ -32,6 +34,7 @@ const owner = ac.newRole({
 
 const admin = ac.newRole({
   ac: ["create", "read", "update", "delete"],
+  apiKey: ["read", "manage"],
   asset: ["create", "read", "delete"],
   batch: ["read", "seal", "sign", "cancel"],
   document: ["create", "read", "revoke"],
