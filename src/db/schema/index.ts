@@ -1,5 +1,6 @@
 export * from "./audit.schema";
 export * from "./auth.schema";
+export * from "./batch.schema";
 export * from "./document.schema";
 export * from "./idempotency.schema";
 export * from "./settings.schema";

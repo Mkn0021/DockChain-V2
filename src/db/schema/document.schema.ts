@@ -10,6 +10,7 @@ import {
 } from "drizzle-orm/pg-core";
 
 import { organizations, users } from "./auth.schema";
+import { batches } from "./batch.schema";
 import { templateVersions } from "./template.schema";
 import { issuerWallets } from "./wallet.schema";
 
@@ -24,7 +25,9 @@ export const documentStatus = pgEnum("document_status", [
 export const documents = pgTable(
   "documents",
   {
-    batchId: text("batch_id"), // FK added in Branch 4
+    batchId: text("batch_id").references(() => batches.id, {
+      onDelete: "set null",
+    }),
 
     claimedIssuedAt: timestamp("claimed_issued_at"),
 
