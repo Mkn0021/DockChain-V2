@@ -13,8 +13,8 @@ interface BundleForQr {
 const toBase64Url = (value: string): string =>
   Buffer.from(value, "base64")
     .toString("base64")
-    .replaceAll(/\+/g, "-")
-    .replaceAll(/\//g, "_")
+    .replaceAll("+", "-")
+    .replaceAll("/", "_")
     .replace(/=+$/, "");
 
 export const buildVerifyUrl = (bundle: BundleForQr): string => {
