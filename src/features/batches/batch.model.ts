@@ -1,8 +1,7 @@
 import { createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
 
-import type { batchStatus } from "../../db/schema/batch.schema";
-import { batches } from "../../db/schema/batch.schema";
+import { batches, type batchStatus } from "../../db/schema/batch.schema";
 
 export const BatchSelectSchema = createSelectSchema(batches);
 
