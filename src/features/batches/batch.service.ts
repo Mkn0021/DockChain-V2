@@ -302,7 +302,7 @@ export const BatchService = {
       primaryType: "Anchor",
       signature,
       types: ANCHOR_TYPES,
-    });
+    }).catch(() => false);
 
     if (!valid) {
       throw AppError.validation(
