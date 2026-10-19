@@ -17,6 +17,7 @@ import { computeLeaf, randomHolderKey, randomSalt } from "../../shared/crypto";
 import { fromUnixSeconds, toDate, toUnixSeconds } from "../../shared/db/date";
 import { AppError, isPgUniqueViolation } from "../../shared/errors";
 import { AuditService } from "../audit/audit.service";
+import { parseCsv, splitCsvRow } from "./document.import";
 import {
   createDraftPayload,
   decryptPayload,
@@ -324,6 +325,75 @@ export const DocumentService = {
     }
     const payload = await decryptPayload(doc.payloadEnc, doc.kekId);
     return { ...doc, fields: payload.fields, recipient: payload.recipient };
+  },
+
+  async importCsv(
+    organizationId: string,
+    createdBy: string,
+    input: {
+      csv: string;
+      issuerWalletId?: string;
+      templateVersionId: string;
+    }
+  ) {
+    const context = await resolveContext(
+      organizationId,
+      input.templateVersionId,
+      input.issuerWalletId
+    );
+
+    const fieldKeys = new Set(context.fieldSchema.fields.map((f) => f.key));
+    const rawRows = parseCsv(input.csv);
+
+    const items = rawRows.map((row) => splitCsvRow(row, fieldKeys));
+
+    const rowsToInsert: (typeof documents.$inferInsert)[] = [];
+    const errors: { index: number; message: string }[] = [];
+
+    for (const [index, item] of items.entries()) {
+      try {
+        const { values } = await buildDocument({
+          context,
+          createdBy,
+          data: {
+            expiresAt: item.expiresAt,
+            externalRef: item.externalRef,
+            fields: item.fields,
+            mode: "ready",
+            recipient: item.recipient,
+            templateVersionId: input.templateVersionId,
+          },
+          organizationId,
+        });
+        rowsToInsert.push(values);
+      } catch (error) {
+        errors.push({
+          index,
+          message: error instanceof Error ? error.message : "Unknown error",
+        });
+      }
+    }
+
+    if (errors.length > 0) {
+      throw AppError.validation(
+        `CSV import rejected ${errors.length} row(s): ${JSON.stringify(errors.slice(0, 5))}`
+      );
+    }
+
+    const created = await db.transaction((tx) =>
+      tx.insert(documents).values(rowsToInsert).returning()
+    );
+
+    await AuditService.record({
+      action: "document.imported",
+      actorId: createdBy,
+      actorType: "user",
+      metadata: { count: created.length },
+      organizationId,
+      targetType: "document",
+    });
+
+    return { created: created.length, documents: created };
   },
 
   async list(

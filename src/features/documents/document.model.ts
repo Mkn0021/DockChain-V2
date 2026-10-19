@@ -1,4 +1,5 @@
 import { createSelectSchema } from "drizzle-zod";
+import { t } from "elysia";
 import { z } from "zod";
 
 import {
@@ -35,6 +36,13 @@ export const DocumentListQuerySchema = z.object({
   status: DocumentStatusSchema.optional(),
   templateId: z.string().min(1).optional(),
   templateVersionId: z.string().min(1).optional(),
+});
+
+// File cant be processed by zod, so we use Elysia's t.File for that.
+export const DocumentImportSchema = t.Object({
+  file: t.File({ maxSize: "5m" }),
+  issuerWalletId: t.Optional(t.String()),
+  templateVersionId: t.String(),
 });
 
 const FieldValuesSchema = z.record(
@@ -112,6 +120,7 @@ export const DocumentBulkResponseSchema = z.object({
 export type DocumentCreateType = z.infer<typeof DocumentCreateSchema>;
 export type DocumentUpdateType = z.infer<typeof DocumentUpdateSchema>;
 export type DocumentBulkCreateType = z.infer<typeof DocumentBulkCreateSchema>;
+export type DocumentImportType = typeof DocumentImportSchema.static;
 export type RecipientType = z.infer<typeof RecipientSchema>;
 
 export type Document = typeof documents.$inferSelect;
