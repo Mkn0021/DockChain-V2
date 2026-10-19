@@ -1,11 +1,13 @@
 import { Elysia } from "elysia";
 
+import { AppError } from "../../shared/errors";
 import { ErrorResponse } from "../../shared/models";
 import {
   authPlugin,
   idempotencyPlugin,
   permissionPlugin,
 } from "../../shared/plugins";
+import { DeliveryService } from "./document.delivery";
 import {
   DocumentBulkCreateSchema,
   DocumentBulkResponseSchema,
@@ -16,9 +18,12 @@ import {
   type DocumentImportType,
   DocumentListQuerySchema,
   DocumentListResponseSchema,
+  DocumentPdfQuerySchema,
+  DocumentResendResponseSchema,
   DocumentSelectSchema,
   DocumentUpdateSchema,
   OrganizationParamsSchema,
+  ProofBundleSchema,
 } from "./document.model";
 import { DocumentService } from "./document.service";
 
@@ -174,6 +179,60 @@ export const documentController = new Elysia({
     }
   )
 
+  .get(
+    "/:documentId/bundle",
+    ({ params }) =>
+      DocumentService.getBundle(params.organizationId, params.documentId),
+    {
+      auth: true,
+      detail: {
+        description:
+          "Returns the proof bundle: leaf, Merkle proof, holder key, salt, fields, and the on-chain metadata needed to verify the document independently.",
+        summary: "Get a document's proof bundle",
+        tags: ["Documents"],
+      },
+      params: DocumentIdParamsSchema,
+      permission: { document: ["read"] },
+      response: {
+        200: ProofBundleSchema,
+        404: ErrorResponse,
+        409: ErrorResponse,
+      },
+    }
+  )
+
+  .get(
+    "/:documentId/pdf",
+    async ({ params, query, set }) => {
+      const result = await DocumentService.getPdfUrl(
+        params.organizationId,
+        params.documentId,
+        query.preview === true
+      );
+
+      if ("bytes" in result) {
+        set.headers["content-type"] = result.contentType;
+        set.headers["content-disposition"] =
+          `inline; filename="${params.documentId}-preview.pdf"`;
+        return result.bytes;
+      }
+
+      return result;
+    },
+    {
+      auth: true,
+      detail: {
+        description:
+          "Returns a short-lived signed URL to the document PDF. Use `preview=true` to render a watermarked version for ready or batched documents; previews are never cached.",
+        summary: "Download or preview a document PDF",
+        tags: ["Documents"],
+      },
+      params: DocumentIdParamsSchema,
+      permission: { document: ["read"] },
+      query: DocumentPdfQuerySchema,
+    }
+  )
+
   .post(
     "/import",
     async ({ params, body, user }) => {
@@ -201,6 +260,48 @@ export const documentController = new Elysia({
         200: DocumentBulkResponseSchema,
         401: ErrorResponse,
         403: ErrorResponse,
+        422: ErrorResponse,
+      },
+    }
+  )
+
+  .post(
+    "/:documentId/resend",
+    async ({ params }) => {
+      const doc = await DocumentService.getById(
+        params.organizationId,
+        params.documentId
+      );
+
+      if (doc.status !== "issued") {
+        throw AppError.conflict("Only issued documents can be resent");
+      }
+
+      const bundle = await DocumentService.getBundle(
+        params.organizationId,
+        params.documentId
+      );
+
+      if (!bundle.recipient) {
+        throw AppError.validation("Document has no recipient email");
+      }
+
+      return DeliveryService.enqueue(params.documentId);
+    },
+    {
+      auth: true,
+      detail: {
+        description:
+          "Enqueues a new email delivery for an issued document. Fails when the document is not issued or has no recipient email.",
+        summary: "Resend a document email",
+        tags: ["Documents"],
+      },
+      params: DocumentIdParamsSchema,
+      permission: { document: ["create"] },
+      response: {
+        200: DocumentResendResponseSchema,
+        404: ErrorResponse,
+        409: ErrorResponse,
         422: ErrorResponse,
       },
     }

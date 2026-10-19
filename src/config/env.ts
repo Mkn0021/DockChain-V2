@@ -68,6 +68,7 @@ export const env = createEnv({
       }
     }),
     NODE_ENV: z.enum(["development", "production", "test"]),
+    PDF_CACHE_TTL_SECONDS: z.coerce.number().int().positive().default(3600),
     PORT: z.coerce.number(),
     REDIS_URL: z.url(),
     REGISTRY_ADDRESS: z

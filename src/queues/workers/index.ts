@@ -1,13 +1,12 @@
 import { batchRelayWorker } from "./batch-relay.worker";
+import { emailDeliveryWorker } from "./email-delivery.worker";
 
-// All workers array
-export const allWorkers = [batchRelayWorker];
+export { batchRelayWorker, emailDeliveryWorker };
 
-// Graceful shutdown for all workers
+export const allWorkers = [batchRelayWorker, emailDeliveryWorker];
+
 export const closeAllWorkers = async () => {
   console.log("Closing queue workers...");
   await Promise.all(allWorkers.map((worker) => worker.close()));
   console.log("Queue workers closed");
 };
-
-export { batchRelayWorker };

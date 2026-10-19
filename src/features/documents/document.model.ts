@@ -124,10 +124,70 @@ export const DocumentBulkResponseSchema = z.object({
     .optional(),
 });
 
+export const DocumentPdfQuerySchema = z.object({
+  preview: z
+    .union([z.literal("true"), z.literal("false"), z.boolean()])
+    .optional()
+    .transform((value) => value === true || value === "true"),
+});
+
+export const DocumentPdfUrlResponseSchema = z.object({
+  expiresIn: z.number(),
+  key: z.string(),
+  url: z.string(),
+});
+
+export const DocumentResendResponseSchema = z.object({
+  attempts: z.number().int().nonnegative(),
+  channel: z.literal("email"),
+  createdAt: z.date(),
+  documentId: z.string(),
+  id: z.string(),
+  lastError: z.string().nullable(),
+  sentAt: z.date().nullable(),
+  status: z.enum(["queued", "sent", "failed"]),
+  updatedAt: z.date(),
+});
+
+export const ProofBundleSchema = z.object({
+  blockNumber: z.string().nullable(),
+  chainId: z.number(),
+  claimedIssuedAt: z.number(),
+  expiresAt: z.number(),
+  fields: z.record(z.string(), z.unknown()),
+  holderKey: z.string(),
+  issuer: z.string().regex(/^0x[0-9a-fA-F]{40}$/),
+  leaf: z.string().regex(/^0x[0-9a-f]{64}$/),
+  leafIndex: z.number().int().nonnegative(),
+  proof: z.array(z.string()),
+  recipient: z
+    .object({
+      email: z.string(),
+      name: z.string(),
+    })
+    .nullable(),
+  registry: z.string().regex(/^0x[0-9a-fA-F]{40}$/),
+  root: z.string().regex(/^0x[0-9a-f]{64}$/),
+  salt: z.string(),
+  schemaHash: z.string().regex(/^0x[0-9a-f]{64}$/),
+  txHash: z.string().nullable(),
+  version: z.literal(1),
+  windowEnd: z.number(),
+  windowStart: z.number(),
+});
+
+export type ProofBundleType = z.infer<typeof ProofBundleSchema>;
+
 export type DocumentCreateType = z.infer<typeof DocumentCreateSchema>;
 export type DocumentUpdateType = z.infer<typeof DocumentUpdateSchema>;
 export type DocumentBulkCreateType = z.infer<typeof DocumentBulkCreateSchema>;
 export type DocumentImportType = typeof DocumentImportSchema.static;
+export type DocumentPdfUrlResponseType = z.infer<
+  typeof DocumentPdfUrlResponseSchema
+>;
+export type DocumentResendResponseType = z.infer<
+  typeof DocumentResendResponseSchema
+>;
 export type RecipientType = z.infer<typeof RecipientSchema>;
 
 export type Document = typeof documents.$inferSelect;
