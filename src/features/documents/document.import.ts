@@ -43,7 +43,9 @@ export const splitCsvRow = (
   let externalRef: string | undefined;
 
   for (const [key, value] of Object.entries(row)) {
-    if (value === undefined || value === "") {continue;}
+    if (value === undefined || value === "") {
+      continue;
+    }
 
     switch (key) {
       case "recipient_email": {

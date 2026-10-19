@@ -52,7 +52,7 @@ export const documents = pgTable(
 
     leafIndex: text("leaf_index"),
 
-    merkleProof: jsonb("merkle_proof"),
+    merkleProof: jsonb("merkle_proof").$type<string[]>(),
 
     organizationId: text("organization_id")
       .notNull()
