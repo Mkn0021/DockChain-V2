@@ -38,9 +38,10 @@ export async function createTestUser(prefix = "user"): Promise<TestUser> {
 }
 
 export type RequestOptions = {
-  user?: TestUser;
   body?: unknown;
+  headers?: Record<string, string>;
   query?: Record<string, string | number>;
+  user?: TestUser;
 };
 
 export async function request(
@@ -55,16 +56,22 @@ export async function request(
     }
   }
 
-  const headers = new Headers();
+  const headers = new Headers(options.headers ?? {});
   if (options.user) headers.set("cookie", options.user.cookie);
-  if (options.body !== undefined) {
+
+  const isFormData = options.body instanceof FormData;
+  if (options.body !== undefined && !isFormData) {
     headers.set("content-type", "application/json");
   }
 
   return app.handle(
     new Request(url.toString(), {
       body:
-        options.body === undefined ? undefined : JSON.stringify(options.body),
+        options.body === undefined
+          ? undefined
+          : isFormData
+            ? (options.body as FormData)
+            : JSON.stringify(options.body),
       headers,
       method,
     })
