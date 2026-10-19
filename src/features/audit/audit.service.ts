@@ -1,4 +1,4 @@
-import { and, desc, eq } from "drizzle-orm";
+import { and, count, desc, eq, gte, lte } from "drizzle-orm";
 
 import type { AuditEventType } from "./audit.model";
 
@@ -6,7 +6,7 @@ import { db } from "../../db";
 import { auditLogs } from "../../db/schema/audit.schema";
 
 export const AuditService = {
-  list(
+  async list(
     organizationId: string,
     options: {
       action?: string;
@@ -20,6 +20,7 @@ export const AuditService = {
     }
   ) {
     const conditions = [eq(auditLogs.organizationId, organizationId)];
+
     if (options.action) {
       conditions.push(eq(auditLogs.action, options.action));
     }
@@ -32,14 +33,34 @@ export const AuditService = {
     if (options.targetType) {
       conditions.push(eq(auditLogs.targetType, options.targetType));
     }
+    if (options.from) {
+      conditions.push(gte(auditLogs.createdAt, options.from));
+    }
+    if (options.to) {
+      conditions.push(lte(auditLogs.createdAt, options.to));
+    }
 
-    return db
-      .select()
-      .from(auditLogs)
-      .where(and(...conditions))
-      .orderBy(desc(auditLogs.createdAt))
-      .limit(options.limit)
-      .offset(options.offset);
+    const where = and(...conditions);
+
+    const [rows, [{ total }]] = await Promise.all([
+      db
+        .select()
+        .from(auditLogs)
+        .where(where)
+        .orderBy(desc(auditLogs.createdAt))
+        .limit(options.limit)
+        .offset(options.offset),
+      db.select({ total: count() }).from(auditLogs).where(where),
+    ]);
+
+    return {
+      data: rows,
+      meta: {
+        limit: options.limit,
+        offset: options.offset,
+        total: Number(total),
+      },
+    };
   },
 
   record(event: AuditEventType) {

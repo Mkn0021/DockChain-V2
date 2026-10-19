@@ -6,6 +6,7 @@ const statement = {
 
   apiKey: ["read", "manage"],
   asset: ["create", "read", "delete"],
+  auditLog: ["read"],
   batch: ["read", "seal", "sign", "cancel"],
   document: ["create", "read", "revoke"],
   settings: ["read", "update"],
@@ -20,6 +21,7 @@ const owner = ac.newRole({
   ac: ["create", "read", "update", "delete"],
   apiKey: ["read", "manage"],
   asset: ["create", "read", "delete"],
+  auditLog: ["read"],
   batch: ["read", "seal", "sign", "cancel"],
   document: ["create", "read", "revoke"],
   invitation: ["create", "cancel"],
@@ -36,6 +38,7 @@ const admin = ac.newRole({
   ac: ["create", "read", "update", "delete"],
   apiKey: ["read", "manage"],
   asset: ["create", "read", "delete"],
+  auditLog: ["read"],
   batch: ["read", "seal", "sign", "cancel"],
   document: ["create", "read", "revoke"],
   invitation: ["create", "cancel"],

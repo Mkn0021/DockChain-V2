@@ -1,3 +1,5 @@
+import type { Json } from "drizzle-zod";
+
 import {
   index,
   jsonb,
@@ -33,7 +35,7 @@ export const auditLogs = pgTable(
 
     ip: text("ip"),
 
-    metadata: jsonb("metadata"),
+    metadata: jsonb("metadata").$type<Json>(),
 
     organizationId: text("organization_id")
       .notNull()
