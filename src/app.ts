@@ -17,6 +17,7 @@ import { organizationController } from "./features/organizations/organization.co
 import { settingsController } from "./features/settings/settings.controller";
 import { templateController } from "./features/templates/template.controller";
 import { walletController } from "./features/wallets/wallet.controller";
+import { webhookController } from "./features/webhooks/webhook.controller";
 import { httpPlugin } from "./shared/http";
 import {
   authPlugin,
@@ -77,4 +78,5 @@ export const app = new Elysia({
   .use(organizationController)
   .use(settingsController)
   .use(templateController)
-  .use(walletController);
+  .use(walletController)
+  .use(webhookController);
