@@ -1,7 +1,10 @@
 import { createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
 
-import { documents } from "../../db/schema/document.schema";
+import {
+  documents,
+  type documentStatus,
+} from "../../db/schema/document.schema";
 
 export const DocumentSelectSchema = createSelectSchema(documents);
 
@@ -110,3 +113,7 @@ export type DocumentCreateType = z.infer<typeof DocumentCreateSchema>;
 export type DocumentUpdateType = z.infer<typeof DocumentUpdateSchema>;
 export type DocumentBulkCreateType = z.infer<typeof DocumentBulkCreateSchema>;
 export type RecipientType = z.infer<typeof RecipientSchema>;
+
+export type Document = typeof documents.$inferSelect;
+export type NewDocument = typeof documents.$inferInsert;
+export type DocumentStatus = (typeof documentStatus.enumValues)[number];
