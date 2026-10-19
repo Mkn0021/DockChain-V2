@@ -13,6 +13,7 @@ import { documents } from "../../db/schema/document.schema";
 import { organizationSettings } from "../../db/schema/settings.schema";
 import { templateVersions } from "../../db/schema/template.schema";
 import { issuerWallets } from "../../db/schema/wallet.schema";
+import { S3Service } from "../../s3";
 import { computeLeaf, randomHolderKey, randomSalt } from "../../shared/crypto";
 import { fromUnixSeconds, toDate, toUnixSeconds } from "../../shared/db/date";
 import { AppError, isPgUniqueViolation } from "../../shared/errors";
@@ -25,6 +26,7 @@ import {
   encryptPayload,
   type DocumentPayload,
 } from "./document.payload";
+import { renderPdf } from "./document.pdf";
 import { DocumentRepository } from "./document.repository";
 import {
   normalizeFields,
@@ -38,6 +40,8 @@ interface ResolvedContext {
   walletId: string;
   walletAddress: string;
 }
+
+const s3Service = new S3Service();
 
 const resolveContext = async (
   organizationId: string,
@@ -379,6 +383,65 @@ export const DocumentService = {
     }
     const payload = await decryptPayload(doc.payloadEnc, doc.kekId);
     return { ...doc, fields: payload.fields, recipient: payload.recipient };
+  },
+
+  async getPdfUrl(
+    organizationId: string,
+    documentId: string,
+    preview: boolean
+  ) {
+    const doc = await DocumentRepository.findById(organizationId, documentId);
+    if (!doc) {
+      throw AppError.notFound("Document not found");
+    }
+
+    if (!preview && doc.status !== "issued") {
+      throw AppError.conflict(
+        "Only issued documents can be downloaded without preview"
+      );
+    }
+    if (
+      preview &&
+      !["ready", "batched", "issued", "revoked"].includes(doc.status)
+    ) {
+      throw AppError.conflict("Document is not ready for PDF preview");
+    }
+
+    const bundle = await this.getBundle(organizationId, documentId);
+
+    const cacheKey = `pdf/${documentId}.pdf`;
+    if (preview) {
+      const bytes = await renderPdf({ bundle, preview: true });
+      return {
+        bytes,
+        contentType: "application/pdf",
+        inline: true,
+      };
+    }
+
+    if (await s3Service.exists(cacheKey)) {
+      return {
+        expiresIn: env.PDF_CACHE_TTL_SECONDS,
+        key: cacheKey,
+        url: await s3Service.presignDownload(cacheKey, {
+          expiresIn: env.PDF_CACHE_TTL_SECONDS,
+        }),
+      };
+    }
+
+    const bytes = await renderPdf({ bundle, preview });
+
+    await s3Service.upload(cacheKey, bytes, {
+      contentType: "application/pdf",
+    });
+
+    return {
+      expiresIn: env.PDF_CACHE_TTL_SECONDS,
+      key: cacheKey,
+      url: s3Service.presignDownload(cacheKey, {
+        expiresIn: env.PDF_CACHE_TTL_SECONDS,
+      }),
+    };
   },
 
   async importCsv(

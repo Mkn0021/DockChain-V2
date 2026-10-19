@@ -124,6 +124,19 @@ export const DocumentBulkResponseSchema = z.object({
     .optional(),
 });
 
+export const DocumentPdfQuerySchema = z.object({
+  preview: z
+    .union([z.literal("true"), z.literal("false"), z.boolean()])
+    .optional()
+    .transform((value) => value === true || value === "true"),
+});
+
+export const DocumentPdfUrlResponseSchema = z.object({
+  expiresIn: z.number(),
+  key: z.string(),
+  url: z.string(),
+});
+
 export const ProofBundleSchema = z.object({
   blockNumber: z.string().nullable(),
   chainId: z.number(),
@@ -157,6 +170,9 @@ export type DocumentCreateType = z.infer<typeof DocumentCreateSchema>;
 export type DocumentUpdateType = z.infer<typeof DocumentUpdateSchema>;
 export type DocumentBulkCreateType = z.infer<typeof DocumentBulkCreateSchema>;
 export type DocumentImportType = typeof DocumentImportSchema.static;
+export type DocumentPdfUrlResponseType = z.infer<
+  typeof DocumentPdfUrlResponseSchema
+>;
 export type RecipientType = z.infer<typeof RecipientSchema>;
 
 export type Document = typeof documents.$inferSelect;

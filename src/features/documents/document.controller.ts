@@ -16,6 +16,7 @@ import {
   type DocumentImportType,
   DocumentListQuerySchema,
   DocumentListResponseSchema,
+  DocumentPdfQuerySchema,
   DocumentSelectSchema,
   DocumentUpdateSchema,
   OrganizationParamsSchema,
@@ -194,6 +195,38 @@ export const documentController = new Elysia({
         404: ErrorResponse,
         409: ErrorResponse,
       },
+    }
+  )
+
+  .get(
+    "/:documentId/pdf",
+    async ({ params, query, set }) => {
+      const result = await DocumentService.getPdfUrl(
+        params.organizationId,
+        params.documentId,
+        query.preview === true
+      );
+
+      if ("bytes" in result) {
+        set.headers["content-type"] = result.contentType;
+        set.headers["content-disposition"] =
+          `inline; filename="${params.documentId}-preview.pdf"`;
+        return result.bytes;
+      }
+
+      return result;
+    },
+    {
+      auth: true,
+      detail: {
+        description:
+          "Returns a short-lived signed URL to the document PDF. Use `preview=true` to render a watermarked version for ready or batched documents; previews are never cached.",
+        summary: "Download or preview a document PDF",
+        tags: ["Documents"],
+      },
+      params: DocumentIdParamsSchema,
+      permission: { document: ["read"] },
+      query: DocumentPdfQuerySchema,
     }
   )
 
