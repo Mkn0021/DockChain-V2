@@ -1,11 +1,13 @@
 import { Elysia } from "elysia";
 
+import { AppError } from "../../shared/errors";
 import { ErrorResponse } from "../../shared/models";
 import {
   authPlugin,
   idempotencyPlugin,
   permissionPlugin,
 } from "../../shared/plugins";
+import { DeliveryService } from "./document.delivery";
 import {
   DocumentBulkCreateSchema,
   DocumentBulkResponseSchema,
@@ -17,6 +19,7 @@ import {
   DocumentListQuerySchema,
   DocumentListResponseSchema,
   DocumentPdfQuerySchema,
+  DocumentResendResponseSchema,
   DocumentSelectSchema,
   DocumentUpdateSchema,
   OrganizationParamsSchema,
@@ -257,6 +260,48 @@ export const documentController = new Elysia({
         200: DocumentBulkResponseSchema,
         401: ErrorResponse,
         403: ErrorResponse,
+        422: ErrorResponse,
+      },
+    }
+  )
+
+  .post(
+    "/:documentId/resend",
+    async ({ params }) => {
+      const doc = await DocumentService.getById(
+        params.organizationId,
+        params.documentId
+      );
+
+      if (doc.status !== "issued") {
+        throw AppError.conflict("Only issued documents can be resent");
+      }
+
+      const bundle = await DocumentService.getBundle(
+        params.organizationId,
+        params.documentId
+      );
+
+      if (!bundle.recipient) {
+        throw AppError.validation("Document has no recipient email");
+      }
+
+      return DeliveryService.enqueue(params.documentId);
+    },
+    {
+      auth: true,
+      detail: {
+        description:
+          "Enqueues a new email delivery for an issued document. Fails when the document is not issued or has no recipient email.",
+        summary: "Resend a document email",
+        tags: ["Documents"],
+      },
+      params: DocumentIdParamsSchema,
+      permission: { document: ["create"] },
+      response: {
+        200: DocumentResendResponseSchema,
+        404: ErrorResponse,
+        409: ErrorResponse,
         422: ErrorResponse,
       },
     }

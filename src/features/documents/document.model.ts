@@ -137,6 +137,18 @@ export const DocumentPdfUrlResponseSchema = z.object({
   url: z.string(),
 });
 
+export const DocumentResendResponseSchema = z.object({
+  attempts: z.number().int().nonnegative(),
+  channel: z.literal("email"),
+  createdAt: z.date(),
+  documentId: z.string(),
+  id: z.string(),
+  lastError: z.string().nullable(),
+  sentAt: z.date().nullable(),
+  status: z.enum(["queued", "sent", "failed"]),
+  updatedAt: z.date(),
+});
+
 export const ProofBundleSchema = z.object({
   blockNumber: z.string().nullable(),
   chainId: z.number(),
@@ -172,6 +184,9 @@ export type DocumentBulkCreateType = z.infer<typeof DocumentBulkCreateSchema>;
 export type DocumentImportType = typeof DocumentImportSchema.static;
 export type DocumentPdfUrlResponseType = z.infer<
   typeof DocumentPdfUrlResponseSchema
+>;
+export type DocumentResendResponseType = z.infer<
+  typeof DocumentResendResponseSchema
 >;
 export type RecipientType = z.infer<typeof RecipientSchema>;
 
