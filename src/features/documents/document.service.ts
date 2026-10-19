@@ -8,7 +8,7 @@ import type {
 } from "./document.model";
 
 import { env } from "../../config";
-import { db } from "../../db";
+import { batches, db } from "../../db";
 import { documents } from "../../db/schema/document.schema";
 import { organizationSettings } from "../../db/schema/settings.schema";
 import { templateVersions } from "../../db/schema/template.schema";
@@ -17,6 +17,7 @@ import { computeLeaf, randomHolderKey, randomSalt } from "../../shared/crypto";
 import { fromUnixSeconds, toDate, toUnixSeconds } from "../../shared/db/date";
 import { AppError, isPgUniqueViolation } from "../../shared/errors";
 import { AuditService } from "../audit/audit.service";
+import { buildBundle } from "./document.bundle";
 import { parseCsv, splitCsvRow } from "./document.import";
 import {
   createDraftPayload,
@@ -317,6 +318,58 @@ export const DocumentService = {
     });
 
     return deleted;
+  },
+
+  async getBundle(organizationId: string, documentId: string) {
+    const doc = await DocumentRepository.findById(organizationId, documentId);
+    if (!doc) {
+      throw AppError.notFound("Document not found");
+    }
+    if (doc.status !== "issued" && doc.status !== "revoked") {
+      throw AppError.conflict(
+        "Only issued or revoked documents have a proof bundle"
+      );
+    }
+    if (!doc.batchId) {
+      throw AppError.conflict("Document is not attached to a batch");
+    }
+
+    const [batch] = await db
+      .select()
+      .from(batches)
+      .where(eq(batches.id, doc.batchId))
+      .limit(1);
+
+    if (!batch) {
+      throw AppError.internal("Batch not found");
+    }
+
+    const [wallet] = await db
+      .select({ address: issuerWallets.address })
+      .from(issuerWallets)
+      .where(eq(issuerWallets.id, doc.issuerWalletId))
+      .limit(1);
+
+    if (!wallet) {
+      throw AppError.internal("Issuer wallet not found");
+    }
+
+    const [templateVersion] = await db
+      .select({ schemaHash: templateVersions.schemaHash })
+      .from(templateVersions)
+      .where(eq(templateVersions.id, doc.templateVersionId))
+      .limit(1);
+
+    if (!templateVersion) {
+      throw AppError.internal("Template version not found");
+    }
+
+    return buildBundle({
+      batch,
+      document: doc,
+      templateVersion,
+      wallet,
+    });
   },
 
   async getById(organizationId: string, documentId: string) {

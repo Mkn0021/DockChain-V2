@@ -19,6 +19,7 @@ import {
   DocumentSelectSchema,
   DocumentUpdateSchema,
   OrganizationParamsSchema,
+  ProofBundleSchema,
 } from "./document.model";
 import { DocumentService } from "./document.service";
 
@@ -168,6 +169,28 @@ export const documentController = new Elysia({
       permission: { document: ["create"] },
       response: {
         200: DocumentSelectSchema,
+        404: ErrorResponse,
+        409: ErrorResponse,
+      },
+    }
+  )
+
+  .get(
+    "/:documentId/bundle",
+    ({ params }) =>
+      DocumentService.getBundle(params.organizationId, params.documentId),
+    {
+      auth: true,
+      detail: {
+        description:
+          "Returns the proof bundle: leaf, Merkle proof, holder key, salt, fields, and the on-chain metadata needed to verify the document independently.",
+        summary: "Get a document's proof bundle",
+        tags: ["Documents"],
+      },
+      params: DocumentIdParamsSchema,
+      permission: { document: ["read"] },
+      response: {
+        200: ProofBundleSchema,
         404: ErrorResponse,
         409: ErrorResponse,
       },
