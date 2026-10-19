@@ -87,7 +87,9 @@ export const ApiKeyService = {
     const rows = await db
       .select()
       .from(apikeys)
-      .where(sql`${apikeys.metadata}->>'organizationId' = ${organizationId}`);
+      .where(
+        sql`${apikeys.metadata}::jsonb->>'organizationId' = ${organizationId}`
+      );
 
     return rows
       .filter((row) => {
