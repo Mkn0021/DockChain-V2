@@ -4,6 +4,7 @@ import {
   text,
   timestamp,
   boolean,
+  integer,
   index,
   uniqueIndex,
 } from "drizzle-orm/pg-core";
@@ -115,8 +116,42 @@ export const invitations = pgTable(
   ]
 );
 
+export const apikeys = pgTable(
+  "apikeys",
+  {
+    createdAt: timestamp("created_at").notNull(),
+    enabled: boolean("enabled").default(true),
+    expiresAt: timestamp("expires_at"),
+    id: text("id").primaryKey(),
+    key: text("key").notNull(),
+    lastRefillAt: timestamp("last_refill_at"),
+    lastRequest: timestamp("last_request"),
+    metadata: text("metadata"),
+    name: text("name"),
+    permissions: text("permissions"),
+    prefix: text("prefix"),
+    rateLimitEnabled: boolean("rate_limit_enabled").default(true),
+    rateLimitMax: integer("rate_limit_max").default(10),
+    rateLimitTimeWindow: integer("rate_limit_time_window").default(86_400_000),
+    refillAmount: integer("refill_amount"),
+    refillInterval: integer("refill_interval"),
+    remaining: integer("remaining"),
+    requestCount: integer("request_count").default(0),
+    start: text("start"),
+    updatedAt: timestamp("updated_at").notNull(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+  },
+  (table) => [
+    index("apikeys_key_idx").on(table.key),
+    index("apikeys_userId_idx").on(table.userId),
+  ]
+);
+
 export const usersRelations = relations(users, ({ many }) => ({
   accounts: many(accounts),
+  apikeys: many(apikeys),
   invitations: many(invitations),
   members: many(members),
 }));
@@ -151,6 +186,13 @@ export const invitationsRelations = relations(invitations, ({ one }) => ({
   }),
   users: one(users, {
     fields: [invitations.inviterId],
+    references: [users.id],
+  }),
+}));
+
+export const apikeysRelations = relations(apikeys, ({ one }) => ({
+  users: one(users, {
+    fields: [apikeys.userId],
     references: [users.id],
   }),
 }));

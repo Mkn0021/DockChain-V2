@@ -4,19 +4,24 @@ import { defaultStatements } from "better-auth/plugins/organization/access";
 const statement = {
   ...defaultStatements,
 
+  apiKey: ["read", "manage"],
   asset: ["create", "read", "delete"],
+  auditLog: ["read"],
   batch: ["read", "seal", "sign", "cancel"],
   document: ["create", "read", "revoke"],
   settings: ["read", "update"],
   template: ["create", "read", "update", "publish", "delete"],
   wallet: ["create", "read", "update", "delete"],
+  webhook: ["read", "manage"],
 } as const;
 
 const ac = createAccessControl(statement);
 
 const owner = ac.newRole({
   ac: ["create", "read", "update", "delete"],
+  apiKey: ["read", "manage"],
   asset: ["create", "read", "delete"],
+  auditLog: ["read"],
   batch: ["read", "seal", "sign", "cancel"],
   document: ["create", "read", "revoke"],
   invitation: ["create", "cancel"],
@@ -26,11 +31,14 @@ const owner = ac.newRole({
   team: ["create", "update", "delete"],
   template: ["create", "read", "update", "publish", "delete"],
   wallet: ["create", "read", "update", "delete"],
+  webhook: ["read", "manage"],
 });
 
 const admin = ac.newRole({
   ac: ["create", "read", "update", "delete"],
+  apiKey: ["read", "manage"],
   asset: ["create", "read", "delete"],
+  auditLog: ["read"],
   batch: ["read", "seal", "sign", "cancel"],
   document: ["create", "read", "revoke"],
   invitation: ["create", "cancel"],
@@ -40,6 +48,7 @@ const admin = ac.newRole({
   team: ["create", "update", "delete"],
   template: ["create", "read", "update", "publish", "delete"],
   wallet: ["create", "read", "update", "delete"],
+  webhook: ["read", "manage"],
 });
 
 const issuer = ac.newRole({
@@ -54,6 +63,7 @@ const issuer = ac.newRole({
   team: [],
   template: ["create", "read", "update", "publish"],
   wallet: ["read"],
+  webhook: ["read"],
 });
 
 const viewer = ac.newRole({
@@ -68,6 +78,7 @@ const viewer = ac.newRole({
   team: [],
   template: ["read"],
   wallet: ["read"],
+  webhook: ["read"],
 });
 
 export const organizationAccessControl = ac;

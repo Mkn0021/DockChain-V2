@@ -82,6 +82,9 @@ vault.json
 *api-key*
 *.secret
 !*.secret.example
+!webhook.secret.ts
+!src/features/**
+!apikeys.test.ts
 
 # ===================
 # DATABASE

@@ -1,5 +1,6 @@
 import { batchRelayQueue } from "./batch-relay.queue";
 import { emailDeliveryQueue } from "./email-delivery.queue";
+import { webhookDeliveryQueue } from "./webhook-delivery.queue";
 
 export {
   batchRelayQueue,
@@ -13,4 +14,14 @@ export {
   type EmailDeliveryJobDataType,
 } from "./email-delivery.queue";
 
-export const allQueues = [batchRelayQueue, emailDeliveryQueue];
+export {
+  webhookDeliveryQueue,
+  WebhookDeliveryJobData,
+  type WebhookDeliveryJobDataType,
+} from "./webhook-delivery.queue";
+
+export const allQueues = [
+  batchRelayQueue,
+  emailDeliveryQueue,
+  webhookDeliveryQueue,
+];

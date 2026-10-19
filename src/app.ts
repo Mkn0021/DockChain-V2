@@ -7,6 +7,8 @@ import { Elysia } from "elysia";
 import { z } from "zod";
 
 import { authOpenAPI } from "./auth";
+import { apiKeyController } from "./features/apikeys/apikey.controller";
+import { auditController } from "./features/audit/audit.controller";
 import { batchController } from "./features/batches/batch.controller";
 import { runBatchScheduler } from "./features/batches/batch.scheduler";
 import { documentController } from "./features/documents/document.controller";
@@ -15,6 +17,7 @@ import { organizationController } from "./features/organizations/organization.co
 import { settingsController } from "./features/settings/settings.controller";
 import { templateController } from "./features/templates/template.controller";
 import { walletController } from "./features/wallets/wallet.controller";
+import { webhookController } from "./features/webhooks/webhook.controller";
 import { httpPlugin } from "./shared/http";
 import {
   authPlugin,
@@ -67,10 +70,13 @@ export const app = new Elysia({
   )
   .use(opentelemetry())
   .use(serverTiming())
+  .use(apiKeyController)
+  .use(auditController)
   .use(batchController)
   .use(documentController)
   .use(healthController)
   .use(organizationController)
   .use(settingsController)
   .use(templateController)
-  .use(walletController);
+  .use(walletController)
+  .use(webhookController);

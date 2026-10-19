@@ -7,3 +7,4 @@ export * from "./idempotency.schema";
 export * from "./settings.schema";
 export * from "./template.schema";
 export * from "./wallet.schema";
+export * from "./webhook.schema";

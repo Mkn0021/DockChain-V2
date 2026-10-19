@@ -13,6 +13,7 @@ import { AppError } from "../../shared/errors";
 import { buildTree, getProof, getRoot } from "../../shared/merkle";
 import { AuditService } from "../audit/audit.service";
 import { decryptPayload } from "../documents/document.payload";
+import { WebhookService } from "../webhooks/webhook.service";
 import { buildPackage } from "./batch.package";
 import { BatchRepository } from "./batch.repository";
 import { assertTransition } from "./batch.state";
@@ -264,6 +265,22 @@ export const BatchService = {
       targetId: batch.id,
       targetType: "batch",
     });
+
+    try {
+      await WebhookService.emit(organizationId, "batch.awaiting_signature", {
+        batchId: batch.id,
+        issuerWalletId,
+        leafCount: leaves.length,
+        root,
+        windowEnd: new Date(windowEndSeconds * 1000).toISOString(),
+        windowStart: new Date(windowStartSeconds * 1000).toISOString(),
+      });
+    } catch (error) {
+      console.error("[batch.sealNow] webhook emit failed", {
+        batchId: batch.id,
+        error: error instanceof Error ? error.message : error,
+      });
+    }
 
     return BatchRepository.findById(organizationId, batch.id);
   },

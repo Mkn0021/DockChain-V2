@@ -1,6 +1,6 @@
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { openAPI, organization } from "better-auth/plugins";
+import { apiKey, openAPI, organization } from "better-auth/plugins";
 
 import { env } from "../config";
 import { db } from "../db";
@@ -31,6 +31,13 @@ export const auth = betterAuth({
       roles: organizationRoles,
     }),
     openAPI(),
+    apiKey({
+      enableMetadata: true,
+      enableSessionForAPIKeys: true,
+      rateLimit: {
+        enabled: false, // handled by the existing rate limiter
+      },
+    }),
   ],
 
   secondaryStorage: {
