@@ -1,3 +1,5 @@
+import type { Json } from "drizzle-zod";
+
 import { and, desc, eq, sql } from "drizzle-orm";
 
 import { db } from "../../db";
@@ -95,11 +97,7 @@ export const WebhookService = {
     return endpoint;
   },
 
-  async emit(
-    organizationId: string,
-    event: WebhookEvent,
-    payload: Record<string, unknown>
-  ) {
+  async emit(organizationId: string, event: WebhookEvent, payload: Json) {
     if (!isWebhookEvent(event)) {
       throw new Error(`Unknown event: ${event}`);
     }

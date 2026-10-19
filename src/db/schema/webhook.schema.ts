@@ -1,3 +1,5 @@
+import type { Json } from "drizzle-zod";
+
 import {
   index,
   integer,
@@ -79,7 +81,7 @@ export const webhookDeliveries = pgTable(
 
     nextAttemptAt: timestamp("next_attempt_at").notNull(),
 
-    payload: jsonb("payload").notNull(),
+    payload: jsonb("payload").$type<Json>().notNull(),
 
     status: webhookDeliveryStatus("status").default("pending").notNull(),
   },

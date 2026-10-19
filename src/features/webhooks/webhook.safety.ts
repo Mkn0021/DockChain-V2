@@ -26,7 +26,7 @@ export const assertUrlIsPublic = async (url: string): Promise<void> => {
     throw new Error("Webhook URL must use https");
   }
 
-  const {hostname} = parsed;
+  const { hostname } = parsed;
 
   if (
     hostname === "localhost" ||
@@ -52,7 +52,8 @@ export const assertUrlIsPublic = async (url: string): Promise<void> => {
     throw new Error(
       `Could not resolve webhook hostname: ${
         error instanceof Error ? error.message : "unknown error"
-      }`, { cause: error }
+      }`,
+      { cause: error }
     );
   }
 };

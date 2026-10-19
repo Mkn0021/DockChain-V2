@@ -10,6 +10,7 @@ const statement = {
   settings: ["read", "update"],
   template: ["create", "read", "update", "publish", "delete"],
   wallet: ["create", "read", "update", "delete"],
+  webhook: ["read", "manage"],
 } as const;
 
 const ac = createAccessControl(statement);
@@ -26,6 +27,7 @@ const owner = ac.newRole({
   team: ["create", "update", "delete"],
   template: ["create", "read", "update", "publish", "delete"],
   wallet: ["create", "read", "update", "delete"],
+  webhook: ["read", "manage"],
 });
 
 const admin = ac.newRole({
@@ -40,6 +42,7 @@ const admin = ac.newRole({
   team: ["create", "update", "delete"],
   template: ["create", "read", "update", "publish", "delete"],
   wallet: ["create", "read", "update", "delete"],
+  webhook: ["read", "manage"],
 });
 
 const issuer = ac.newRole({
@@ -54,6 +57,7 @@ const issuer = ac.newRole({
   team: [],
   template: ["create", "read", "update", "publish"],
   wallet: ["read"],
+  webhook: ["read"],
 });
 
 const viewer = ac.newRole({
@@ -68,6 +72,7 @@ const viewer = ac.newRole({
   team: [],
   template: ["read"],
   wallet: ["read"],
+  webhook: ["read"],
 });
 
 export const organizationAccessControl = ac;

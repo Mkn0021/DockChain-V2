@@ -12,6 +12,7 @@ export type OrganizationPermissions = Partial<{
   settings: ("read" | "update")[];
   template: ("create" | "read" | "update" | "publish" | "delete")[];
   wallet: ("create" | "read" | "update" | "delete")[];
+  webhook: ("read" | "manage")[];
 }>;
 
 export const hasOrganizationPermission = async (
