@@ -113,7 +113,7 @@ export const WalletService = {
       throw AppError.validation("No active challenge for this address");
     }
 
-    if (new Date(challenge.expiresAt).getTime() < Date.now()) {
+    if (challenge.expiresAt.getTime() < Date.now()) {
       await db
         .delete(verifications)
         .where(eq(verifications.identifier, identifier));

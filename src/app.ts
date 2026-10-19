@@ -7,6 +7,7 @@ import { Elysia } from "elysia";
 import { z } from "zod";
 
 import { authOpenAPI } from "./auth";
+import { documentController } from "./features/documents/document.controller";
 import { healthController } from "./features/health/health.controller";
 import { organizationController } from "./features/organizations/organization.controller";
 import { settingsController } from "./features/settings/settings.controller";
@@ -64,6 +65,7 @@ export const app = new Elysia({
   )
   .use(opentelemetry())
   .use(serverTiming())
+  .use(documentController)
   .use(healthController)
   .use(organizationController)
   .use(settingsController)
