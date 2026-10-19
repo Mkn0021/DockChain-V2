@@ -1,5 +1,5 @@
+import { defaultKeyHasher } from "better-auth/plugins";
 import { eq } from "drizzle-orm";
-import { createHash } from "node:crypto";
 
 import { apikeys, db } from "../db";
 import { parseApiKeyMetadata } from "../features/apikeys/apikey.metadata";
@@ -22,11 +22,8 @@ export type OrganizationPermissions = Partial<{
   webhook: ("read" | "manage")[];
 }>;
 
-const hashApiKey = (raw: string): string =>
-  createHash("sha256").update(raw).digest("hex");
-
 const resolveApiKeyContext = async (rawKey: string) => {
-  const hashed = hashApiKey(rawKey);
+  const hashed = await defaultKeyHasher(rawKey);
 
   const [key] = await db
     .select()

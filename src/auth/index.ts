@@ -33,6 +33,7 @@ export const auth = betterAuth({
     openAPI(),
     apiKey({
       enableMetadata: true,
+      enableSessionForAPIKeys: true,
       rateLimit: {
         enabled: false, // handled by the existing rate limiter
       },
