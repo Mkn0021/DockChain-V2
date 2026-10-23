@@ -12,6 +12,7 @@ import { env } from "./config";
 import { apiKeyController } from "./features/apikeys/apikey.controller";
 import { auditController } from "./features/audit/audit.controller";
 import { batchController } from "./features/batches/batch.controller";
+import { runBatchReconciler } from "./features/batches/batch.reconciler";
 import { runBatchScheduler } from "./features/batches/batch.scheduler";
 import { documentController } from "./features/documents/document.controller";
 import { healthController } from "./features/health/health.controller";
@@ -58,6 +59,15 @@ export const app = new Elysia({
       pattern: "* * * * *",
       async run() {
         await runBatchScheduler();
+      },
+    })
+  )
+  .use(
+    cron({
+      name: "batch-reconciler",
+      pattern: "* * * * *",
+      async run() {
+        await runBatchReconciler();
       },
     })
   )
