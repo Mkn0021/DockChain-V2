@@ -1,5 +1,7 @@
 import { Elysia } from "elysia";
 
+import { batchRelayQueue } from "../../queues";
+import { AppError } from "../../shared/errors";
 import { ErrorResponse } from "../../shared/models";
 import { authPlugin, permissionPlugin } from "../../shared/plugins";
 import {
@@ -12,7 +14,9 @@ import {
   BatchTypedDataSchema,
   OrganizationParamsSchema,
 } from "./batch.model";
+import { BatchRepository } from "./batch.repository";
 import { BatchService } from "./batch.service";
+import { assertTransition } from "./batch.state";
 
 export const batchController = new Elysia({
   prefix: "/organizations/:organizationId/batches",
@@ -148,6 +152,54 @@ export const batchController = new Elysia({
       },
       params: BatchIdParamsSchema,
       permission: { batch: ["cancel"] },
+      response: {
+        200: BatchSelectSchema,
+        404: ErrorResponse,
+        409: ErrorResponse,
+      },
+    }
+  )
+
+  .post(
+    "/:batchId/retry",
+    async ({ params }) => {
+      const batch = await BatchService.getById(
+        params.organizationId,
+        params.batchId
+      );
+
+      if (batch.status !== "failed") {
+        throw AppError.conflict(
+          `Only failed batches can be retried (was "${batch.status}")`
+        );
+      }
+
+      assertTransition(batch.status, "signed");
+
+      await BatchRepository.update(params.organizationId, params.batchId, {
+        attempts: 0,
+        lastError: null,
+        status: "signed",
+        updatedAt: new Date(),
+      });
+
+      await batchRelayQueue.add("submit", {
+        batchId: params.batchId,
+        organizationId: params.organizationId,
+      });
+
+      return BatchService.getById(params.organizationId, params.batchId);
+    },
+    {
+      auth: true,
+      detail: {
+        description:
+          "Requeues a failed batch for anchor submission. Only failed batches are eligible.",
+        summary: "Retry a failed batch",
+        tags: ["Batches"],
+      },
+      params: BatchIdParamsSchema,
+      permission: { batch: ["sign"] },
       response: {
         200: BatchSelectSchema,
         404: ErrorResponse,
