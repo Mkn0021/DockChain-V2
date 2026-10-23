@@ -1,5 +1,7 @@
 import { batchRelayQueue } from "./batch-relay.queue";
+import { chainIndexerQueue } from "./chain-indexer.queue";
 import { emailDeliveryQueue } from "./email-delivery.queue";
+import { revocationRelayQueue } from "./revocation-relay.queue";
 import { webhookDeliveryQueue } from "./webhook-delivery.queue";
 
 export {
@@ -22,6 +24,8 @@ export {
 
 export const allQueues = [
   batchRelayQueue,
+  chainIndexerQueue,
   emailDeliveryQueue,
+  revocationRelayQueue,
   webhookDeliveryQueue,
 ];
