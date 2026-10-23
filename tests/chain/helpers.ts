@@ -34,6 +34,7 @@ export const HARDHAT_SECOND_KEY =
 
 export interface HardhatNode {
   port: number;
+  rpcCall: (method: string, params: unknown[]) => Promise<unknown>;
   rpcUrl: string;
   kill: () => Promise<void>;
 }
@@ -111,7 +112,25 @@ export async function startHardhatNode(): Promise<HardhatNode> {
     });
   };
 
-  return { kill, port, rpcUrl };
+  const rpcCall = async (
+    method: string,
+    params: unknown[]
+  ): Promise<unknown> => {
+    const res = await fetch(rpcUrl, {
+      body: JSON.stringify({ id: 1, jsonrpc: "2.0", method, params }),
+      headers: { "content-type": "application/json" },
+      method: "POST",
+    });
+    const json = (await res.json()) as { result?: unknown; error?: unknown };
+    if (json.error) {
+      throw new Error(
+        `RPC call ${method} failed: ${JSON.stringify(json.error)}`
+      );
+    }
+    return json.result;
+  };
+
+  return { kill, port, rpcCall, rpcUrl };
 }
 
 async function loadBytecode(): Promise<Hex> {

@@ -20,6 +20,7 @@ import { settingsController } from "./features/settings/settings.controller";
 import { templateController } from "./features/templates/template.controller";
 import { walletController } from "./features/wallets/wallet.controller";
 import { webhookController } from "./features/webhooks/webhook.controller";
+import { scheduleChainIndexer } from "./queues/queues/chain-indexer.queue";
 import { httpPlugin } from "./shared/http";
 import {
   authPlugin,
@@ -33,6 +34,7 @@ import {
 
 if (env.NODE_ENV !== "test") {
   await syncRegistryDeployment(env.CHAIN_ID, env.REGISTRY_ADDRESS);
+  await scheduleChainIndexer();
 }
 
 export const app = new Elysia({

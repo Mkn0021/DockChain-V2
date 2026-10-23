@@ -16,6 +16,7 @@ export interface ChainClient {
 
 const createClientForUrl = (url: string): PublicClient =>
   createPublicClient({
+    cacheTime: 0,
     transport: http(url),
   });
 
@@ -30,6 +31,7 @@ export const createChainClient = (
   }
 
   const publicClient = createPublicClient({
+    cacheTime: 0,
     transport: fallback(
       rpcUrls.map((url) => http(url, { retryCount: 2, timeout: 10_000 }))
     ),
