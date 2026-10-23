@@ -6,8 +6,8 @@
   "scripts": {
     "build": "hardhat build",
     "node": "hardhat node",
-    "deploy:local": "hardhat ignition deploy ignition/modules/DocumentRegistry.ts --network localhost",
-    "deploy:sepolia": "hardhat ignition deploy ignition/modules/DocumentRegistry.ts --network baseSepolia"
+    "deploy:local": "hardhat ignition deploy ignition/modules/document-registry.ts --network localhost",
+    "deploy:sepolia": "hardhat ignition deploy ignition/modules/document-registry.ts --network baseSepolia"
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-ignition": "^3.1.8",
