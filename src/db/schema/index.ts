@@ -1,6 +1,7 @@
 export * from "./audit.schema";
 export * from "./auth.schema";
 export * from "./batch.schema";
+export * from "./chain.schema";
 export * from "./document.schema";
 export * from "./delivery.schema";
 export * from "./idempotency.schema";
