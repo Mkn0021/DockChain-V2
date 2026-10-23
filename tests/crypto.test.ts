@@ -7,6 +7,7 @@ import {
 } from "../src/shared/crypto/encryption";
 import { computeLeaf } from "../src/shared/crypto/leaf";
 import { randomHolderKey, randomSalt } from "../src/shared/crypto/random";
+import leafVectors from "./fixtures/leaf-vectors.json";
 
 describe("canonicalJson", () => {
   it("sorts top-level keys", () => {
@@ -151,5 +152,27 @@ describe("computeLeaf", () => {
     const a = computeLeaf(base);
     const b = computeLeaf({ ...base, expiresAt: base.expiresAt + 1 });
     expect(a).not.toBe(b);
+  });
+});
+
+describe("computeLeaf — frozen vectors", () => {
+  it("matches the committed fixture", () => {
+    for (const vector of leafVectors.vectors) {
+      const salt = new Uint8Array(new ArrayBuffer(32));
+      salt.set(Buffer.from(vector.salt, "base64"));
+
+      const leaf = computeLeaf({
+        chainId: vector.chainId,
+        registryAddress: vector.registryAddress as `0x${string}`,
+        issuerAddress: vector.issuerAddress as `0x${string}`,
+        schemaHash: vector.schemaHash as `0x${string}`,
+        fields: vector.fields,
+        salt,
+        claimedIssuedAt: vector.claimedIssuedAt,
+        expiresAt: vector.expiresAt,
+      });
+
+      expect(leaf).toBe(vector.expectedLeaf as `0x${string}`);
+    }
   });
 });

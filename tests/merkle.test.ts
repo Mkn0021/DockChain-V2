@@ -6,6 +6,7 @@ import {
   getRoot,
   verifyProof,
 } from "../src/shared/merkle";
+import merkleVectors from "./fixtures/merkle-vectors.json";
 
 const leafA =
   "0x1111111111111111111111111111111111111111111111111111111111111111" as `0x${string}`;
@@ -71,5 +72,12 @@ describe("Merkle tree", () => {
     const root = getRoot(tree);
     const proof = getProof(tree, leafA);
     expect(verifyProof(root, leafA, proof)).toBe(true);
+  });
+});
+
+describe("buildTree — frozen vectors", () => {
+  it("matches the committed root", () => {
+    const tree = buildTree(merkleVectors.leaves as `0x${string}`[]);
+    expect(getRoot(tree)).toBe(merkleVectors.expectedRoot as `0x${string}`);
   });
 });
