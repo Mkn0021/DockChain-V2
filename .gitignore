@@ -50,6 +50,8 @@ aws-credentials
 !.prettierrc.json
 !.eslintrc.json
 !bunfig.json
+!tests/fixtures/
+!tests/fixtures/**
 *-credentials.json
 *-service-account.json
 gcloud/

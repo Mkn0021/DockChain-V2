@@ -20,7 +20,7 @@ export const computeLeaf = (input: LeafInput): `0x${string}` => {
   const fieldsHash = keccak256(bytesFromUtf8(canonicalJson(input.fields)));
 
   const parts = [
-    stringToHex(LEAF_DOMAIN),
+    stringToHex(LEAF_DOMAIN, { size: 32 }),
     toHex(BigInt(input.chainId), { size: 32 }),
     input.registryAddress.toLowerCase() as `0x${string}`,
     input.issuerAddress.toLowerCase() as `0x${string}`,
