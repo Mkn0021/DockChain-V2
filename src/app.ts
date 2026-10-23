@@ -12,12 +12,14 @@ import { env } from "./config";
 import { apiKeyController } from "./features/apikeys/apikey.controller";
 import { auditController } from "./features/audit/audit.controller";
 import { batchController } from "./features/batches/batch.controller";
+import { runBatchReconciler } from "./features/batches/batch.reconciler";
 import { runBatchScheduler } from "./features/batches/batch.scheduler";
 import { documentController } from "./features/documents/document.controller";
 import { healthController } from "./features/health/health.controller";
 import { organizationController } from "./features/organizations/organization.controller";
 import { settingsController } from "./features/settings/settings.controller";
 import { templateController } from "./features/templates/template.controller";
+import { verifyController } from "./features/verify/verify.controller";
 import { walletController } from "./features/wallets/wallet.controller";
 import { webhookController } from "./features/webhooks/webhook.controller";
 import { scheduleChainIndexer } from "./queues/queues/chain-indexer.queue";
@@ -62,6 +64,15 @@ export const app = new Elysia({
     })
   )
   .use(
+    cron({
+      name: "batch-reconciler",
+      pattern: "* * * * *",
+      async run() {
+        await runBatchReconciler();
+      },
+    })
+  )
+  .use(
     openapi({
       documentation: {
         components: (await authOpenAPI.getComponents()) as never,
@@ -86,5 +97,6 @@ export const app = new Elysia({
   .use(organizationController)
   .use(settingsController)
   .use(templateController)
+  .use(verifyController)
   .use(walletController)
   .use(webhookController);

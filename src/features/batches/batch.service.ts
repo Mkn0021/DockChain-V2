@@ -7,6 +7,7 @@ import { env } from "../../config";
 import { db, templateVersions } from "../../db";
 import { organizationSettings } from "../../db/schema/settings.schema";
 import { issuerWallets } from "../../db/schema/wallet.schema";
+import { batchRelayQueue } from "../../queues";
 import { S3Service } from "../../s3";
 import { toUnixSeconds } from "../../shared/db/date";
 import { AppError } from "../../shared/errors";
@@ -345,6 +346,11 @@ export const BatchService = {
       organizationId,
       targetId: batchId,
       targetType: "batch",
+    });
+
+    await batchRelayQueue.add("submit", {
+      batchId,
+      organizationId,
     });
 
     return this.getById(organizationId, batchId);

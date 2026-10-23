@@ -10,12 +10,12 @@ export const REVOKE_TYPES = {
   ],
 } as const;
 
-export interface RevokeMessage {
+export type RevokeMessage = Record<string, unknown> & {
   issuer: `0x${string}`;
   leaf: `0x${string}`;
   reason: number;
   root: `0x${string}`;
-}
+};
 
 export interface RevokeTypedData {
   domain: {
