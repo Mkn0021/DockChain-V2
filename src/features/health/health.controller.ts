@@ -8,7 +8,7 @@ export const healthController = new Elysia({ prefix: "/health" }).get(
   () => HealthService.check(),
   {
     detail: {
-      description: "Returns the health status of the API",
+      description: "Returns the health status of the API and chain",
       summary: "Health check",
       tags: ["Health"],
     },
