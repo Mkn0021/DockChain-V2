@@ -4,9 +4,9 @@ const TRANSITIONS: Record<BatchStatus, BatchStatus[]> = {
   awaiting_signature: ["signed", "cancelled"],
   cancelled: [],
   confirmed: [],
-  failed: ["signed"],
+  failed: ["signed", "confirmed"],
   open: ["awaiting_signature", "cancelled"],
-  signed: ["submitted", "failed"],
+  signed: ["submitted", "confirmed", "failed"],
   submitted: ["confirmed", "failed"],
 };
 
