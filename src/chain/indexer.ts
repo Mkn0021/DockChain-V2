@@ -14,6 +14,7 @@ import { documents } from "../db/schema/document.schema";
 import { issuerWallets } from "../db/schema/wallet.schema";
 import { DeliveryService } from "../features/documents/document.delivery";
 import { WebhookService } from "../features/webhooks/webhook.service";
+import { redis } from "../redis";
 import { DOCUMENT_REGISTRY_ABI } from "./registry.abi";
 
 const CHUNK_SIZE = 2000n;
@@ -35,6 +36,8 @@ export interface IndexerRunResult {
   halted: boolean;
   toBlock: bigint;
 }
+
+const cacheKey = (leaf: string) => `verify:leaf:${leaf.toLowerCase()}`;
 
 const toJsonSafe = (value: unknown): Record<string, unknown> => {
   const json = JSON.stringify(value, (_key, inner) =>
@@ -253,7 +256,7 @@ const applyAnchored = async (event: AnchoredEvent): Promise<void> => {
     .where(eq(batches.id, batch.id));
 
   const docs = await db
-    .select({ id: documents.id })
+    .select({ id: documents.id, leaf: documents.leaf })
     .from(documents)
     .where(eq(documents.batchId, batch.id));
 
@@ -272,6 +275,10 @@ const applyAnchored = async (event: AnchoredEvent): Promise<void> => {
   });
 
   for (const doc of docs) {
+    if (doc.leaf) {
+      await redis.del(cacheKey(doc.leaf));
+    }
+
     await WebhookService.emit(batch.organizationId, "document.issued", {
       documentId: doc.id,
     });
@@ -314,6 +321,8 @@ const applyRevoked = async (event: RevokedEvent): Promise<void> => {
     .update(documents)
     .set({ status: "revoked", updatedAt: new Date() })
     .where(eq(documents.id, doc.id));
+
+  await redis.del(cacheKey(leaf));
 
   await WebhookService.emit(doc.organizationId, "document.revoked", {
     documentId: doc.id,
@@ -358,11 +367,26 @@ const applyKeyCompromised = async (
     })
     .where(eq(issuerWallets.id, wallet.id));
 
+  await invalidateWalletCache(wallet.id);
+
   await WebhookService.emit(wallet.organizationId, "wallet.compromised", {
     cutoff,
     txHash: event.transactionHash ?? "",
     walletId: wallet.id,
   });
+};
+
+const invalidateWalletCache = async (walletId: string): Promise<void> => {
+  const walletDocs = await db
+    .select({ leaf: documents.leaf })
+    .from(documents)
+    .where(eq(documents.issuerWalletId, walletId));
+
+  for (const doc of walletDocs) {
+    if (doc.leaf) {
+      await redis.del(cacheKey(doc.leaf));
+    }
+  }
 };
 
 export const getIndexerStatus = async (chainId: number) => {

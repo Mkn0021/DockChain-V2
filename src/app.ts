@@ -19,6 +19,7 @@ import { healthController } from "./features/health/health.controller";
 import { organizationController } from "./features/organizations/organization.controller";
 import { settingsController } from "./features/settings/settings.controller";
 import { templateController } from "./features/templates/template.controller";
+import { verifyController } from "./features/verify/verify.controller";
 import { walletController } from "./features/wallets/wallet.controller";
 import { webhookController } from "./features/webhooks/webhook.controller";
 import { scheduleChainIndexer } from "./queues/queues/chain-indexer.queue";
@@ -96,5 +97,6 @@ export const app = new Elysia({
   .use(organizationController)
   .use(settingsController)
   .use(templateController)
+  .use(verifyController)
   .use(walletController)
   .use(webhookController);
