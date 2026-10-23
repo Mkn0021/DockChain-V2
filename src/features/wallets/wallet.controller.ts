@@ -3,6 +3,11 @@ import { Elysia } from "elysia";
 import { ErrorResponse } from "../../shared/models";
 import { authPlugin, permissionPlugin } from "../../shared/plugins";
 import {
+  CompromisePrepareResponseSchema,
+  CompromisePrepareSchema,
+} from "./wallet.compromise.model";
+import { WalletCompromiseService } from "./wallet.compromise.service";
+import {
   OrganizationParamsSchema,
   WalletChallengeResponseSchema,
   WalletChallengeSchema,
@@ -115,6 +120,34 @@ export const walletController = new Elysia({
         401: ErrorResponse,
         403: ErrorResponse,
         404: ErrorResponse,
+        422: ErrorResponse,
+      },
+    }
+  )
+
+  .post(
+    "/:walletId/compromise/prepare",
+    ({ params, body }) =>
+      WalletCompromiseService.prepare(
+        params.organizationId,
+        params.walletId,
+        body
+      ),
+    {
+      auth: true,
+      body: CompromisePrepareSchema,
+      detail: {
+        description:
+          "Returns the calldata for the issuer's wallet to send markKeyCompromised on the registry. The wallet becomes compromised only when the indexer sees the event.",
+        summary: "Prepare a wallet compromise transaction",
+        tags: ["Wallets"],
+      },
+      params: WalletIdParamsSchema,
+      permission: { wallet: ["update"] },
+      response: {
+        200: CompromisePrepareResponseSchema,
+        404: ErrorResponse,
+        409: ErrorResponse,
         422: ErrorResponse,
       },
     }
