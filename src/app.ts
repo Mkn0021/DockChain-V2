@@ -7,6 +7,8 @@ import { Elysia } from "elysia";
 import { z } from "zod";
 
 import { authOpenAPI } from "./auth";
+import { syncRegistryDeployment } from "./chain/deployments";
+import { env } from "./config";
 import { apiKeyController } from "./features/apikeys/apikey.controller";
 import { auditController } from "./features/audit/audit.controller";
 import { batchController } from "./features/batches/batch.controller";
@@ -18,6 +20,7 @@ import { settingsController } from "./features/settings/settings.controller";
 import { templateController } from "./features/templates/template.controller";
 import { walletController } from "./features/wallets/wallet.controller";
 import { webhookController } from "./features/webhooks/webhook.controller";
+import { scheduleChainIndexer } from "./queues/queues/chain-indexer.queue";
 import { httpPlugin } from "./shared/http";
 import {
   authPlugin,
@@ -28,6 +31,11 @@ import {
   redisPlugin,
   s3Plugin,
 } from "./shared/plugins";
+
+if (env.NODE_ENV !== "test") {
+  await syncRegistryDeployment(env.CHAIN_ID, env.REGISTRY_ADDRESS);
+  await scheduleChainIndexer();
+}
 
 export const app = new Elysia({
   serve: {

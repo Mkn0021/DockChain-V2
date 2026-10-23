@@ -12,14 +12,14 @@ export const ANCHOR_TYPES = {
   ],
 } as const;
 
-export interface AnchorMessage {
+export type AnchorMessage = Record<string, unknown> & {
   count: number;
   dataHash: `0x${string}`;
   issuer: `0x${string}`;
   root: `0x${string}`;
   windowEnd: bigint;
   windowStart: bigint;
-}
+};
 
 export interface AnchorTypedData {
   domain: {

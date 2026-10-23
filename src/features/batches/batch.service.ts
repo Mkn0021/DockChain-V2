@@ -1,8 +1,8 @@
 import { and, eq, inArray } from "drizzle-orm";
-import { verifyTypedData } from "viem";
 
 import type { BatchStatus } from "./batch.model";
 
+import { createChainClient } from "../../chain/client";
 import { env } from "../../config";
 import { db, templateVersions } from "../../db";
 import { organizationSettings } from "../../db/schema/settings.schema";
@@ -312,14 +312,18 @@ export const BatchService = {
 
     const typedData = fromJson(batch.typedData as AnchorTypedDataJson);
 
-    const valid = await verifyTypedData({
-      address: wallet.address as `0x${string}`,
-      domain: typedData.domain,
-      message: typedData.message,
-      primaryType: "Anchor",
-      signature,
-      types: ANCHOR_TYPES,
-    }).catch(() => false);
+    const chainClient = createChainClient();
+
+    const valid = await chainClient.publicClient
+      .verifyTypedData({
+        address: wallet.address as `0x${string}`,
+        domain: typedData.domain,
+        message: typedData.message,
+        primaryType: "Anchor",
+        signature,
+        types: ANCHOR_TYPES,
+      })
+      .catch(() => false);
 
     if (!valid) {
       throw AppError.validation(

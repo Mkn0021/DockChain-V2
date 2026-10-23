@@ -1,19 +1,13 @@
-import { createPublicClient, http } from "viem";
-import { baseSepolia } from "viem/chains";
 import {
   generateSiweNonce,
   parseSiweMessage,
   verifySiweMessage,
 } from "viem/siwe";
 
+import { createChainClient } from "../../chain/client";
 import { env } from "../../config";
 
 const CHALLENGE_TTL_MS = 10 * 60 * 1000;
-
-const client = createPublicClient({
-  chain: baseSepolia,
-  transport: http(),
-});
 
 export const buildChallengeMessage = (input: {
   address: string;
@@ -79,7 +73,9 @@ export const verifyChallenge = async (input: {
     throw new Error("Challenge expired");
   }
 
-  const valid = await verifySiweMessage(client, {
+  const chainClient = createChainClient();
+
+  const valid = await verifySiweMessage(chainClient.publicClient, {
     address: input.address as `0x${string}`,
     message: input.message,
     signature: input.signature,
