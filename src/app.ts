@@ -7,6 +7,8 @@ import { Elysia } from "elysia";
 import { z } from "zod";
 
 import { authOpenAPI } from "./auth";
+import { syncRegistryDeployment } from "./chain/deployments";
+import { env } from "./config";
 import { apiKeyController } from "./features/apikeys/apikey.controller";
 import { auditController } from "./features/audit/audit.controller";
 import { batchController } from "./features/batches/batch.controller";
@@ -28,6 +30,10 @@ import {
   redisPlugin,
   s3Plugin,
 } from "./shared/plugins";
+
+if (env.NODE_ENV !== "test") {
+  await syncRegistryDeployment(env.CHAIN_ID, env.REGISTRY_ADDRESS);
+}
 
 export const app = new Elysia({
   serve: {
