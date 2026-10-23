@@ -25,6 +25,7 @@ export const env = createEnv({
     BULL_BOARD_PASSWORD: z.string().min(8),
     BULL_BOARD_USERNAME: z.string(),
     CHAIN_ID: z.coerce.number().int().positive().default(84_532),
+    CONFIRMATIONS: z.coerce.number().int().min(1).default(5),
     DATABASE_URL: z.url(),
     DOCUMENT_ENCRYPTION_ACTIVE_KEY_ID: z.string().min(1),
     DOCUMENT_ENCRYPTION_KEYS: z.string().transform((value, ctx) => {
@@ -67,16 +68,35 @@ export const env = createEnv({
         return z.NEVER;
       }
     }),
+    INDEXER_POLL_MS: z.coerce.number().int().min(1000).default(5000),
     NODE_ENV: z.enum(["development", "production", "test"]),
     PDF_CACHE_TTL_SECONDS: z.coerce.number().int().positive().default(3600),
     PORT: z.coerce.number(),
+    RECONCILE_AFTER_MINUTES: z.coerce.number().int().min(1).default(15),
     REDIS_URL: z.url(),
     REGISTRY_ADDRESS: z
       .string()
       .regex(/^0x[0-9a-fA-F]{40}$/, "Must be a 0x-prefixed 40-char hex address")
       .default(ZERO_ADDRESS),
+    RELAYER_PRIVATE_KEY: z
+      .string()
+      .regex(
+        /^0x[0-9a-fA-F]{64}$/,
+        "RELAYER_PRIVATE_KEY must be a 32-byte hex string"
+      )
+      .optional(),
     RESEND_API_KEY: z.string(),
     RESEND_FROM_EMAIL: z.email(),
+    RPC_URLS: z
+      .string()
+      .transform((value) =>
+        value
+          .split(",")
+          .map((s) => s.trim())
+          .filter(Boolean)
+      )
+      .pipe(z.array(z.url()).min(1, "At least one RPC URL is required")),
+
     // S3 Storage
     S3_ACCESS_KEY_ID: z.string(),
     S3_BUCKET: z.string(),
@@ -92,6 +112,10 @@ if (env.NODE_ENV === "production") {
     console.error(
       "❌ REGISTRY_ADDRESS must be set to a non-zero address in production"
     );
+    process.exit(1);
+  }
+  if (!env.RELAYER_PRIVATE_KEY) {
+    console.error("❌ RELAYER_PRIVATE_KEY must be set in production");
     process.exit(1);
   }
   if (
