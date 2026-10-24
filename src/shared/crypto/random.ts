@@ -1,4 +1,4 @@
-import { bytesFromLength, type Bytes } from "./bytes";
+import { bytesFromLength, type Bytes } from "@dockchain/verify";
 
 export const randomBytes = (size: number): Bytes => {
   const out = bytesFromLength(size);

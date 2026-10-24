@@ -3,7 +3,7 @@ import {
   bytesToArrayBuffer,
   bytesFrom,
   type Bytes,
-} from "./bytes";
+} from "@dockchain/verify";
 
 const IV_LENGTH = 12;
 const TAG_LENGTH = 16;

@@ -1,8 +1,8 @@
+import { computeVerificationStatus } from "@dockchain/verify";
 import { eq } from "drizzle-orm";
 
 import { createChainClient } from "../../chain/client";
 import { RegistryClient } from "../../chain/registry.client";
-import { computeVerificationStatus } from "../../chain/status";
 import { env } from "../../config";
 import { db } from "../../db";
 import { organizations } from "../../db/schema/auth.schema";

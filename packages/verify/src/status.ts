@@ -18,8 +18,6 @@ export interface ComputeVerificationStatusInput {
   compromisedFrom: number;
 }
 
-export const timestampSkewSeconds = 1;
-
 export const computeVerificationStatus = (
   input: ComputeVerificationStatusInput
 ): VerificationStatus => {
@@ -27,7 +25,7 @@ export const computeVerificationStatus = (
     return "pending";
   }
 
-  if (input.claimedIssuedAt > input.anchorTimestamp + timestampSkewSeconds) {
+  if (input.claimedIssuedAt > input.anchorTimestamp) {
     return "invalid";
   }
 

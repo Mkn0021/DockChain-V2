@@ -1,3 +1,4 @@
+import { buildTree, getProof, getRoot } from "@dockchain/verify";
 import { and, eq, inArray } from "drizzle-orm";
 
 import type { BatchStatus } from "./batch.model";
@@ -11,7 +12,6 @@ import { batchRelayQueue } from "../../queues";
 import { S3Service } from "../../s3";
 import { toUnixSeconds } from "../../shared/db/date";
 import { AppError } from "../../shared/errors";
-import { buildTree, getProof, getRoot } from "../../shared/merkle";
 import { AuditService } from "../audit/audit.service";
 import { decryptPayload } from "../documents/document.payload";
 import { WebhookService } from "../webhooks/webhook.service";

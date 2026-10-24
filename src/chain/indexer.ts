@@ -1,3 +1,4 @@
+import { DOCUMENT_REGISTRY_ABI } from "@dockchain/verify";
 import { and, eq, sql } from "drizzle-orm";
 import {
   parseEventLogs,
@@ -15,7 +16,6 @@ import { issuerWallets } from "../db/schema/wallet.schema";
 import { DeliveryService } from "../features/documents/document.delivery";
 import { WebhookService } from "../features/webhooks/webhook.service";
 import { redis } from "../redis";
-import { DOCUMENT_REGISTRY_ABI } from "./registry.abi";
 
 const CHUNK_SIZE = 2000n;
 

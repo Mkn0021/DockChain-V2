@@ -1,11 +1,10 @@
-import {
-  timestampSkewSeconds,
-  type VerificationStatus,
-} from "../../chain/status";
+import { verifyProof, type VerificationStatus } from "@dockchain/verify";
+
 import { env } from "../../config";
 import { computeLeaf, bytesFromBase64 } from "../../shared/crypto";
 import { AppError } from "../../shared/errors";
-import { verifyProof } from "../../shared/merkle";
+
+const timestampSkewSeconds = 1;
 
 export interface BundleCheck {
   detail?: string;

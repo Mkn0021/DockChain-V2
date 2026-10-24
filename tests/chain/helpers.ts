@@ -1,3 +1,4 @@
+import { computeLeaf, buildTree, getProof, getRoot } from "@dockchain/verify";
 import { spawn } from "node:child_process";
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
@@ -12,8 +13,6 @@ import {
 } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 
-import { computeLeaf } from "../../src/shared/crypto/leaf";
-import { buildTree, getProof, getRoot } from "../../src/shared/merkle";
 import { DOCUMENT_REGISTRY_ABI } from "./abi";
 
 const REPO_ROOT = join(import.meta.dirname, "..", "..");

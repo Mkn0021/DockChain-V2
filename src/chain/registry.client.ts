@@ -1,3 +1,4 @@
+import { DOCUMENT_REGISTRY_ABI } from "@dockchain/verify";
 import {
   encodeFunctionData,
   getContract,
@@ -10,7 +11,6 @@ import {
 } from "viem";
 
 import { decodeRegistryError } from "./errors";
-import { DOCUMENT_REGISTRY_ABI } from "./registry.abi";
 
 type RegistryContract = GetContractReturnType<
   typeof DOCUMENT_REGISTRY_ABI,
