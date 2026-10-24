@@ -12,9 +12,11 @@ import type {
 import { db } from "../../db";
 import { templateVersions, templates } from "../../db/schema/template.schema";
 import { AppError, isPgUniqueViolation } from "../../shared/errors";
+import { AssetService } from "../assets/asset.service";
 import { extractFields } from "./template.extract";
 import { computeSchemaHash } from "./template.hash";
 import {
+  collectAssetReferences,
   renderLayout,
   sanitizeLayout,
   validateLayoutAgainstSchema,
@@ -79,6 +81,23 @@ const resolveFieldSchema = (
   return { fields: extractFields(layout) };
 };
 
+const prepareLayout = async (
+  organizationId: string,
+  rawLayout: string,
+  explicitFieldSchema: FieldSchemaType | undefined
+): Promise<{ layout: string; fieldSchema: FieldSchemaType }> => {
+  const layout = sanitizeLayout(rawLayout);
+  const fieldSchema = resolveFieldSchema(layout, explicitFieldSchema);
+
+  validateLayoutAgainstSchema(layout, fieldSchema);
+  await AssetService.assertAssetsBelongToOrg(
+    organizationId,
+    collectAssetReferences(layout)
+  );
+
+  return { fieldSchema, layout };
+};
+
 export const TemplateService = {
   async archive(organizationId: string, templateId: string) {
     await requireTemplate(organizationId, templateId);
@@ -112,10 +131,11 @@ export const TemplateService = {
     createdBy: string,
     data: TemplateCreateType
   ) {
-    const sanitized = sanitizeLayout(data.layout);
-    const fieldSchema = resolveFieldSchema(sanitized, data.fieldSchema);
-
-    validateLayoutAgainstSchema(sanitized, fieldSchema);
+    const { layout, fieldSchema } = await prepareLayout(
+      organizationId,
+      data.layout,
+      data.fieldSchema
+    );
 
     try {
       return await db.transaction(async (tx) => {
@@ -134,7 +154,7 @@ export const TemplateService = {
           .values({
             createdBy,
             fieldSchema,
-            layout: sanitized,
+            layout,
             templateId: template.id,
             version: 1,
           })
@@ -160,10 +180,11 @@ export const TemplateService = {
   ) {
     await requireTemplate(organizationId, templateId);
 
-    const sanitized = sanitizeLayout(data.layout);
-    const fieldSchema = resolveFieldSchema(sanitized, data.fieldSchema);
-
-    validateLayoutAgainstSchema(sanitized, fieldSchema);
+    const { layout, fieldSchema } = await prepareLayout(
+      organizationId,
+      data.layout,
+      data.fieldSchema
+    );
 
     return db.transaction(async (tx) => {
       await tx.execute(
@@ -182,7 +203,7 @@ export const TemplateService = {
         .values({
           createdBy,
           fieldSchema,
-          layout: sanitized,
+          layout,
           templateId,
           version: nextVersion,
         })
@@ -388,6 +409,10 @@ export const TemplateService = {
     }
 
     validateLayoutAgainstSchema(nextLayout, nextFieldSchema);
+    await AssetService.assertAssetsBelongToOrg(
+      organizationId,
+      collectAssetReferences(nextLayout)
+    );
 
     const [updated] = await db
       .update(templateVersions)

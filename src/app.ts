@@ -10,6 +10,7 @@ import { authOpenAPI } from "./auth";
 import { syncRegistryDeployment } from "./chain/deployments";
 import { env } from "./config";
 import { apiKeyController } from "./features/apikeys/apikey.controller";
+import { assetController } from "./features/assets/asset.controller";
 import { auditController } from "./features/audit/audit.controller";
 import { batchController } from "./features/batches/batch.controller";
 import { runBatchReconciler } from "./features/batches/batch.reconciler";
@@ -90,6 +91,7 @@ export const app = new Elysia({
   .use(opentelemetry())
   .use(serverTiming())
   .use(apiKeyController)
+  .use(assetController)
   .use(auditController)
   .use(batchController)
   .use(documentController)
