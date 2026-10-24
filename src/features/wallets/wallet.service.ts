@@ -3,6 +3,7 @@ import { and, count, eq } from "drizzle-orm";
 import type { TxtResolver } from "./wallet.dns";
 import type { WalletChallengeType, WalletCreateType } from "./wallet.model";
 
+import { env } from "../../config";
 import { db } from "../../db";
 import { verifications } from "../../db/schema/auth.schema";
 import { batches } from "../../db/schema/batch.schema";
@@ -163,12 +164,17 @@ export const WalletService = {
       throw AppError.validation("Challenge has expired");
     }
 
-    // Extract chainId from the message
     const chainIdMatch = data.message.match(/^Chain ID:\s*(\d+)$/m);
     if (!chainIdMatch) {
       throw AppError.validation("Message is missing a Chain ID line");
     }
     const chainId = Number(chainIdMatch[1]);
+
+    if (chainId !== env.CHAIN_ID) {
+      throw AppError.validation(
+        `Chain ID mismatch: message declares ${chainId}, expected ${env.CHAIN_ID}`
+      );
+    }
 
     try {
       await verifyChallenge({

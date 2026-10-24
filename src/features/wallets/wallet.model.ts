@@ -1,6 +1,7 @@
 import { createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
 
+import { env } from "../../config";
 import { issuerWallets } from "../../db/schema/wallet.schema";
 
 export const WalletSelectSchema = createSelectSchema(issuerWallets);
@@ -20,7 +21,14 @@ export const WalletChallengeSchema = z.object({
     .string()
     .regex(/^0x[0-9a-fA-F]{40}$/, "Address must be a 0x-prefixed hex string")
     .transform((value) => value.toLowerCase()),
-  chainId: z.coerce.number().int().positive(),
+  chainId: z.coerce
+    .number()
+    .int()
+    .positive()
+    .refine(
+      (value) => value === env.CHAIN_ID,
+      `Only chain ${env.CHAIN_ID} is supported`
+    ),
 });
 
 export const WalletChallengeResponseSchema = z.object({
