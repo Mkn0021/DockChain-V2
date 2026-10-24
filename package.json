@@ -49,8 +49,6 @@
     "docker:clean": "docker compose -f docker-compose.local.yml down -v",
     "docker:build": "docker compose build",
     "docker:prod": "docker compose up -d",
-    "ci:enable": "bun run scripts/ci-enable.ts",
-    "ci:disable": "bun run scripts/ci-disable.ts",
     "auth:generate": "bunx @better-auth/cli generate --output src/db/schema/auth.schema.ts"
   },
   "dependencies": {
