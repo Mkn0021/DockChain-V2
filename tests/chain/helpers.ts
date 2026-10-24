@@ -92,7 +92,9 @@ export async function startHardhatNode(): Promise<HardhatNode> {
         headers: { "content-type": "application/json" },
         method: "POST",
       });
-      if (res.ok) break;
+      if (res.ok) {
+        break;
+      }
     } catch {
       // not ready
     }
@@ -100,12 +102,16 @@ export async function startHardhatNode(): Promise<HardhatNode> {
   }
 
   const kill = async () => {
-    if (child.killed) return;
+    if (child.killed) {
+      return;
+    }
     child.kill("SIGTERM");
     await new Promise<void>((resolve) => {
       child.once("exit", () => resolve());
       setTimeout(() => {
-        if (!child.killed) child.kill("SIGKILL");
+        if (!child.killed) {
+          child.kill("SIGKILL");
+        }
         resolve();
       }, 3000);
     });
@@ -196,13 +202,13 @@ export async function deployRegistry(rpcUrl: string): Promise<RegistryContext> {
 }
 
 export interface BatchFixture {
-  docs: Array<{
+  docs: {
     fields: Record<string, unknown>;
     holderKey: string;
     leaf: `0x${string}`;
     salt: string;
     schemaHash: `0x${string}`;
-  }>;
+  }[];
   leaves: `0x${string}`[];
   proofs: string[][];
   root: `0x${string}`;

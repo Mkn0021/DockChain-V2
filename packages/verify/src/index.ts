@@ -27,3 +27,19 @@ export {
   type VerificationStatus,
 } from "./status";
 export { DOCUMENT_REGISTRY_ABI } from "./abi";
+export {
+  OFFICIAL_REGISTRIES,
+  verifyBundle,
+  type BundleCheck,
+  type ProofBundleV1,
+  type VerifyBundleOptions,
+  type VerifyBundleResult,
+} from "./bundle";
+export {
+  defaultTxtResolver,
+  lookupDockchainRecords,
+  parseDockchainRecord,
+  verifyIssuerDomain,
+  type ParsedDockchainRecord,
+  type TxtResolver,
+} from "./dns";

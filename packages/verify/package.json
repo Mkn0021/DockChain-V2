@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "private": false,
   "description": "Pure verification logic for DockChain proof bundles and on-chain state.",
+  "bin": {
+    "dockchain-verify": "./bin/dockchain-verify.ts"
+  },
   "type": "module",
   "main": "./src/index.ts",
   "types": "./src/index.ts",
