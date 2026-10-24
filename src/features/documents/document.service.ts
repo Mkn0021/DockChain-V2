@@ -349,7 +349,10 @@ export const DocumentService = {
     }
 
     const [wallet] = await db
-      .select({ address: issuerWallets.address })
+      .select({
+        address: issuerWallets.address,
+        domain: issuerWallets.domain,
+      })
       .from(issuerWallets)
       .where(eq(issuerWallets.id, doc.issuerWalletId))
       .limit(1);
