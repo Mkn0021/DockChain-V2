@@ -1,13 +1,16 @@
-import { and, eq } from "drizzle-orm";
+import { and, count, eq } from "drizzle-orm";
 
 import type { TxtResolver } from "./wallet.dns";
 import type { WalletChallengeType, WalletCreateType } from "./wallet.model";
 
 import { db } from "../../db";
 import { verifications } from "../../db/schema/auth.schema";
+import { batches } from "../../db/schema/batch.schema";
+import { documents } from "../../db/schema/document.schema";
 import { organizationSettings } from "../../db/schema/settings.schema";
 import { issuerWallets } from "../../db/schema/wallet.schema";
 import { AppError, isPgUniqueViolation } from "../../shared/errors";
+import { AuditService } from "../audit/audit.service";
 import { createChallenge, verifyChallenge } from "./wallet.challenge";
 import { normalizeDomain, verifyDomainOwnership } from "./wallet.domain";
 
@@ -15,6 +18,36 @@ const CHALLENGE_PREFIX = "wallet-challenge";
 
 const challengeIdentifier = (organizationId: string, address: string) =>
   `${CHALLENGE_PREFIX}:${organizationId}:${address.toLowerCase()}`;
+
+const walletHasReferences = async (walletId: string): Promise<boolean> => {
+  const [[{ documentCount }], [{ batchCount }]] = await Promise.all([
+    db
+      .select({ documentCount: count() })
+      .from(documents)
+      .where(eq(documents.issuerWalletId, walletId)),
+    db
+      .select({ batchCount: count() })
+      .from(batches)
+      .where(eq(batches.issuerWalletId, walletId)),
+  ]);
+
+  return Number(documentCount) > 0 || Number(batchCount) > 0;
+};
+
+const clearDefaultWalletIfMatches = async (
+  organizationId: string,
+  walletId: string
+): Promise<void> => {
+  await db
+    .update(organizationSettings)
+    .set({ defaultWalletId: null, updatedAt: new Date() })
+    .where(
+      and(
+        eq(organizationSettings.organizationId, organizationId),
+        eq(organizationSettings.defaultWalletId, walletId)
+      )
+    );
+};
 
 export const WalletService = {
   async createChallenge(organizationId: string, data: WalletChallengeType) {
@@ -41,9 +74,7 @@ export const WalletService = {
   async delete(organizationId: string, walletId: string) {
     const wallet = await WalletService.getById(organizationId, walletId);
 
-    // Documents don't exist yet — this is the branch-1 semantic.
-    // When documents land, replace with a real reference check.
-    const hasReferences = false;
+    const hasReferences = await walletHasReferences(wallet.id);
 
     if (hasReferences) {
       const [updated] = await db
@@ -51,20 +82,32 @@ export const WalletService = {
         .set({ status: "disabled", updatedAt: new Date() })
         .where(eq(issuerWallets.id, wallet.id))
         .returning();
+
+      await clearDefaultWalletIfMatches(organizationId, wallet.id);
+
+      await AuditService.record({
+        action: "wallet.disabled",
+        actorType: "user",
+        metadata: { reason: "referenced_by_documents_or_batches" },
+        organizationId,
+        targetId: wallet.id,
+        targetType: "issuer_wallet",
+      });
+
       return updated;
     }
 
     await db.delete(issuerWallets).where(eq(issuerWallets.id, wallet.id));
 
-    await db
-      .update(organizationSettings)
-      .set({ defaultWalletId: null, updatedAt: new Date() })
-      .where(
-        and(
-          eq(organizationSettings.organizationId, organizationId),
-          eq(organizationSettings.defaultWalletId, wallet.id)
-        )
-      );
+    await clearDefaultWalletIfMatches(organizationId, wallet.id);
+
+    await AuditService.record({
+      action: "wallet.deleted",
+      actorType: "user",
+      organizationId,
+      targetId: wallet.id,
+      targetType: "issuer_wallet",
+    });
 
     return wallet;
   },
