@@ -12,7 +12,7 @@ import {
 } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 
-import { computeLeaf } from "../../src/shared/crypto";
+import { computeLeaf } from "../../src/shared/crypto/leaf";
 import { buildTree, getProof, getRoot } from "../../src/shared/merkle";
 import { DOCUMENT_REGISTRY_ABI } from "./abi";
 
