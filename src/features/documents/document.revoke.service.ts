@@ -44,7 +44,11 @@ type RevokePrepareResult =
       typedData: ReturnType<typeof buildRevokeTypedData>;
     };
 
-const loadContext = async (organizationId: string, documentId: string) => {
+const loadContext = async (
+  organizationId: string,
+  documentId: string,
+  checkExisting = true
+) => {
   const [doc] = await db
     .select()
     .from(documents)
@@ -86,21 +90,23 @@ const loadContext = async (organizationId: string, documentId: string) => {
     throw AppError.internal("Issuer wallet missing");
   }
 
-  const existing = await db
-    .select()
-    .from(revocations)
-    .where(
-      and(
-        eq(revocations.documentId, documentId),
-        inArray(revocations.status, ["prepared", "submitted", "confirmed"])
+  if (checkExisting) {
+    const existing = await db
+      .select()
+      .from(revocations)
+      .where(
+        and(
+          eq(revocations.documentId, documentId),
+          inArray(revocations.status, ["prepared", "submitted", "confirmed"])
+        )
       )
-    )
-    .limit(1);
+      .limit(1);
 
-  if (existing.length > 0) {
-    throw AppError.conflict(
-      "A revocation is already in progress for this document"
-    );
+    if (existing.length > 0) {
+      throw AppError.conflict(
+        "A revocation is already in progress for this document"
+      );
+    }
   }
 
   if (!doc.leaf || !doc.merkleProof || !batch.root) {
@@ -315,7 +321,8 @@ export const DocumentRevokeService = {
 
     const { batch, doc, wallet } = await loadContext(
       organizationId,
-      documentId
+      documentId,
+      false
     );
     const revocation = await loadPreparedRevocation(
       documentId,

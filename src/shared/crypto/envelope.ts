@@ -1,5 +1,6 @@
+import { bytesFromBase64, type Bytes } from "@dockchain/verify";
+
 import { env } from "../../config";
-import { bytesFromBase64, type Bytes } from "./bytes";
 
 const decodeKey = (base64: string): Bytes => {
   const bytes = bytesFromBase64(base64);

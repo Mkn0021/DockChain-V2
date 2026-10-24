@@ -1,7 +1,7 @@
 {
   "$schema": "./node_modules/oxlint/configuration_schema.json",
   "extends": ["./node_modules/ultracite/config/oxlint/core/.oxlintrc.json"],
-  "ignorePatterns": ["opensrc/**", "tests/**"],
+  "ignorePatterns": ["opensrc/**", "tests/**", "**.test**"],
   "rules": {
     // Allow top-level "import type { X }" syntax instead of inline "import { type X }"
     // This avoids conflicts with no-import-type-side-effects rule

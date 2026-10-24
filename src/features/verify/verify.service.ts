@@ -1,8 +1,8 @@
+import { computeVerificationStatus } from "@dockchain/verify";
 import { eq } from "drizzle-orm";
 
 import { createChainClient } from "../../chain/client";
 import { RegistryClient } from "../../chain/registry.client";
-import { computeVerificationStatus } from "../../chain/status";
 import { env } from "../../config";
 import { db } from "../../db";
 import { organizations } from "../../db/schema/auth.schema";
@@ -10,16 +10,27 @@ import { batches } from "../../db/schema/batch.schema";
 import { registryDeployments } from "../../db/schema/chain.schema";
 import { documents } from "../../db/schema/document.schema";
 import { issuerWallets } from "../../db/schema/wallet.schema";
+import { toUnixSeconds as toUnix } from "../../shared/db/date";
 import { AppError } from "../../shared/errors";
+import {
+  chainNotConfiguredResponse,
+  checkChainId,
+  checkClaimedIssuedAt,
+  checkMerkleProof,
+  checkNotExpired,
+  checkRegistryAddress,
+  invalidBundleResponse,
+  parseBundle,
+  rebuildLeaf,
+  type BundleCheck,
+  type ParsedBundle,
+} from "./verify.bundle";
 
 const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
 
 type DocumentRow = typeof documents.$inferSelect;
 type WalletRow = typeof issuerWallets.$inferSelect;
 type BatchRow = typeof batches.$inferSelect;
-
-const toUnix = (value: Date | string | null): number =>
-  value ? Math.floor(new Date(value).getTime() / 1000) : 0;
 
 const buildRevocationInfo = (
   revocation: { reason: number; timestamp: number },
@@ -96,6 +107,118 @@ const readChainContext = async (input: {
 };
 
 export const VerifyService = {
+  async byBundle(raw: Record<string, unknown>) {
+    const checks: BundleCheck[] = [];
+
+    let bundle: ParsedBundle;
+    try {
+      bundle = parseBundle(raw);
+      checks.push({ name: "shape", ok: true });
+    } catch (error) {
+      return invalidBundleResponse(
+        checks,
+        error instanceof Error ? error.message : "invalid bundle"
+      );
+    }
+
+    if (env.REGISTRY_ADDRESS === ZERO_ADDRESS) {
+      return chainNotConfiguredResponse(checks, bundle);
+    }
+
+    checks.push(checkChainId(bundle));
+    checks.push(checkRegistryAddress(bundle));
+
+    const { check: leafCheck, leaf: rebuiltLeaf } = rebuildLeaf(bundle);
+    checks.push(leafCheck);
+
+    const merkleCheck = checkMerkleProof(bundle, rebuiltLeaf);
+    if (merkleCheck) {
+      checks.push(merkleCheck);
+    }
+
+    const chainClient = createChainClient();
+    const registry = new RegistryClient({
+      address: bundle.registry,
+      publicClient: chainClient.publicClient,
+    });
+
+    const anchor = await registry.readAnchor(bundle.issuer, bundle.root);
+    checks.push({
+      detail:
+        anchor.timestamp > 0
+          ? `timestamp ${anchor.timestamp}`
+          : "anchor not found",
+      name: "anchor-exists",
+      ok: anchor.timestamp > 0,
+    });
+
+    const revocation = await registry.readRevocation(
+      bundle.issuer,
+      bundle.leaf
+    );
+    checks.push({
+      detail:
+        revocation.timestamp > 0
+          ? `revoked at ${revocation.timestamp}`
+          : undefined,
+      name: "not-revoked",
+      ok: revocation.timestamp === 0,
+    });
+
+    const compromisedFrom = await registry.readCompromisedFrom(bundle.issuer);
+
+    const claimedCheck = checkClaimedIssuedAt(bundle, anchor.timestamp);
+    if (claimedCheck) {
+      checks.push(claimedCheck);
+    }
+
+    const now = Math.floor(Date.now() / 1000);
+    checks.push(checkNotExpired(bundle, now));
+
+    const status = computeVerificationStatus({
+      anchorTimestamp: anchor.timestamp,
+      claimedIssuedAt: bundle.claimedIssuedAt,
+      compromisedFrom,
+      domainVerified: true,
+      expiresAt: bundle.expiresAt,
+      now,
+      revokedAt: revocation.timestamp,
+    });
+
+    return {
+      anchor:
+        anchor.timestamp > 0
+          ? {
+              blockNumber: null,
+              blockTimestamp: anchor.timestamp,
+              chainId: bundle.chainId,
+              registry: bundle.registry,
+              root: bundle.root,
+              txHash: null,
+            }
+          : null,
+      checks,
+      claimedIssuedAt: bundle.claimedIssuedAt,
+      expiresAt: bundle.expiresAt || null,
+      issuer: {
+        address: bundle.issuer,
+        domain: null,
+        domainVerified: false,
+        organizationName: null,
+      },
+      revocation:
+        revocation.timestamp > 0
+          ? {
+              blockTimestamp: revocation.timestamp,
+              reasonCode: String(revocation.reason),
+              txHash: null,
+            }
+          : null,
+      source: "chain" as const,
+      status,
+    };
+  },
+
   async byLeaf(leaf: string, live: boolean) {
     const [doc] = await db
       .select()

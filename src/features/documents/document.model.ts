@@ -157,6 +157,7 @@ export const ProofBundleSchema = z.object({
   fields: z.record(z.string(), z.unknown()),
   holderKey: z.string(),
   issuer: z.string().regex(/^0x[0-9a-fA-F]{40}$/),
+  issuerDomain: z.string().optional(),
   leaf: z.string().regex(/^0x[0-9a-f]{64}$/),
   leafIndex: z.number().int().nonnegative(),
   proof: z.array(z.string()),

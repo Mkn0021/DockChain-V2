@@ -29,6 +29,7 @@ interface BundleBatch {
 
 interface BundleWallet {
   address: string;
+  domain: string | null;
 }
 
 interface BundleTemplateVersion {
@@ -40,6 +41,7 @@ export interface ProofBundle {
   chainId: number;
   registry: `0x${string}`;
   issuer: `0x${string}`;
+  issuerDomain?: string;
   root: `0x${string}`;
   leaf: `0x${string}`;
   leafIndex: number;
@@ -94,6 +96,7 @@ export const buildBundle = async (input: {
     fields: payload.fields,
     holderKey: payload.holderKey,
     issuer: wallet.address as `0x${string}`,
+    issuerDomain: wallet.domain ?? undefined,
     leaf: document.leaf as `0x${string}`,
     leafIndex: Number(document.leafIndex),
     proof: document.merkleProof as string[],

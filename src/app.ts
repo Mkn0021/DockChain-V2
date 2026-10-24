@@ -10,11 +10,13 @@ import { authOpenAPI } from "./auth";
 import { syncRegistryDeployment } from "./chain/deployments";
 import { env } from "./config";
 import { apiKeyController } from "./features/apikeys/apikey.controller";
+import { assetController } from "./features/assets/asset.controller";
 import { auditController } from "./features/audit/audit.controller";
 import { batchController } from "./features/batches/batch.controller";
 import { runBatchReconciler } from "./features/batches/batch.reconciler";
 import { runBatchScheduler } from "./features/batches/batch.scheduler";
 import { documentController } from "./features/documents/document.controller";
+import { documentRevokeController } from "./features/documents/document.revoke.controller";
 import { healthController } from "./features/health/health.controller";
 import { organizationController } from "./features/organizations/organization.controller";
 import { settingsController } from "./features/settings/settings.controller";
@@ -36,8 +38,8 @@ import {
 
 if (env.NODE_ENV !== "test") {
   await syncRegistryDeployment(env.CHAIN_ID, env.REGISTRY_ADDRESS);
-  await scheduleChainIndexer();
 }
+await scheduleChainIndexer();
 
 export const app = new Elysia({
   serve: {
@@ -90,9 +92,11 @@ export const app = new Elysia({
   .use(opentelemetry())
   .use(serverTiming())
   .use(apiKeyController)
+  .use(assetController)
   .use(auditController)
   .use(batchController)
   .use(documentController)
+  .use(documentRevokeController)
   .use(healthController)
   .use(organizationController)
   .use(settingsController)

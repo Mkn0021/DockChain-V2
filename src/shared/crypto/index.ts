@@ -1,4 +1,4 @@
-export type { Bytes } from "./bytes";
+export type { Bytes } from "@dockchain/verify";
 export {
   bytesFrom,
   bytesFromBase64,
@@ -8,9 +8,9 @@ export {
   bytesToBase64,
   bytesToUtf8,
   emptyBytes,
-} from "./bytes";
-export { canonicalBytes, canonicalJson } from "./canonical";
+} from "@dockchain/verify";
+export { canonicalBytes, canonicalJson } from "@dockchain/verify";
 export { decryptWithKey, encryptWithKey } from "./encryption";
 export { getActiveKek, getKek } from "./envelope";
-export { computeLeaf, LEAF_DOMAIN, type LeafInput } from "./leaf";
+export { computeLeaf, LEAF_DOMAIN, type LeafInput } from "@dockchain/verify";
 export { randomBytes, randomHolderKey, randomSalt } from "./random";

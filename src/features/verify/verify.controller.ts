@@ -6,6 +6,8 @@ import {
   IssuerParamsSchema,
   IssuerResponseSchema,
   RegistryResponseSchema,
+  VerifyBundleBodySchema,
+  VerifyBundleResponseSchema,
   VerifyLeafParamsSchema,
   VerifyLeafQuerySchema,
   VerifyResponseSchema,
@@ -57,6 +59,20 @@ export const verifyController = new Elysia()
       },
     }
   )
+
+  .post("/verify/bundle", ({ body }) => VerifyService.byBundle(body.bundle), {
+    body: VerifyBundleBodySchema,
+    detail: {
+      description:
+        "Verifies a proof bundle without touching the database. Rebuilds the leaf, verifies the Merkle proof, and reads anchor, revocation, and compromise cutoff live from the chain. Never logs or stores the bundle contents.",
+      summary: "Verify a proof bundle",
+      tags: ["Public Verify"],
+    },
+    response: {
+      200: VerifyBundleResponseSchema,
+      422: ErrorResponse,
+    },
+  })
 
   .get(
     "/issuers/:address",
