@@ -1,5 +1,7 @@
-import type { VerificationStatus } from "../../chain/status";
-
+import {
+  timestampSkewSeconds,
+  type VerificationStatus,
+} from "../../chain/status";
 import { env } from "../../config";
 import { computeLeaf, bytesFromBase64 } from "../../shared/crypto";
 import { AppError } from "../../shared/errors";
@@ -264,7 +266,7 @@ export const checkClaimedIssuedAt = (
   if (anchorTimestamp <= 0) {
     return null;
   }
-  const ok = bundle.claimedIssuedAt <= anchorTimestamp;
+  const ok = bundle.claimedIssuedAt <= anchorTimestamp + timestampSkewSeconds;
   return {
     detail: ok
       ? undefined

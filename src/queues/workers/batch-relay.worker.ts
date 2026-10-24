@@ -228,13 +228,13 @@ const downloadPackage = async (key: string | null): Promise<Uint8Array> => {
 
   const { S3Service } = await import("../../s3/s3.service");
   const s3 = new S3Service();
-  const text = await s3.getText(key);
+  const buffer = await s3.getArrayBuffer(key);
 
-  if (!text) {
+  if (!buffer) {
     throw new Error(`Package not found at ${key}`);
   }
 
-  return new Uint8Array(Buffer.from(text, "binary"));
+  return new Uint8Array(buffer);
 };
 
 export const batchRelayWorker = new Worker<BatchRelayJobDataType>(

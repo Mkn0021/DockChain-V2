@@ -7,29 +7,42 @@ import { createBullMQConnection } from "../connection";
 
 const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
 
+interface SerializedIndexerRunResult {
+  appliedCount: number;
+  fromBlock: string;
+  halted: boolean;
+  toBlock: string;
+}
+
 interface SkippedIndexerResult {
   reason: string;
   skipped: true;
 }
 
-type ChainIndexerResult = IndexerRunResult | SkippedIndexerResult;
+type ChainIndexerResult = SerializedIndexerRunResult | SkippedIndexerResult;
 
-const processChainIndexer = (_job: Job): Promise<ChainIndexerResult> => {
+const processChainIndexer = async (_job: Job): Promise<ChainIndexerResult> => {
   if (env.REGISTRY_ADDRESS === ZERO_ADDRESS) {
-    return Promise.resolve({
+    return {
       reason: "REGISTRY_ADDRESS not configured",
       skipped: true,
-    });
+    };
   }
 
   const client = createChainClient();
 
-  return runIndexer({
+  const result: IndexerRunResult = await runIndexer({
     chainId: env.CHAIN_ID,
     confirmations: env.CONFIRMATIONS,
     publicClient: client.publicClient,
     registryAddress: env.REGISTRY_ADDRESS as `0x${string}`,
   });
+
+  return {
+    ...result,
+    fromBlock: result.fromBlock.toString(),
+    toBlock: result.toBlock.toString(),
+  };
 };
 
 export const chainIndexerWorker = new Worker(
