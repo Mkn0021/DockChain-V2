@@ -1,10 +1,14 @@
 import type { Config } from "drizzle-kit";
 
-import { env } from "./src/config";
+const url = process.env.DATABASE_URL;
+
+if (!url) {
+  throw new Error("DATABASE_URL is not set");
+}
 
 export default {
   dbCredentials: {
-    url: env.DATABASE_URL,
+    url,
   },
   dialect: "postgresql",
   out: "./src/db/migrations",

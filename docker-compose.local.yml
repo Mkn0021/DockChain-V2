@@ -62,6 +62,20 @@ services:
       exit 0;
       "
 
+  migrate:
+    image: oven/bun:1
+    container_name: elysia-migrate-local
+    working_dir: /app
+    volumes:
+      - .:/app
+    environment:
+      DATABASE_URL: postgresql://elysia:elysia_local_pass@postgres:5432/elysia_dev
+    depends_on:
+      postgres:
+        condition: service_healthy
+    command: bun run db:migrate
+    restart: "no"
+
 volumes:
   postgres_local_data:
   redis_local_data:
