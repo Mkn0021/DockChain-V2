@@ -18,7 +18,7 @@ export const FeatureCard: React.FC<FeatureCardProps> = ({
 }) => {
   return (
     <div className={`flex flex-col h-full ${className}`.trim()}>
-      <div className="bg-gradient-to-t from-black via-[#081E83] to-[#0F2CB7] w-full aspect-square p-4 relative mb-4">
+      <div className="bg-linear-to-t from-black via-[#081E83] to-[#0F2CB7] w-full aspect-square p-4 relative mb-4">
         <Image
           src={imageSrc}
           alt={imageAlt}
@@ -27,7 +27,7 @@ export const FeatureCard: React.FC<FeatureCardProps> = ({
           className="w-full h-full object-contain"
         />
       </div>
-      <div className="flex-grow flex flex-col">
+      <div className="grow flex flex-col">
         <h3 className="mb-2">{title}</h3>
         <p className="px-4 text-center break-all hyphens-auto leading-relaxed">
           {description}

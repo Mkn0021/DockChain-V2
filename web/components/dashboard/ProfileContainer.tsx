@@ -127,7 +127,7 @@ const ProfileContainer: React.FC<ProfileContainerProps> = ({
                 onClick={handleLogout}
                 className="w-full flex items-center gap-4 px-6 py-4 text-left text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/10 transition-all duration-150 border-none"
               >
-                <LOGOUT_BUTTON.icon className="w-5 h-5 flex-shrink-0" />
+                <LOGOUT_BUTTON.icon className="w-5 h-5 shrink-0" />
                 <span className="font-medium">{LOGOUT_BUTTON.label}</span>
               </button>
             </div>

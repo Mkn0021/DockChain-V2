@@ -107,7 +107,7 @@ export default function UploadTemplatePage() {
                 </button>
 
                 {/* SVG Preview */}
-                <div className="w-full h-96 border-2 border-border rounded-lg p-2 bg-background-muted shadow-sm overflow-hidden">
+                <div className="w-full h-96 border-2 border-border rounded-lg p-2 bg-background-muted shadow-xs overflow-hidden">
                   <div
                     className="w-full h-full flex items-center justify-center [&_svg]:rounded-lg [&_svg]:max-w-full [&_svg]:max-h-full [&_svg]:w-auto [&_svg]:h-auto"
                     dangerouslySetInnerHTML={{ __html: svgTemplate }}

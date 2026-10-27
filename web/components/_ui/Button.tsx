@@ -25,7 +25,7 @@ export const Button: React.FC<ButtonProps> = ({
   const hoverClasses =
     "hover:bg-primary-hover hover:text-white hover:-translate-y-1 dark:hover:bg-gray-50 dark:hover:text-zinc-900";
   const activeClasses =
-    "active:outline active:outline-primary active:outline-offset-[3px] active:outline-2";
+    "active:outline-solid active:outline-primary active:outline-offset-[3px] active:outline-2";
   const variantClasses =
     variant === "primary"
       ? "bg-primary dark:bg-primary-dark text-white"

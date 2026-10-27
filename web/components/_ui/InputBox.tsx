@@ -17,7 +17,7 @@ const InputBox: React.FC<InputBoxProps> = ({
   ...props
 }) => {
   const baseClasses = `w-full h-full placeholder-text-secondary border-2 border-border 
-    focus:border-primary outline-none transition-colors duration-200 rounded-xl px-6 py-4 ${className}`;
+    focus:border-primary outline-hidden transition-colors duration-200 rounded-xl px-6 py-4 ${className}`;
 
   return (
     <div className="w-full">

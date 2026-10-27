@@ -28,7 +28,7 @@ export default function SelectionStep({ selectedTemplate, onSelectTemplate }: Te
             <button
                 key={page}
                 onClick={() => setCurrentPage(page)}
-                className={`px-3 py-1 text-sm rounded ${page === currentPage ? 'bg-primary text-white' : 'text-text-secondary hover:bg-background-muted'}`}
+                className={`px-3 py-1 text-sm rounded-sm ${page === currentPage ? 'bg-primary text-white' : 'text-text-secondary hover:bg-background-muted'}`}
             >
                 {page}
             </button>
@@ -39,7 +39,7 @@ export default function SelectionStep({ selectedTemplate, onSelectTemplate }: Te
                 <button
                     onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
                     disabled={currentPage === 1}
-                    className="p-2 text-text-secondary hover:bg-background-muted rounded disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="p-2 text-text-secondary hover:bg-background-muted rounded-sm disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                     <MdNavigateNext size={36} className="rotate-180" />
                 </button>
@@ -47,7 +47,7 @@ export default function SelectionStep({ selectedTemplate, onSelectTemplate }: Te
                 <button
                     onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
                     disabled={currentPage === totalPages}
-                    className="p-2 text-text-secondary hover:bg-background-muted rounded disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="p-2 text-text-secondary hover:bg-background-muted rounded-sm disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                     <MdNavigateNext size={36} />
                 </button>

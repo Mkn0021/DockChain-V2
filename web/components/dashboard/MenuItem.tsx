@@ -44,7 +44,7 @@ const MenuItem: React.FC<MenuItemProps> = ({
       className={`${baseClasses} ${variantClasses} ${className}`}
       title={item.label}
     >
-      <Icon className="w-5 h-5 flex-shrink-0 rounded-none" />
+      <Icon className="w-5 h-5 shrink-0 rounded-none" />
       <span className="font-medium">{item.label}</span>
     </button>
   );

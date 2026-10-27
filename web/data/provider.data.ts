@@ -24,5 +24,5 @@ export const ALERT_STYLES = {
 export const BASE_STYLES = {
   container:
     "px-6 py-4 bg-white shadow-[0_2px_4px_rgba(0,0,0,0.1)] font-satoshi flex items-center gap-3 border text-base rounded-lg transition-all duration-300 transform relative",
-  icon: "text-3xl flex-shrink-0",
+  icon: "text-3xl shrink-0",
 };

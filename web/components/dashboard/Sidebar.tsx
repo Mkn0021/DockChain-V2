@@ -34,7 +34,7 @@ export function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
                 w-64 xl:w-72 bg-background-muted lg:bg-background-muted/30 border border-border
                 transform transition-transform duration-300 ease-in-out lg:transform-none
                 ${sidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
-                lg:block flex-shrink-0
+                lg:block shrink-0
             `}
       >
         <nav className="h-full max-h-full w-[90%] mx-auto flex flex-col">

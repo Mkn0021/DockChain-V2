@@ -34,7 +34,7 @@ export default function VerifyPage() {
         </div>
         {/* Right: Lottie Animation */}
         <div className="hidden lg:flex w-1/2 h-full items-center justify-center">
-          <div className="w-full max-w-xl h-[32rem] flex items-center justify-center">
+          <div className="w-full max-w-xl h-128 flex items-center justify-center">
             <Lottie
               autoplay
               loop

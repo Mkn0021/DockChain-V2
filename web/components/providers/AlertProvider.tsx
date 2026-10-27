@@ -82,7 +82,7 @@ const AlertItem: React.FC<{
       </span>
       <button
         onClick={handleDismiss}
-        className="ml-2 text-2xl font-semibold opacity-60 hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-current rounded transition-opacity flex-shrink-0"
+        className="ml-2 text-2xl font-semibold opacity-60 hover:opacity-100 focus:outline-hidden focus:ring-2 focus:ring-current rounded-sm transition-opacity shrink-0"
         aria-label="Dismiss alert"
       >
         ×
