@@ -1,5 +1,5 @@
 import "./globals.css";
-import type { Metadata } from "next";
+import  { type Metadata } from "next";
 
 import { AlertProvider } from "@/components/providers/AlertProvider";
 
@@ -14,7 +14,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className="bg-black">
       <body className="antialiased">
         <AlertProvider>{children}</AlertProvider>
       </body>

@@ -23,7 +23,7 @@ const socials = [
 
 export function Footer() {
   return (
-    <footer className="dark relative rounded-t-3xl bg-background">
+    <footer className="dark relative rounded-t-3xl bg-black">
       <Section
         as="div"
         className="flex w-full flex-col pb-10 sm:flex-row sm:items-center sm:justify-between"
