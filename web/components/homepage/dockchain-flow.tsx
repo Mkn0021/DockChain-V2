@@ -172,7 +172,7 @@ interface CircleProps {
 const Circle = ({ icon, compact = false, style, children }: CircleProps) => (
   <div
     className={cn(
-      "relative z-10 grid shrink-0 place-items-center rounded-full bg-neutral-50 ring-(--flow-soft) transition-all duration-300 group-hover:-translate-y-1 group-hover:scale-105 group-hover:shadow-lg group-hover:shadow-primary/30 motion-reduce:transition-none",
+      "relative z-10 grid shrink-0 place-items-center rounded-full border border-border/70 bg-background ring-(--flow-soft) transition-all duration-300 group-hover:-translate-y-1 group-hover:scale-105 group-hover:shadow-xl group-hover:shadow-primary/30 motion-reduce:transition-none",
       compact ? "size-18 ring-6" : "ring-8 group-hover:ring-10"
     )}
     style={style}

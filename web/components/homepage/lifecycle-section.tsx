@@ -41,7 +41,7 @@ const DEFAULT_STEPS = [
 
 export function LifecycleSection() {
   return (
-    <Section>
+    <Section className="pb-0">
       <SectionHeader>Lifecycle of a document</SectionHeader>
       <DockChainFlow steps={DEFAULT_STEPS} />
     </Section>
