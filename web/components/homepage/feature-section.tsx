@@ -23,7 +23,7 @@ const FEATURES = [
 export function FeatureSection() {
   return (
     <Section>
-      <SectionHeader as="h2">Three steps to trusted documents</SectionHeader>
+      <SectionHeader>Three steps to trusted documents</SectionHeader>
       <div className="grid w-full grid-cols-1 gap-4 overflow-hidden lg:grid-cols-3 lg:rounded-4xl">
         {FEATURES.map((feature) => (
           <FeatureCard
