@@ -1,12 +1,12 @@
 import Link from "next/link";
 
 import { Navbar } from "@/components/_ui/navbar";
-import { buttonVariants } from "@/components/ui/button";
-import { HeroSection } from "@/components/homepage/hero-section";
 import { FeatureSection } from "@/components/homepage/feature-section";
+import { Footer } from "@/components/homepage/footer";
+import { HeroSection } from "@/components/homepage/hero-section";
 import { LifecycleSection } from "@/components/homepage/lifecycle-section";
 import { TestimonialSection } from "@/components/homepage/testimonial";
-import { Footer } from "@/components/homepage/footer";
+import { buttonVariants } from "@/components/ui/button";
 
 export default function HomePage() {
   return (

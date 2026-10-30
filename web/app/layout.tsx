@@ -1,7 +1,8 @@
 import "./globals.css";
-import  { type Metadata } from "next";
+import type { Metadata } from "next";
 
-import { AlertProvider } from "@/components/providers/AlertProvider";
+import { Providers } from "@/components/providers";
+import { Toaster } from "@/components/ui/sonner";
 
 export const metadata: Metadata = {
   title: "DockChain",
@@ -14,9 +15,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="bg-black">
+    <html lang="en" className="bg-black" suppressHydrationWarning>
       <body className="antialiased">
-        <AlertProvider>{children}</AlertProvider>
+        <Providers>{children}</Providers>
+        <Toaster richColors />
       </body>
     </html>
   );

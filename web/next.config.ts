@@ -1,4 +1,4 @@
-import type { NextConfig } from "next";
+import  { type NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   outputFileTracingRoot: __dirname,
@@ -11,6 +11,13 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  rewrites: () => [
+    {
+      source: "/api/auth/:path*",
+      destination: `${process.env.API_URL}/api/auth/:path*`,
+    },
+    { source: "/backend/:path*", destination: `${process.env.API_URL}/:path*` },
+  ],
 };
 
 export default nextConfig;
