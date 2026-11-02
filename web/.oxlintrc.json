@@ -12,6 +12,7 @@
     "react-perf/jsx-no-new-function-as-prop": "off",
     "import/consistent-type-specifier-style": "off",
     "no-useless-escape": "off",
-    "eslint-plugin-unicorn/prefer-string-raw": "off"
+    "eslint-plugin-unicorn/prefer-string-raw": "off",
+    "no-bitwise": "off"
   }
 }

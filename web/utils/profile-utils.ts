@@ -13,12 +13,7 @@ export const AVATAR_COLORS = [
   "bg-amber-500",
 ] as const;
 
-export interface InitialsAndColor {
-  initials: string;
-  colorClass: string;
-}
-
-export const getInitialsAndColor = (name: string): InitialsAndColor => {
+export const getInitialsAndColor = (name: string) => {
   const initials = name
     .split(" ")
     .map((word) => word.charAt(0))
@@ -26,9 +21,10 @@ export const getInitialsAndColor = (name: string): InitialsAndColor => {
     .toUpperCase()
     .slice(0, 2);
 
-  const hash = initials
-    .split("")
-    .reduce((acc, char) => char.charCodeAt(0) + ((acc << 5) - acc), 0);
+  const hash = [...initials].reduce(
+    (acc, char) => char.codePointAt(0) + ((acc << 5) - acc),
+    0
+  );
   const colorClass = AVATAR_COLORS[Math.abs(hash) % AVATAR_COLORS.length];
 
   return { initials, colorClass };

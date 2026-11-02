@@ -11,6 +11,7 @@ import {
 import Logo from "../_ui/logo";
 import { Section, SectionHeader } from "../_ui/section";
 import { buttonVariants } from "../ui/button";
+import { Separator } from "../_ui/separator";
 
 const socials = [
   { icon: FaTelegram, url: "https://t.me/mkn0021" },
@@ -48,7 +49,7 @@ export function Footer() {
         </div>
       </Section>
 
-      <div className="w-full border-t border-border mask-r-from-80% mask-l-from-80%" />
+      <Separator />
 
       <Section
         as="div"
