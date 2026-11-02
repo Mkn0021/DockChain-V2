@@ -30,7 +30,7 @@ const getQueryClient = () => {
   return browserQueryClient;
 };
 
-export const Providers = ({ children }: { children: ReactNode }) => {
+export const QueryProvider = ({ children }: { children: ReactNode }) => {
   const queryClient = getQueryClient();
 
   return (
