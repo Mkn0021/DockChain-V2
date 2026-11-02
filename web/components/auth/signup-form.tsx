@@ -1,5 +1,3 @@
-/* eslint-disable react-perf/jsx-no-new-function-as-prop -- react-hook-form Controller render callbacks must be inline */
-
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -19,6 +17,7 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { authClient } from "@/lib/auth-client";
+import { resolvePostAuthPath } from "@/lib/auth-redirect";
 import { AuthError, toAuthError } from "@/lib/auth-utils";
 import { type SignupValues, signupSchema } from "@/lib/schemas/auth";
 
@@ -27,7 +26,7 @@ const DUPLICATE_CODES = new Set([
   "USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL",
 ]);
 
-export const SignupForm = () => {
+export const SignupForm = ({ redirectTo }: { redirectTo: string | null }) => {
   const router = useRouter();
   const queryClient = useQueryClient();
 
@@ -58,7 +57,7 @@ export const SignupForm = () => {
     },
     onSuccess: async () => {
       await queryClient.invalidateQueries();
-      router.replace("/onboarding");
+      router.replace(await resolvePostAuthPath(redirectTo));
       router.refresh();
     },
   });

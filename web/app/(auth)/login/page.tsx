@@ -1,10 +1,13 @@
 import { CheckCircle2 } from "lucide-react";
+import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
 import { GradientBackground } from "@/components/_ui/gradient-background";
 import { Navbar } from "@/components/_ui/navbar";
 import { Section, SectionHeader } from "@/components/_ui/section";
 import { AuthPanel } from "@/components/auth/auth-panel";
+import { safeRedirect } from "@/lib/auth-utils";
+import { getHomePath } from "@/lib/server-auth";
 
 const FEATURES = [
   "Issue certificates, degrees, and IDs from templates.",
@@ -15,7 +18,17 @@ const FEATURES = [
   "Verify documents with QR codes and proofs.",
 ];
 
-export default function LoginPage() {
+export default async function LoginPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ redirect?: string }>;
+}) {
+  const home = await getHomePath();
+  if (home) {
+    const { redirect: target } = await searchParams;
+    redirect(safeRedirect(target) ?? home);
+  }
+
   return (
     <div className="relative min-h-dvh w-full overflow-hidden">
       <GradientBackground className="before:pointer-events-none before:absolute before:inset-0 before:bg-linear-to-r before:from-black before:to-transparent before:content-['']" />

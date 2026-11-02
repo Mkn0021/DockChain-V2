@@ -56,7 +56,7 @@ export const AuthPanel = () => {
       {mode === "login" ? (
         <LoginForm redirectTo={redirectTo} />
       ) : (
-        <SignupForm />
+        <SignupForm redirectTo={redirectTo} />
       )}
     </AuthCard>
   );

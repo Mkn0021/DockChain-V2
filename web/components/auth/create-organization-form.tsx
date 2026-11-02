@@ -1,4 +1,3 @@
-/* eslint-disable react-perf/jsx-no-new-function-as-prop -- react-hook-form Controller render callbacks must be inline */
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";

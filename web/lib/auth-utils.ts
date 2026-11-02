@@ -1,5 +1,5 @@
-export const safeRedirect = (value: string | null, fallback = "/dashboard") =>
-  value?.startsWith("/") && !value.startsWith("//") ? value : fallback;
+export const safeRedirect = (value: string | null | undefined) =>
+  value?.startsWith("/") && !value.startsWith("//") ? value : null;
 
 export const slugify = (value: string) =>
   value

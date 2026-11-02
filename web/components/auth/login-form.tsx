@@ -1,4 +1,3 @@
-/* eslint-disable react-perf/jsx-no-new-function-as-prop -- react-hook-form Controller render callbacks must be inline */
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -17,10 +16,11 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { authClient } from "@/lib/auth-client";
+import { resolvePostAuthPath } from "@/lib/auth-redirect";
 import { toAuthError } from "@/lib/auth-utils";
 import { type LoginValues, loginSchema } from "@/lib/schemas/auth";
 
-export const LoginForm = ({ redirectTo }: { redirectTo: string }) => {
+export const LoginForm = ({ redirectTo }: { redirectTo: string | null }) => {
   const router = useRouter();
   const queryClient = useQueryClient();
 
@@ -38,7 +38,7 @@ export const LoginForm = ({ redirectTo }: { redirectTo: string }) => {
     },
     onSuccess: async () => {
       await queryClient.invalidateQueries();
-      router.replace(redirectTo);
+      router.replace(await resolvePostAuthPath(redirectTo));
       router.refresh();
     },
   });
