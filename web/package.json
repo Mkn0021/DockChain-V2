@@ -7,7 +7,7 @@
     "build": "next build --turbopack",
     "start": "next start",
     "lint": "oxlint -c .oxlintrc.json . && oxfmt --check -c .oxfmtrc.jsonc .",
-    "format": "oxlint -c .oxlintrc.json --fix . ; oxfmt -c .oxfmtrc.jsonc ."
+    "format": "oxlint -c .oxlintrc.json --fix . && oxfmt -c .oxfmtrc.jsonc ."
   },
   "dependencies": {
     "@base-ui/react": "^1.9.0",

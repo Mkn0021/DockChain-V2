@@ -8,6 +8,10 @@
   "ignorePatterns": ["components/ui/**", ".next/**", "src/lib/api/schema.d.ts"],
   "rules": {
     "sort-keys": "off",
-    "func-style": "off"
+    "func-style": "off",
+    "react-perf/jsx-no-new-function-as-prop": "off",
+    "import/consistent-type-specifier-style": "off",
+    "no-useless-escape": "off",
+    "eslint-plugin-unicorn/prefer-string-raw": "off"
   }
 }
