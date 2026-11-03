@@ -9,6 +9,7 @@ build/
 out/
 .next/
 coverage/
+*next-env.d.ts
 
 # ===================
 # SECURITY - SECRETS
