@@ -12,5 +12,5 @@
     "stylesheet": "./app/globals.css",
     "functions": ["cn", "cva", "clsx"],
   },
-  "ignorePatterns": [".next/**", "src/lib/api/schema.d.ts"],
+  "ignorePatterns": [".next/**", "types/api.d.ts"],
 }

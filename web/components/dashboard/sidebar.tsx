@@ -47,17 +47,17 @@ export function Sidebar({ open, onClose }: SidebarProps) {
   return (
     <>
       <div
-        className={`fixed lg:static inset-y-0 left-0 z-50 w-64 xl:w-72 bg-muted lg:bg-muted/30 border border-border transform transition-transform duration-300 ease-in-out lg:transform-none ${
+        className={`fixed inset-y-0 left-0 z-50 w-64 transform border border-border bg-muted transition-transform duration-300 ease-in-out lg:static lg:transform-none lg:bg-muted/30 xl:w-72 ${
           open ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
         } shrink-0`}
       >
         <nav
           aria-label="Main navigation"
-          className="h-full max-h-full w-[90%] mx-auto flex flex-col"
+          className="mx-auto flex h-full max-h-full w-[90%] flex-col"
         >
-          <div className="w-full h-44 flex flex-col items-center justify-center gap-2">
+          <div className="flex h-44 w-full flex-col items-center justify-center gap-2">
             <Logo className="text-primary" />
-            <span className="text-sm text-background bg-primary truncate max-w-full px-4 rounded-2xl">
+            <span className="max-w-full truncate rounded-2xl bg-primary px-4 text-sm text-background">
               {organization.name}
             </span>
           </div>
@@ -84,7 +84,7 @@ export function Sidebar({ open, onClose }: SidebarProps) {
 
       {open && (
         <div
-          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+          className="fixed inset-0 z-40 bg-black/50 lg:hidden"
           onClick={onClose}
           aria-hidden="true"
         />

@@ -24,7 +24,7 @@ export function MenuItem({
       onClick={onClick}
       title={label}
       className={cn(
-        "w-full flex items-center gap-4 px-6 py-4 text-left font-medium transition-all duration-150 rounded-md",
+        "flex w-full items-center gap-4 rounded-md px-6 py-4 text-left font-medium transition-all duration-150",
         isActive
           ? "bg-primary/10 text-primary"
           : "text-foreground/80 hover:bg-muted hover:text-foreground",

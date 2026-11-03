@@ -13,19 +13,26 @@ export const AVATAR_COLORS = [
   "bg-amber-500",
 ] as const;
 
+const hashString = (value: string) => {
+  let hash = 0;
+  for (let i = 0; i < value.length; i += 1) {
+    const code = value.codePointAt(i) ?? 0;
+    hash = Math.trunc((hash << 5) - hash + code);
+  }
+  return hash;
+};
+
 export const getInitialsAndColor = (name: string) => {
   const initials = name
-    .split(" ")
-    .map((word) => word.charAt(0))
-    .join("")
-    .toUpperCase()
-    .slice(0, 2);
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((word) => word.charAt(0).toUpperCase())
+    .join("");
 
-  const hash = [...initials].reduce(
-    (acc, char) => char.codePointAt(0) + ((acc << 5) - acc),
-    0
-  );
-  const colorClass = AVATAR_COLORS[Math.abs(hash) % AVATAR_COLORS.length];
+  const hash = Math.abs(hashString(initials || name || "?"));
+  const colorClass = AVATAR_COLORS[hash % AVATAR_COLORS.length];
 
-  return { initials, colorClass };
+  return { initials: initials || "?", colorClass };
 };

@@ -108,7 +108,7 @@ function ProfileAvatar({
       aria-haspopup="menu"
       aria-label="Profile menu"
       className={cn(
-        "size-10 rounded-full text-white flex items-center justify-center font-semibold text-sm hover:scale-110 cursor-pointer transition-all duration-200 shadow-soft",
+        "flex size-10 cursor-pointer items-center justify-center rounded-full text-sm font-semibold text-white shadow-soft transition-all duration-200 hover:scale-110",
         colorClass
       )}
     >
@@ -135,16 +135,16 @@ function ProfileUserInfo({
       <div className="flex items-center gap-4">
         <div
           className={cn(
-            "size-10 rounded-full text-white flex items-center justify-center font-semibold text-sm",
+            "flex size-10 items-center justify-center rounded-full text-sm font-semibold text-white",
             colorClass
           )}
         >
           {initials}
         </div>
-        <div className="flex flex-col items-start min-w-0">
-          <h4 className="truncate w-full">{name}</h4>
+        <div className="flex min-w-0 flex-col items-start">
+          <h4 className="w-full truncate">{name}</h4>
           {email && (
-            <p className="text-muted-foreground text-xs truncate w-full">
+            <p className="w-full truncate text-xs text-muted-foreground">
               {email}
             </p>
           )}
@@ -180,7 +180,7 @@ function ProfileDropdown({
   return (
     <div
       role="menu"
-      className="absolute right-0 top-full mt-4 w-80 bg-background border border-border shadow-large z-50 rounded-3xl p-2"
+      className="absolute top-full right-0 z-50 mt-4 w-80 rounded-3xl border border-border bg-background p-2 shadow-large"
     >
       <ProfileUserInfo
         name={name}
@@ -191,7 +191,7 @@ function ProfileDropdown({
 
       <Separator className="my-2" />
 
-      <p className="px-2 py-2 text-xs font-medium uppercase text-foreground">
+      <p className="px-2 py-2 text-xs font-medium text-foreground uppercase">
         Organizations
       </p>
 
@@ -217,7 +217,7 @@ function ProfileDropdown({
         icon={FaSignOutAlt}
         label="Log Out"
         onClick={onLogout}
-        className="text-red-600 hover:bg-red-50 hover:text-foreground rounded-t-none rounded-b-2xl"
+        className="rounded-t-none rounded-b-2xl text-red-600 hover:bg-red-50 hover:text-foreground"
       />
     </div>
   );

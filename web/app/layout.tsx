@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 
 import { QueryProvider } from "@/components/providers/query-provider";
 import { ToastProvider } from "@/components/providers/toast-provider";
+import { AppWagmiProvider } from "@/components/providers/wagmi-provider";
 
 export const metadata: Metadata = {
   title: "DockChain",
@@ -17,9 +18,11 @@ export default function RootLayout({
   return (
     <html lang="en" className="bg-black" suppressHydrationWarning>
       <body className="antialiased">
-        <QueryProvider>
-          <ToastProvider>{children}</ToastProvider>
-        </QueryProvider>
+        <AppWagmiProvider>
+          <QueryProvider>
+            <ToastProvider>{children}</ToastProvider>
+          </QueryProvider>
+        </AppWagmiProvider>
       </body>
     </html>
   );

@@ -131,25 +131,25 @@ function ToastItem({
 
   return (
     <div
-      className={`px-6 py-4 bg-white shadow-[0_2px_4px_rgba(0,0,0,0.1)] font-satoshi flex items-center gap-3 border text-base rounded-lg relative overflow-hidden ${styles.container}`}
+      className={`relative flex items-center gap-3 overflow-hidden rounded-lg border bg-white px-6 py-4 font-satoshi text-base shadow-[0_2px_4px_rgba(0,0,0,0.1)] ${styles.container}`}
       style={{ animation: "slide-in-right 300ms ease-out" }}
       onMouseEnter={handlePause}
       onMouseLeave={handleResume}
       role="alert"
     >
       <Icon className={`size-8 shrink-0 ${styles.icon}`} strokeWidth={2} />
-      <p className="whitespace-pre-line leading-tight flex-1 min-w-0">
+      <p className="min-w-0 flex-1 leading-tight whitespace-pre-line">
         {toast.message}
       </p>
       <button
         aria-label="Dismiss"
-        className="text-2xl font-semibold opacity-60 hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-current leading-none"
+        className="text-2xl leading-none font-semibold opacity-60 hover:opacity-100 focus-visible:ring-2 focus-visible:ring-current focus-visible:ring-offset-2 focus-visible:outline-none"
         onClick={() => onDismiss(toast.id)}
         type="button"
       >
         ×
       </button>
-      <div className="absolute bottom-0 left-0 right-0 h-1 bg-gray-200 rounded-b-lg overflow-hidden">
+      <div className="absolute right-0 bottom-0 left-0 h-1 overflow-hidden rounded-b-lg bg-gray-200">
         <div
           className={`h-full ${styles.progressBg}`}
           style={{ width: `${timer.progress}%` }}
@@ -203,7 +203,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
         }
       `}</style>
       {children}
-      <div className="fixed top-8 right-4 z-50 flex flex-col gap-3 w-[min(24rem,calc(100vw-2rem))] pointer-events-none">
+      <div className="pointer-events-none fixed top-8 right-4 z-50 flex w-[min(24rem,calc(100vw-2rem))] flex-col gap-3">
         {toasts.map((toast) => (
           <div key={toast.id} className="pointer-events-auto">
             <ToastItem toast={toast} onDismiss={dismiss} />
