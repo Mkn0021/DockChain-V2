@@ -1,31 +1,33 @@
-import { z } from "zod";
+import { t } from "elysia";
 
-export const ChainHealthSchema = z.object({
-  address: z.string(),
-  chainId: z.number(),
-  indexer: z
-    .object({
-      haltedReason: z.string().nullable(),
-      lag: z.number().nullable(),
-      lastBlock: z.string(),
-      status: z.enum(["running", "halted"]),
-    })
-    .nullable(),
-  registryCodeExists: z.boolean(),
-  relayer: z
-    .object({
-      address: z.string(),
-      balanceWei: z.string(),
-    })
-    .nullable(),
-  rpcReachable: z.boolean(),
+export const ChainHealthSchema = t.Object({
+  address: t.String(),
+  chainId: t.Number(),
+  indexer: t.Union([
+    t.Object({
+      haltedReason: t.Union([t.String(), t.Null()]),
+      lag: t.Union([t.Number(), t.Null()]),
+      lastBlock: t.String(),
+      status: t.Union([t.Literal("running"), t.Literal("halted")]),
+    }),
+    t.Null(),
+  ]),
+  registryCodeExists: t.Boolean(),
+  relayer: t.Union([
+    t.Object({
+      address: t.String(),
+      balanceWei: t.String(),
+    }),
+    t.Null(),
+  ]),
+  rpcReachable: t.Boolean(),
 });
 
-export const HealthResponse = z.object({
-  chain: ChainHealthSchema.nullable(),
-  status: z.literal("ok"),
-  timestamp: z.string(),
+export const HealthResponse = t.Object({
+  chain: t.Union([ChainHealthSchema, t.Null()]),
+  status: t.Literal("ok"),
+  timestamp: t.String(),
 });
 
-export type ChainHealth = z.infer<typeof ChainHealthSchema>;
-export type HealthResponse = z.infer<typeof HealthResponse>;
+export type ChainHealth = typeof ChainHealthSchema.static;
+export type HealthResponse = typeof HealthResponse.static;

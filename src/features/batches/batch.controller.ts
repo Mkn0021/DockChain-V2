@@ -9,9 +9,9 @@ import {
   BatchListQuerySchema,
   BatchListResponseSchema,
   BatchSealSchema,
-  BatchSelectSchema,
+  BatchResponseSchema,
   BatchSignatureSchema,
-  BatchTypedDataSchema,
+  BatchTypedDataResponseSchema,
   OrganizationParamsSchema,
 } from "./batch.model";
 import { BatchRepository } from "./batch.repository";
@@ -40,7 +40,7 @@ export const batchController = new Elysia({
       params: OrganizationParamsSchema,
       permission: { batch: ["seal"] },
       response: {
-        200: BatchSelectSchema,
+        200: BatchResponseSchema,
         401: ErrorResponse,
         403: ErrorResponse,
         404: ErrorResponse,
@@ -82,7 +82,7 @@ export const batchController = new Elysia({
       params: BatchIdParamsSchema,
       permission: { batch: ["read"] },
       response: {
-        200: BatchSelectSchema,
+        200: BatchResponseSchema,
         404: ErrorResponse,
       },
     }
@@ -103,7 +103,7 @@ export const batchController = new Elysia({
       params: BatchIdParamsSchema,
       permission: { batch: ["read"] },
       response: {
-        200: BatchTypedDataSchema,
+        200: BatchTypedDataResponseSchema,
         404: ErrorResponse,
         409: ErrorResponse,
       },
@@ -130,7 +130,7 @@ export const batchController = new Elysia({
       params: BatchIdParamsSchema,
       permission: { batch: ["sign"] },
       response: {
-        200: BatchSelectSchema,
+        200: BatchResponseSchema,
         404: ErrorResponse,
         409: ErrorResponse,
         422: ErrorResponse,
@@ -153,7 +153,7 @@ export const batchController = new Elysia({
       params: BatchIdParamsSchema,
       permission: { batch: ["cancel"] },
       response: {
-        200: BatchSelectSchema,
+        200: BatchResponseSchema,
         404: ErrorResponse,
         409: ErrorResponse,
       },
@@ -201,7 +201,7 @@ export const batchController = new Elysia({
       params: BatchIdParamsSchema,
       permission: { batch: ["sign"] },
       response: {
-        200: BatchSelectSchema,
+        200: BatchResponseSchema,
         404: ErrorResponse,
         409: ErrorResponse,
       },

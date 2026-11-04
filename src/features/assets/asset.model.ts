@@ -1,25 +1,31 @@
-import { z } from "zod";
+import { t } from "elysia";
 
-export const OrganizationParamsSchema = z.object({
-  organizationId: z.string().min(1),
+export const OrganizationParamsSchema = t.Object({
+  organizationId: t.String({ minLength: 1 }),
 });
 
-export const AssetIdParamsSchema = OrganizationParamsSchema.extend({
-  assetId: z.string().uuid(),
+export const AssetIdParamsSchema = t.Object({
+  assetId: t.String({ format: "uuid" }),
+  organizationId: t.String({ minLength: 1 }),
 });
 
-export const AssetResponseSchema = z.object({
-  createdAt: z.date(),
-  createdBy: z.string().nullable(),
-  filename: z.string(),
-  id: z.string().uuid(),
-  mimeType: z.string(),
-  organizationId: z.string(),
-  sha256: z.string(),
-  size: z.number(),
-  url: z.string(),
+export const AssetUploadSchema = t.Object({
+  file: t.File({ maxSize: "2m" }),
 });
 
-export const AssetListResponseSchema = z.array(AssetResponseSchema);
+export const AssetResponseSchema = t.Object({
+  createdAt: t.Date(),
+  createdBy: t.Optional(t.Union([t.String(), t.Null()])),
+  filename: t.String(),
+  id: t.String({ format: "uuid" }),
+  mimeType: t.String(),
+  organizationId: t.String(),
+  sha256: t.String(),
+  size: t.Number(),
+  url: t.String(),
+});
 
-export type AssetResponseType = z.infer<typeof AssetResponseSchema>;
+export const AssetListResponseSchema = t.Array(AssetResponseSchema);
+export const AssetDeleteResponseSchema = t.Object({ id: t.String() });
+
+export type AssetResponseType = typeof AssetResponseSchema.static;

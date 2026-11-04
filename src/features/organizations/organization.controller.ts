@@ -1,5 +1,6 @@
-import { Elysia } from "elysia";
+import { Elysia, t } from "elysia";
 
+import { ErrorResponse } from "../../shared/models";
 import {
   authPlugin,
   orgContextPlugin,
@@ -7,12 +8,17 @@ import {
 } from "../../shared/plugins";
 import {
   InvitationCreateSchema,
+  InvitationResponseSchema,
   MemberIdParamsSchema,
+  MemberResponseSchema,
   MemberRoleUpdateSchema,
+  MembersResponseSchema,
   OrganizationCreateSchema,
+  OrganizationFullResponseSchema,
   OrganizationIdParamsSchema,
-  OrganizationListMembersQuerySchema,
   OrganizationInvitationParamsSchema,
+  OrganizationListMembersQuerySchema,
+  OrganizationResponseSchema,
   OrganizationUpdateSchema,
   SetActiveOrganizationSchema,
 } from "./organization.model";
@@ -31,9 +37,12 @@ export const organizationController = new Elysia({
     {
       auth: true,
       body: OrganizationCreateSchema,
-      detail: {
-        summary: "Create an organization",
-        tags: ["Organizations"],
+      detail: { summary: "Create an organization", tags: ["Organizations"] },
+      response: {
+        200: OrganizationResponseSchema,
+        401: ErrorResponse,
+        409: ErrorResponse,
+        422: ErrorResponse,
       },
     }
   )
@@ -43,6 +52,10 @@ export const organizationController = new Elysia({
     detail: {
       summary: "List organizations available to the current user",
       tags: ["Organizations"],
+    },
+    response: {
+      200: t.Array(OrganizationResponseSchema),
+      401: ErrorResponse,
     },
   })
 
@@ -56,6 +69,12 @@ export const organizationController = new Elysia({
       detail: {
         summary: "Set or clear the active organization",
         tags: ["Organizations"],
+      },
+      response: {
+        200: t.Union([OrganizationResponseSchema, t.Null()]),
+        401: ErrorResponse,
+        403: ErrorResponse,
+        422: ErrorResponse,
       },
     }
   )
@@ -75,6 +94,11 @@ export const organizationController = new Elysia({
       },
       orgContext: true,
       params: OrganizationIdParamsSchema,
+      response: {
+        200: OrganizationFullResponseSchema,
+        401: ErrorResponse,
+        404: ErrorResponse,
+      },
     }
   )
 
@@ -85,12 +109,17 @@ export const organizationController = new Elysia({
     {
       auth: true,
       body: OrganizationUpdateSchema,
-      detail: {
-        summary: "Update an organization",
-        tags: ["Organizations"],
-      },
+      detail: { summary: "Update an organization", tags: ["Organizations"] },
       params: OrganizationIdParamsSchema,
       permission: { organization: ["update"] },
+      response: {
+        200: OrganizationResponseSchema,
+        401: ErrorResponse,
+        403: ErrorResponse,
+        404: ErrorResponse,
+        409: ErrorResponse,
+        422: ErrorResponse,
+      },
     }
   )
 
@@ -100,12 +129,15 @@ export const organizationController = new Elysia({
       OrganizationService.delete(request.headers, params.organizationId),
     {
       auth: true,
-      detail: {
-        summary: "Delete an organization",
-        tags: ["Organizations"],
-      },
+      detail: { summary: "Delete an organization", tags: ["Organizations"] },
       params: OrganizationIdParamsSchema,
       permission: { organization: ["delete"] },
+      response: {
+        200: t.Object({ id: t.String() }),
+        401: ErrorResponse,
+        403: ErrorResponse,
+        404: ErrorResponse,
+      },
     }
   )
 
@@ -127,6 +159,12 @@ export const organizationController = new Elysia({
       orgContext: true,
       params: OrganizationIdParamsSchema,
       query: OrganizationListMembersQuerySchema,
+      response: {
+        200: MembersResponseSchema,
+        401: ErrorResponse,
+        403: ErrorResponse,
+        404: ErrorResponse,
+      },
     }
   )
 
@@ -148,6 +186,13 @@ export const organizationController = new Elysia({
       },
       params: MemberIdParamsSchema,
       permission: { member: ["update"] },
+      response: {
+        200: MemberResponseSchema,
+        401: ErrorResponse,
+        403: ErrorResponse,
+        404: ErrorResponse,
+        422: ErrorResponse,
+      },
     }
   )
 
@@ -167,6 +212,12 @@ export const organizationController = new Elysia({
       },
       params: MemberIdParamsSchema,
       permission: { member: ["delete"] },
+      response: {
+        200: MemberResponseSchema,
+        401: ErrorResponse,
+        403: ErrorResponse,
+        404: ErrorResponse,
+      },
     }
   )
 
@@ -176,12 +227,15 @@ export const organizationController = new Elysia({
       OrganizationService.leave(request.headers, params.organizationId),
     {
       auth: true,
-      detail: {
-        summary: "Leave an organization",
-        tags: ["Organizations"],
-      },
+      detail: { summary: "Leave an organization", tags: ["Organizations"] },
       orgContext: true,
       params: OrganizationIdParamsSchema,
+      response: {
+        200: t.Unknown(),
+        401: ErrorResponse,
+        403: ErrorResponse,
+        404: ErrorResponse,
+      },
     }
   )
 
@@ -191,7 +245,10 @@ export const organizationController = new Elysia({
       OrganizationService.createInvitation(
         request.headers,
         params.organizationId,
-        body
+        {
+          email: body.email,
+          role: body.role ?? "viewer",
+        }
       ),
     {
       auth: true,
@@ -202,6 +259,13 @@ export const organizationController = new Elysia({
       },
       params: OrganizationIdParamsSchema,
       permission: { invitation: ["create"] },
+      response: {
+        200: InvitationResponseSchema,
+        401: ErrorResponse,
+        403: ErrorResponse,
+        404: ErrorResponse,
+        422: ErrorResponse,
+      },
     }
   )
 
@@ -220,6 +284,12 @@ export const organizationController = new Elysia({
       },
       params: OrganizationIdParamsSchema,
       permission: { invitation: ["create"] },
+      response: {
+        200: t.Array(InvitationResponseSchema),
+        401: ErrorResponse,
+        403: ErrorResponse,
+        404: ErrorResponse,
+      },
     }
   )
 
@@ -239,5 +309,11 @@ export const organizationController = new Elysia({
       },
       params: OrganizationInvitationParamsSchema,
       permission: { invitation: ["cancel"] },
+      response: {
+        200: InvitationResponseSchema,
+        401: ErrorResponse,
+        403: ErrorResponse,
+        404: ErrorResponse,
+      },
     }
   );

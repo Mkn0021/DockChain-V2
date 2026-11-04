@@ -14,7 +14,7 @@ import {
   WalletCreateSchema,
   WalletIdParamsSchema,
   WalletListResponseSchema,
-  WalletSelectSchema,
+  WalletResponseSchema,
   WalletVerifyDomainResponseSchema,
 } from "./wallet.model";
 import { WalletService } from "./wallet.service";
@@ -64,7 +64,7 @@ export const walletController = new Elysia({
       params: OrganizationParamsSchema,
       permission: { wallet: ["create"] },
       response: {
-        200: WalletSelectSchema,
+        200: WalletResponseSchema,
         401: ErrorResponse,
         403: ErrorResponse,
         409: ErrorResponse,
@@ -95,7 +95,7 @@ export const walletController = new Elysia({
       params: WalletIdParamsSchema,
       permission: { wallet: ["read"] },
       response: {
-        200: WalletSelectSchema,
+        200: WalletResponseSchema,
         404: ErrorResponse,
       },
     }
@@ -168,7 +168,7 @@ export const walletController = new Elysia({
       params: WalletIdParamsSchema,
       permission: { wallet: ["delete"] },
       response: {
-        200: WalletSelectSchema,
+        200: WalletResponseSchema,
         404: ErrorResponse,
       },
     }

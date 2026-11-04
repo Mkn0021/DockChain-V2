@@ -9,6 +9,28 @@ import { auth } from "../../auth";
 import { isOrganizationMember } from "../../auth/organization-access";
 import { AppError, isPgUniqueViolation } from "../../shared/errors";
 
+const normalizeOrganization = <
+  T extends { logo?: string | null; metadata?: unknown },
+>(
+  organization: T
+) => ({
+  ...organization,
+  logo: organization.logo ?? null,
+  metadata:
+    organization.metadata === null || organization.metadata === undefined
+      ? null
+      : String(organization.metadata),
+});
+
+const normalizeMember = <T extends { user?: { image?: string | null } }>(
+  member: T
+) => ({
+  ...member,
+  ...(member.user
+    ? { user: { ...member.user, image: member.user.image ?? null } }
+    : {}),
+});
+
 export const OrganizationService = {
   async cancelInvitation(
     headers: Headers,
@@ -30,10 +52,14 @@ export const OrganizationService = {
     }
 
     try {
-      return await auth.api.cancelInvitation({
+      const result = await auth.api.cancelInvitation({
         body: { invitationId },
         headers,
       });
+      if (!result) {
+        throw AppError.notFound("Invitation not found");
+      }
+      return result;
     } catch {
       throw AppError.notFound("Invitation not found");
     }
@@ -41,13 +67,17 @@ export const OrganizationService = {
 
   async create(headers: Headers, data: OrganizationCreateType) {
     try {
-      return await auth.api.createOrganization({
+      const organization = await auth.api.createOrganization({
         body: {
           name: data.name,
           slug: data.slug,
         },
         headers,
       });
+      if (!organization) {
+        throw AppError.notFound("Organization not found");
+      }
+      return normalizeOrganization(organization);
     } catch (error) {
       if (isPgUniqueViolation(error)) {
         throw AppError.conflict(
@@ -64,14 +94,18 @@ export const OrganizationService = {
     data: InvitationCreateType
   ) {
     try {
-      return await auth.api.createInvitation({
+      const result = await auth.api.createInvitation({
         body: {
           email: data.email,
           organizationId,
-          role: data.role,
+          role: data.role ?? "viewer",
         },
         headers,
       });
+      if (!result) {
+        throw AppError.notFound("Organization not found");
+      }
+      return result;
     } catch {
       throw AppError.notFound("Organization not found");
     }
@@ -79,10 +113,14 @@ export const OrganizationService = {
 
   async delete(headers: Headers, organizationId: string) {
     try {
-      return await auth.api.deleteOrganization({
+      const result = await auth.api.deleteOrganization({
         body: { organizationId },
         headers,
       });
+      if (!result) {
+        throw AppError.notFound("Organization not found");
+      }
+      return normalizeOrganization(result);
     } catch {
       throw AppError.notFound("Organization not found");
     }
@@ -95,10 +133,18 @@ export const OrganizationService = {
     }
 
     try {
-      return await auth.api.getFullOrganization({
+      const organization = await auth.api.getFullOrganization({
         headers,
         query: { organizationId },
       });
+      if (!organization) {
+        throw AppError.notFound("Organization not found");
+      }
+      return {
+        ...normalizeOrganization(organization),
+        invitations: organization.invitations,
+        members: organization.members.map(normalizeMember),
+      };
     } catch {
       throw AppError.notFound("Organization not found");
     }
@@ -106,25 +152,37 @@ export const OrganizationService = {
 
   async leave(headers: Headers, organizationId: string) {
     try {
-      return await auth.api.leaveOrganization({
+      const result = await auth.api.leaveOrganization({
         body: { organizationId },
         headers,
       });
+      if (!result) {
+        throw AppError.forbidden("You cannot leave this organization");
+      }
+      return result;
     } catch {
       throw AppError.forbidden("You cannot leave this organization");
     }
   },
 
-  list(headers: Headers) {
-    return auth.api.listOrganizations({ headers });
+  async list(headers: Headers) {
+    const organizations = await auth.api.listOrganizations({ headers });
+    if (!organizations) {
+      throw AppError.notFound("Organizations not found");
+    }
+    return organizations.map(normalizeOrganization);
   },
 
   async listInvitations(headers: Headers, organizationId: string) {
     try {
-      return await auth.api.listInvitations({
+      const result = await auth.api.listInvitations({
         headers,
         query: { organizationId },
       });
+      if (!result) {
+        throw AppError.notFound("Organization not found");
+      }
+      return result;
     } catch {
       throw AppError.notFound("Organization not found");
     }
@@ -142,10 +200,14 @@ export const OrganizationService = {
     }
 
     try {
-      return await auth.api.listMembers({
+      const result = await auth.api.listMembers({
         headers,
         query: { limit, offset, organizationId },
       });
+      if (!result) {
+        throw AppError.notFound("Organization not found");
+      }
+      return { ...result, members: result.members.map(normalizeMember) };
     } catch {
       throw AppError.notFound("Organization not found");
     }
@@ -157,10 +219,14 @@ export const OrganizationService = {
     memberIdOrEmail: string
   ) {
     try {
-      return await auth.api.removeMember({
+      const result = await auth.api.removeMember({
         body: { memberIdOrEmail, organizationId },
         headers,
       });
+      if (!result) {
+        throw AppError.notFound("Member not found");
+      }
+      return { member: normalizeMember(result.member) };
     } catch {
       throw AppError.notFound("Member not found");
     }
@@ -168,10 +234,11 @@ export const OrganizationService = {
 
   async setActive(headers: Headers, organizationId: string | null) {
     try {
-      return await auth.api.setActiveOrganization({
+      const organization = await auth.api.setActiveOrganization({
         body: { organizationId },
         headers,
       });
+      return organization ? normalizeOrganization(organization) : null;
     } catch {
       throw AppError.forbidden("You are not a member of this organization");
     }
@@ -183,13 +250,17 @@ export const OrganizationService = {
     data: OrganizationUpdateType
   ) {
     try {
-      return await auth.api.updateOrganization({
+      const organization = await auth.api.updateOrganization({
         body: {
           data,
           organizationId,
         },
         headers,
       });
+      if (!organization) {
+        throw AppError.notFound("Organization not found");
+      }
+      return normalizeOrganization(organization);
     } catch (error) {
       if (isPgUniqueViolation(error)) {
         throw AppError.conflict(
@@ -207,7 +278,7 @@ export const OrganizationService = {
     data: MemberRoleUpdateType
   ) {
     try {
-      return await auth.api.updateMemberRole({
+      const member = await auth.api.updateMemberRole({
         body: {
           memberId,
           organizationId,
@@ -215,6 +286,10 @@ export const OrganizationService = {
         },
         headers,
       });
+      if (!member) {
+        throw AppError.notFound("Member not found");
+      }
+      return { member: normalizeMember(member) };
     } catch {
       throw AppError.notFound("Member not found");
     }

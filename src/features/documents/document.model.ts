@@ -1,195 +1,194 @@
-import { createSelectSchema } from "drizzle-zod";
+import { createSelectSchema } from "drizzle-typebox";
 import { t } from "elysia";
-import { z } from "zod";
 
 import {
   documents,
   type documentStatus,
 } from "../../db/schema/document.schema";
 
-export const DocumentSelectSchema = createSelectSchema(documents);
+// ── Response schemas (derived) ─────────────────────────────────────────────
 
-export const DocumentStatusSchema = z.enum([
-  "draft",
-  "ready",
-  "batched",
-  "issued",
-  "revoked",
+export const DocumentResponseSchema = createSelectSchema(documents);
+
+export const DocumentListResponseSchema = t.Object({
+  data: t.Array(DocumentResponseSchema),
+  meta: t.Object({ limit: t.Number(), offset: t.Number(), total: t.Number() }),
+});
+
+const RecipientObjectSchema = t.Object({
+  email: t.String({ format: "email", maxLength: 320 }),
+  name: t.String({ maxLength: 200, minLength: 1 }),
+});
+
+export const DocumentDetailResponseSchema = t.Composite([
+  DocumentResponseSchema,
+  t.Object({
+    fields: t.Record(t.String(), t.Any()),
+    recipient: t.Union([RecipientObjectSchema, t.Null()]),
+  }),
 ]);
 
-export const OrganizationParamsSchema = z.object({
-  organizationId: z.string().min(1),
+export const DocumentBulkResponseSchema = t.Object({
+  created: t.Number(),
+  documents: t.Array(DocumentResponseSchema),
+  errors: t.Optional(
+    t.Array(t.Object({ index: t.Number(), message: t.String() }))
+  ),
 });
 
-export const DocumentIdParamsSchema = OrganizationParamsSchema.extend({
-  documentId: z.string().min(1),
+export const DocumentPdfUrlResponseSchema = t.Object({
+  expiresIn: t.Number(),
+  key: t.String(),
+  url: t.String(),
 });
 
-export const DocumentListQuerySchema = z.object({
-  batchId: z.string().min(1).optional(),
-  createdFrom: z.iso.datetime().optional(),
-  createdTo: z.iso.datetime().optional(),
-  externalRef: z.string().min(1).optional(),
-  issuerWalletId: z.string().min(1).optional(),
-  limit: z.coerce.number().int().min(1).max(100).default(20),
-  offset: z.coerce.number().int().min(0).default(0),
-  status: DocumentStatusSchema.optional(),
-  templateId: z.string().min(1).optional(),
-  templateVersionId: z.string().min(1).optional(),
+export const DocumentResendResponseSchema = t.Object({
+  attempts: t.Number(),
+  channel: t.Literal("email"),
+  createdAt: t.Date(),
+  documentId: t.String(),
+  id: t.String(),
+  lastError: t.Union([t.String(), t.Null()]),
+  sentAt: t.Union([t.Date(), t.Null()]),
+  status: t.Union([
+    t.Literal("queued"),
+    t.Literal("sent"),
+    t.Literal("failed"),
+  ]),
+  updatedAt: t.Date(),
 });
 
-// File cant be processed by zod, so we use Elysia's t.File for that.
+const HexAddress = t.String({ pattern: "^0x[0-9a-fA-F]{40}$" });
+const HexHash = t.String({ pattern: "^0x[0-9a-f]{64}$" });
+
+export const ProofBundleSchema = t.Object({
+  blockNumber: t.Union([t.String(), t.Null()]),
+  chainId: t.Number(),
+  claimedIssuedAt: t.Number(),
+  expiresAt: t.Number(),
+  fields: t.Record(t.String(), t.Any()),
+  holderKey: t.String(),
+  issuer: HexAddress,
+  issuerDomain: t.Optional(t.String()),
+  leaf: HexHash,
+  leafIndex: t.Integer({ minimum: 0 }),
+  proof: t.Array(t.String()),
+  recipient: t.Union([RecipientObjectSchema, t.Null()]),
+  registry: HexAddress,
+  root: HexHash,
+  salt: t.String(),
+  schemaHash: HexHash,
+  txHash: t.Union([t.String(), t.Null()]),
+  version: t.Literal(1),
+  windowEnd: t.Number(),
+  windowStart: t.Number(),
+});
+
+// ── Params ─────────────────────────────────────────────────────────────────
+
+export const OrganizationParamsSchema = t.Object({
+  organizationId: t.String({ minLength: 1 }),
+});
+
+export const DocumentIdParamsSchema = t.Object({
+  documentId: t.String({ minLength: 1 }),
+  organizationId: t.String({ minLength: 1 }),
+});
+
+// ── Query ──────────────────────────────────────────────────────────────────
+
+export const DocumentStatusSchema = t.Union([
+  t.Literal("draft"),
+  t.Literal("ready"),
+  t.Literal("batched"),
+  t.Literal("issued"),
+  t.Literal("revoked"),
+]);
+
+export const DocumentListQuerySchema = t.Object({
+  batchId: t.Optional(t.String({ minLength: 1 })),
+  createdFrom: t.Optional(t.Date()),
+  createdTo: t.Optional(t.Date()),
+  externalRef: t.Optional(t.String({ minLength: 1 })),
+  issuerWalletId: t.Optional(t.String({ minLength: 1 })),
+  limit: t.Integer({ default: 20, maximum: 100, minimum: 1 }),
+  offset: t.Integer({ default: 0, minimum: 0 }),
+  status: t.Optional(DocumentStatusSchema),
+  templateId: t.Optional(t.String({ minLength: 1 })),
+  templateVersionId: t.Optional(t.String({ minLength: 1 })),
+});
+
+export const DocumentPdfQuerySchema = t.Object({
+  preview: t.Optional(
+    t.Union([t.Literal("true"), t.Literal("false"), t.Boolean()])
+  ),
+});
+
+// ── Request bodies ─────────────────────────────────────────────────────────
+
+const FieldValuesSchema = t.Record(
+  t.String(),
+  t.Union([t.String(), t.Number(), t.Boolean(), t.Null()])
+);
+
+export const RecipientSchema = t.Object({
+  email: t.String({ format: "email", maxLength: 320 }),
+  name: t.String({ maxLength: 200, minLength: 1 }),
+});
+
+const DocumentCreateCore = {
+  expiresAt: t.Optional(t.Date()),
+  externalRef: t.Optional(t.String({ maxLength: 200, minLength: 1 })),
+  fields: FieldValuesSchema,
+  recipient: t.Optional(RecipientSchema),
+};
+
+export const DocumentCreateSchema = t.Object({
+  ...DocumentCreateCore,
+  issuerWalletId: t.Optional(t.String({ minLength: 1 })),
+  mode: t.Optional(
+    t.Union([t.Literal("draft"), t.Literal("ready")], { default: "ready" })
+  ),
+  templateVersionId: t.String({ minLength: 1 }),
+});
+
+export const DocumentUpdateSchema = t.Object(
+  {
+    expiresAt: t.Optional(t.Union([t.Date(), t.Null()])),
+    fields: t.Optional(FieldValuesSchema),
+    finalize: t.Optional(t.Literal(true)),
+    recipient: t.Optional(t.Union([RecipientSchema, t.Null()])),
+  },
+  { minProperties: 1 }
+);
+
+export const DocumentBulkCreateSchema = t.Object({
+  issuerWalletId: t.Optional(t.String({ minLength: 1 })),
+  items: t.Array(t.Object(DocumentCreateCore), { maxItems: 500, minItems: 1 }),
+  mode: t.Optional(
+    t.Union([t.Literal("draft"), t.Literal("ready")], { default: "ready" })
+  ),
+  templateVersionId: t.String({ minLength: 1 }),
+});
+
 export const DocumentImportSchema = t.Object({
   file: t.File({ maxSize: "5m" }),
   issuerWalletId: t.Optional(t.String()),
   templateVersionId: t.String(),
 });
 
-const FieldValuesSchema = z.record(
-  z.string(),
-  z.union([z.string(), z.number(), z.boolean(), z.null()])
-);
+// ── Type helpers ───────────────────────────────────────────────────────────
 
-export const RecipientSchema = z.object({
-  email: z.email().max(320),
-  name: z.string().trim().min(1).max(200),
-});
-
-export const DocumentCreateSchema = z.object({
-  expiresAt: z.iso.datetime().optional(),
-  externalRef: z.string().min(1).max(200).optional(),
-  fields: FieldValuesSchema,
-  issuerWalletId: z.string().min(1).optional(),
-  mode: z.enum(["draft", "ready"]).default("ready"),
-  recipient: RecipientSchema.optional(),
-  templateVersionId: z.string().min(1),
-});
-
-export const DocumentUpdateSchema = z
-  .object({
-    expiresAt: z.iso.datetime().nullable().optional(),
-    fields: FieldValuesSchema.optional(),
-    finalize: z.literal(true).optional(),
-    recipient: RecipientSchema.nullable().optional(),
-  })
-  .refine(
-    (data) =>
-      data.fields !== undefined ||
-      data.recipient !== undefined ||
-      data.expiresAt !== undefined ||
-      data.finalize === true,
-    { message: "At least one field must be provided" }
-  );
-
-export const DocumentBulkCreateSchema = z.object({
-  issuerWalletId: z.string().min(1).optional(),
-  items: z
-    .array(
-      DocumentCreateSchema.omit({
-        issuerWalletId: true,
-        mode: true,
-        templateVersionId: true,
-      })
-    )
-    .min(1)
-    .max(500),
-  mode: z.enum(["draft", "ready"]).default("ready"),
-  templateVersionId: z.string().min(1),
-});
-
-export const DocumentListResponseSchema = z.object({
-  data: z.array(DocumentSelectSchema),
-  meta: z.object({
-    limit: z.number(),
-    offset: z.number(),
-    total: z.number(),
-  }),
-});
-
-export const DocumentDetailResponseSchema = DocumentSelectSchema.extend({
-  fields: z.record(z.string(), z.unknown()),
-  recipient: RecipientSchema.nullable(),
-});
-
-export const DocumentBulkResponseSchema = z.object({
-  created: z.number(),
-  documents: z.array(DocumentSelectSchema),
-  errors: z
-    .array(
-      z.object({
-        index: z.number(),
-        message: z.string(),
-      })
-    )
-    .optional(),
-});
-
-export const DocumentPdfQuerySchema = z.object({
-  preview: z
-    .union([z.literal("true"), z.literal("false"), z.boolean()])
-    .optional()
-    .transform((value) => value === true || value === "true"),
-});
-
-export const DocumentPdfUrlResponseSchema = z.object({
-  expiresIn: z.number(),
-  key: z.string(),
-  url: z.string(),
-});
-
-export const DocumentResendResponseSchema = z.object({
-  attempts: z.number().int().nonnegative(),
-  channel: z.literal("email"),
-  createdAt: z.date(),
-  documentId: z.string(),
-  id: z.string(),
-  lastError: z.string().nullable(),
-  sentAt: z.date().nullable(),
-  status: z.enum(["queued", "sent", "failed"]),
-  updatedAt: z.date(),
-});
-
-export const ProofBundleSchema = z.object({
-  blockNumber: z.string().nullable(),
-  chainId: z.number(),
-  claimedIssuedAt: z.number(),
-  expiresAt: z.number(),
-  fields: z.record(z.string(), z.unknown()),
-  holderKey: z.string(),
-  issuer: z.string().regex(/^0x[0-9a-fA-F]{40}$/),
-  issuerDomain: z.string().optional(),
-  leaf: z.string().regex(/^0x[0-9a-f]{64}$/),
-  leafIndex: z.number().int().nonnegative(),
-  proof: z.array(z.string()),
-  recipient: z
-    .object({
-      email: z.string(),
-      name: z.string(),
-    })
-    .nullable(),
-  registry: z.string().regex(/^0x[0-9a-fA-F]{40}$/),
-  root: z.string().regex(/^0x[0-9a-f]{64}$/),
-  salt: z.string(),
-  schemaHash: z.string().regex(/^0x[0-9a-f]{64}$/),
-  txHash: z.string().nullable(),
-  version: z.literal(1),
-  windowEnd: z.number(),
-  windowStart: z.number(),
-});
-
-export type ProofBundleType = z.infer<typeof ProofBundleSchema>;
-
-export type DocumentCreateType = z.infer<typeof DocumentCreateSchema>;
-export type DocumentUpdateType = z.infer<typeof DocumentUpdateSchema>;
-export type DocumentBulkCreateType = z.infer<typeof DocumentBulkCreateSchema>;
+export type ProofBundleType = typeof ProofBundleSchema.static;
+export type DocumentCreateType = typeof DocumentCreateSchema.static;
+export type DocumentUpdateType = typeof DocumentUpdateSchema.static;
+export type DocumentBulkCreateType = typeof DocumentBulkCreateSchema.static;
 export type DocumentImportType = typeof DocumentImportSchema.static;
-export type DocumentPdfUrlResponseType = z.infer<
-  typeof DocumentPdfUrlResponseSchema
->;
-export type DocumentResendResponseType = z.infer<
-  typeof DocumentResendResponseSchema
->;
-export type RecipientType = z.infer<typeof RecipientSchema>;
+export type DocumentPdfUrlResponseType =
+  typeof DocumentPdfUrlResponseSchema.static;
+export type DocumentResendResponseType =
+  typeof DocumentResendResponseSchema.static;
+export type RecipientType = typeof RecipientSchema.static;
 
 export type Document = typeof documents.$inferSelect;
 export type NewDocument = typeof documents.$inferInsert;

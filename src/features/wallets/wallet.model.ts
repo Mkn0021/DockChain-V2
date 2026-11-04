@@ -1,57 +1,58 @@
-import { createSelectSchema } from "drizzle-zod";
-import { z } from "zod";
+import { createSelectSchema } from "drizzle-typebox";
+import { t } from "elysia";
 
 import { env } from "../../config";
 import { issuerWallets } from "../../db/schema/wallet.schema";
 
-export const WalletSelectSchema = createSelectSchema(issuerWallets);
+// ── Response schemas (derived) ─────────────────────────────────────────────
 
-export const WalletStatusSchema = z.enum(["active", "disabled", "compromised"]);
+export const WalletResponseSchema = createSelectSchema(issuerWallets);
 
-export const OrganizationParamsSchema = z.object({
-  organizationId: z.string().min(1),
+export const WalletListResponseSchema = t.Array(WalletResponseSchema);
+
+export const WalletChallengeResponseSchema = t.Object({
+  message: t.String(),
 });
 
-export const WalletIdParamsSchema = OrganizationParamsSchema.extend({
-  walletId: z.string().min(1),
+export const WalletVerifyDomainResponseSchema = t.Object({
+  foundRecords: t.Array(t.String()),
+  wallet: WalletResponseSchema,
 });
 
-export const WalletChallengeSchema = z.object({
-  address: z
-    .string()
-    .regex(/^0x[0-9a-fA-F]{40}$/, "Address must be a 0x-prefixed hex string")
-    .transform((value) => value.toLowerCase()),
-  chainId: z.coerce
-    .number()
-    .int()
-    .positive()
-    .refine(
-      (value) => value === env.CHAIN_ID,
-      `Only chain ${env.CHAIN_ID} is supported`
-    ),
+// ── Params ─────────────────────────────────────────────────────────────────
+
+export const OrganizationParamsSchema = t.Object({
+  organizationId: t.String({ minLength: 1 }),
 });
 
-export const WalletChallengeResponseSchema = z.object({
-  message: z.string(),
+export const WalletIdParamsSchema = t.Object({
+  organizationId: t.String({ minLength: 1 }),
+  walletId: t.String({ minLength: 1 }),
 });
 
-export const WalletCreateSchema = z.object({
-  address: z
-    .string()
-    .regex(/^0x[0-9a-fA-F]{40}$/, "Address must be a 0x-prefixed hex string")
-    .transform((value) => value.toLowerCase()),
-  domain: z.string().trim().min(1).max(253).optional(),
-  label: z.string().trim().min(1).max(100).optional(),
-  message: z.string().min(1),
-  signature: z.string().regex(/^0x[0-9a-fA-F]+$/, "Signature must be hex"),
+// ── Request bodies ─────────────────────────────────────────────────────────
+
+const WalletAddress = t.String({ pattern: "^0x[0-9a-fA-F]{40}$" });
+const WalletSignature = t.String({ pattern: "^0x[0-9a-fA-F]+$" });
+
+export const WalletChallengeSchema = t.Object({
+  address: WalletAddress,
+  chainId: t.Integer({
+    default: env.CHAIN_ID,
+    maximum: env.CHAIN_ID,
+    minimum: 1,
+  }),
 });
 
-export const WalletListResponseSchema = z.array(WalletSelectSchema);
-
-export const WalletVerifyDomainResponseSchema = z.object({
-  foundRecords: z.array(z.string()),
-  wallet: WalletSelectSchema,
+export const WalletCreateSchema = t.Object({
+  address: WalletAddress,
+  domain: t.Optional(t.String({ maxLength: 253, minLength: 1 })),
+  label: t.Optional(t.String({ maxLength: 100, minLength: 1 })),
+  message: t.String({ minLength: 1 }),
+  signature: WalletSignature,
 });
 
-export type WalletChallengeType = z.infer<typeof WalletChallengeSchema>;
-export type WalletCreateType = z.infer<typeof WalletCreateSchema>;
+// ── Types ──────────────────────────────────────────────────────────────────
+
+export type WalletChallengeType = typeof WalletChallengeSchema.static;
+export type WalletCreateType = typeof WalletCreateSchema.static;

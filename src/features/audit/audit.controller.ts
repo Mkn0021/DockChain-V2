@@ -20,10 +20,7 @@ export const auditController = new Elysia({
     ({ params, query }) => AuditService.list(params.organizationId, query),
     {
       auth: true,
-      detail: {
-        summary: "List audit log entries",
-        tags: ["Audit"],
-      },
+      detail: { summary: "List audit log entries", tags: ["Audit"] },
       params: OrganizationParamsSchema,
       permission: { auditLog: ["read"] },
       query: AuditLogListQuerySchema,

@@ -25,8 +25,16 @@ export const parseCsv = (input: string): CsvRow[] => {
   return result.data;
 };
 
+const parseDateCell = (raw: string, column: string): Date => {
+  const d = new Date(raw);
+  if (Number.isNaN(d.getTime())) {
+    throw AppError.validation(`Invalid date "${raw}" in column "${column}"`);
+  }
+  return d;
+};
+
 export interface ParsedCsvRow {
-  expiresAt?: string;
+  expiresAt?: Date;
   externalRef?: string;
   fields: Record<string, string>;
   recipient?: { email: string; name: string };
@@ -39,7 +47,7 @@ export const splitCsvRow = (
   const fields: Record<string, string> = {};
   let recipientEmail: string | undefined;
   let recipientName: string | undefined;
-  let expiresAt: string | undefined;
+  let expiresAt: Date | undefined;
   let externalRef: string | undefined;
 
   for (const [key, value] of Object.entries(row)) {
@@ -57,7 +65,7 @@ export const splitCsvRow = (
         break;
       }
       case "expires_at": {
-        expiresAt = value;
+        expiresAt = parseDateCell(value, "expires_at");
         break;
       }
       case "external_ref": {

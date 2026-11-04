@@ -19,11 +19,20 @@ describe("computeVerificationStatus", () => {
     );
   });
 
-  it("returns invalid when claimedIssuedAt is after the anchor", () => {
+  it("allows a one-second timestamp skew between issuance and anchoring", () => {
     expect(
       computeVerificationStatus({
         ...base,
         claimedIssuedAt: base.anchorTimestamp + 1,
+      })
+    ).toBe("valid");
+  });
+
+  it("returns invalid when claimedIssuedAt exceeds the allowed skew", () => {
+    expect(
+      computeVerificationStatus({
+        ...base,
+        claimedIssuedAt: base.anchorTimestamp + 2,
       })
     ).toBe("invalid");
   });

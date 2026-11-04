@@ -1,77 +1,74 @@
-import { createSelectSchema } from "drizzle-zod";
-import { z } from "zod";
+import { createSelectSchema } from "drizzle-typebox";
+import { t } from "elysia";
 
 import { batches, type batchStatus } from "../../db/schema/batch.schema";
 
-export const BatchSelectSchema = createSelectSchema(batches);
+export const BatchResponseSchema = createSelectSchema(batches);
 
-const HexSchema = z.string().regex(/^0x[0-9a-fA-F]+$/);
+export const BatchListResponseSchema = t.Object({
+  data: t.Array(BatchResponseSchema),
+  meta: t.Object({ limit: t.Number(), offset: t.Number(), total: t.Number() }),
+});
 
-export const BatchStatusSchema = z.enum([
-  "open",
-  "awaiting_signature",
-  "signed",
-  "submitted",
-  "confirmed",
-  "failed",
-  "cancelled",
+const HexSchema = t.String({ pattern: "^0x[0-9a-fA-F]+$" });
+
+export const BatchStatusSchema = t.Union([
+  t.Literal("open"),
+  t.Literal("awaiting_signature"),
+  t.Literal("signed"),
+  t.Literal("submitted"),
+  t.Literal("confirmed"),
+  t.Literal("failed"),
+  t.Literal("cancelled"),
 ]);
 
-export const OrganizationParamsSchema = z.object({
-  organizationId: z.string().min(1),
+export const OrganizationParamsSchema = t.Object({
+  organizationId: t.String({ minLength: 1 }),
 });
 
-export const BatchIdParamsSchema = OrganizationParamsSchema.extend({
-  batchId: z.string().min(1),
+export const BatchIdParamsSchema = t.Object({
+  batchId: t.String({ minLength: 1 }),
+  organizationId: t.String({ minLength: 1 }),
 });
 
-export const BatchListQuerySchema = z.object({
-  issuerWalletId: z.string().min(1).optional(),
-  limit: z.coerce.number().int().min(1).max(100).default(20),
-  offset: z.coerce.number().int().min(0).default(0),
-  status: BatchStatusSchema.optional(),
+export const BatchListQuerySchema = t.Object({
+  issuerWalletId: t.Optional(t.String({ minLength: 1 })),
+  limit: t.Integer({ default: 20, maximum: 100, minimum: 1 }),
+  offset: t.Integer({ default: 0, minimum: 0 }),
+  status: t.Optional(BatchStatusSchema),
 });
 
-export const BatchSealSchema = z.object({
-  issuerWalletId: z.string().min(1),
+export const BatchSealSchema = t.Object({
+  issuerWalletId: t.String({ minLength: 1 }),
 });
 
-export const BatchSignatureSchema = z.object({
-  signature: z.string().regex(/^0x[0-9a-fA-F]+$/, "Signature must be hex"),
+export const BatchSignatureSchema = t.Object({
+  signature: t.String({ pattern: "^0x[0-9a-fA-F]+$" }),
 });
 
-export const BatchTypedDataSchema = z.object({
-  domain: z.object({
-    chainId: z.number(),
-    name: z.string(),
+export const BatchTypedDataResponseSchema = t.Object({
+  domain: t.Object({
+    chainId: t.Number(),
+    name: t.String(),
     verifyingContract: HexSchema,
-    version: z.string(),
+    version: t.String(),
   }),
-  message: z.object({
-    count: z.number(),
+  message: t.Object({
+    count: t.Number(),
     dataHash: HexSchema,
     issuer: HexSchema,
     root: HexSchema,
-    windowEnd: z.string(),
-    windowStart: z.string(),
+    windowEnd: t.String(),
+    windowStart: t.String(),
   }),
-  primaryType: z.literal("Anchor"),
-  types: z.object({
-    Anchor: z.array(z.object({ name: z.string(), type: z.string() })),
-  }),
-});
-
-export const BatchListResponseSchema = z.object({
-  data: z.array(BatchSelectSchema),
-  meta: z.object({
-    limit: z.number(),
-    offset: z.number(),
-    total: z.number(),
+  primaryType: t.Literal("Anchor"),
+  types: t.Object({
+    Anchor: t.Array(t.Object({ name: t.String(), type: t.String() })),
   }),
 });
 
-export type BatchSealType = z.infer<typeof BatchSealSchema>;
-export type BatchSignatureType = z.infer<typeof BatchSignatureSchema>;
+export type BatchSealType = typeof BatchSealSchema.static;
+export type BatchSignatureType = typeof BatchSignatureSchema.static;
 
 export type Batch = typeof batches.$inferSelect;
 export type NewBatch = typeof batches.$inferInsert;

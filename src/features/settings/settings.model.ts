@@ -1,30 +1,33 @@
-import { createSelectSchema } from "drizzle-zod";
-import { z } from "zod";
+import { createSelectSchema } from "drizzle-typebox";
+import { t } from "elysia";
 
 import { organizationSettings } from "../../db/schema/settings.schema";
 
-export const SettingsSelectSchema = createSelectSchema(organizationSettings);
+export const SettingsResponseSchema = createSelectSchema(organizationSettings);
 
-export const DataAvailabilitySchema = z.enum([
-  "onchain_encrypted",
-  "offchain_only",
+export const DataAvailabilitySchema = t.Union([
+  t.Literal("onchain_encrypted"),
+  t.Literal("offchain_only"),
 ]);
 
-export const OrganizationParamsSchema = z.object({
-  organizationId: z.string().min(1),
+export const OrganizationParamsSchema = t.Object({
+  organizationId: t.String({ minLength: 1 }),
 });
 
-export const SettingsUpdateSchema = z
-  .object({
-    autoSeal: z.boolean().optional(),
-    batchWindowMinutes: z.number().int().min(15).max(1440).optional(),
-    dataAvailability: DataAvailabilitySchema.optional(),
-    defaultExpiryDays: z.number().int().positive().nullable().optional(),
-    defaultWalletId: z.string().min(1).nullable().optional(),
-    requireVerifiedDomain: z.boolean().optional(),
-  })
-  .refine((data) => Object.keys(data).length > 0, {
-    message: "At least one field must be provided",
-  });
+export const SettingsUpdateSchema = t.Object(
+  {
+    autoSeal: t.Optional(t.Boolean()),
+    batchWindowMinutes: t.Optional(t.Integer({ maximum: 1440, minimum: 15 })),
+    dataAvailability: t.Optional(DataAvailabilitySchema),
+    defaultExpiryDays: t.Optional(
+      t.Union([t.Integer({ exclusiveMinimum: 0 }), t.Null()])
+    ),
+    defaultWalletId: t.Optional(
+      t.Union([t.String({ minLength: 1 }), t.Null()])
+    ),
+    requireVerifiedDomain: t.Optional(t.Boolean()),
+  },
+  { minProperties: 1 }
+);
 
-export type SettingsUpdateType = z.infer<typeof SettingsUpdateSchema>;
+export type SettingsUpdateType = typeof SettingsUpdateSchema.static;

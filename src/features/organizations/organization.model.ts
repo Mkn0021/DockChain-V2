@@ -1,9 +1,5 @@
-import {
-  createInsertSchema,
-  createSelectSchema,
-  createUpdateSchema,
-} from "drizzle-zod";
-import { z } from "zod";
+import { createSelectSchema } from "drizzle-typebox";
+import { t } from "elysia";
 
 import {
   invitations,
@@ -11,93 +7,121 @@ import {
   organizations,
 } from "../../db/schema/auth.schema";
 
-export const OrganizationSelectSchema = createSelectSchema(organizations);
-export const OrganizationInsertSchema = createInsertSchema(organizations);
-const OrganizationDatabaseUpdateSchema = createUpdateSchema(organizations);
+// ── Response schemas (derived from Drizzle) ────────────────────────────────
 
-export const MemberSelectSchema = createSelectSchema(members);
-export const InvitationSelectSchema = createSelectSchema(invitations);
+export const OrganizationResponseSchema = createSelectSchema(organizations);
+export const MemberResponseItemSchema = createSelectSchema(members);
+export const InvitationResponseSchema = createSelectSchema(invitations);
 
-const organizationId = OrganizationSelectSchema.shape.id;
-const memberId = MemberSelectSchema.shape.id;
-const invitationId = InvitationSelectSchema.shape.id;
-
-const organizationName = z.string().trim().min(2).max(120);
-const organizationSlug = z
-  .string()
-  .trim()
-  .min(2)
-  .max(80)
-  .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/);
-
-export const AssignableRoleSchema = z.enum(["admin", "issuer", "viewer"]);
-export const OrganizationRoleSchema = z.enum([
-  "owner",
-  "admin",
-  "issuer",
-  "viewer",
+export const OrganizationFullResponseSchema = t.Composite([
+  OrganizationResponseSchema,
+  t.Object({
+    invitations: t.Array(InvitationResponseSchema),
+    members: t.Array(MemberResponseItemSchema),
+  }),
 ]);
 
-export const OrganizationIdParamsSchema = z.object({
-  organizationId,
+export const MemberWithUserResponseSchema = t.Composite([
+  MemberResponseItemSchema,
+  t.Object({
+    user: t.Object({
+      email: t.String(),
+      id: t.String(),
+      image: t.Optional(t.Union([t.String(), t.Null()])),
+      name: t.String(),
+    }),
+  }),
+]);
+
+export const MembersResponseSchema = t.Object({
+  members: t.Array(MemberWithUserResponseSchema),
+  total: t.Number(),
 });
 
-export const MemberIdParamsSchema = z.object({
-  memberId,
-  organizationId,
+export const MemberResponseSchema = t.Object({
+  member: MemberResponseItemSchema,
 });
 
-export const InvitationIdParamsSchema = z.object({
-  invitationId,
+// ── Params ─────────────────────────────────────────────────────────────────
+
+export const OrganizationIdParamsSchema = t.Object({
+  organizationId: t.String({ minLength: 1 }),
 });
 
-export const OrganizationInvitationParamsSchema =
-  InvitationIdParamsSchema.extend({ organizationId });
+export const MemberIdParamsSchema = t.Object({
+  memberId: t.String({ minLength: 1 }),
+  organizationId: t.String({ minLength: 1 }),
+});
 
-export const OrganizationCreateSchema = OrganizationInsertSchema.pick({
-  name: true,
-  slug: true,
-}).extend({
+export const InvitationIdParamsSchema = t.Object({
+  invitationId: t.String({ minLength: 1 }),
+});
+
+export const OrganizationInvitationParamsSchema = t.Object({
+  invitationId: t.String({ minLength: 1 }),
+  organizationId: t.String({ minLength: 1 }),
+});
+
+// ── Query ──────────────────────────────────────────────────────────────────
+
+export const OrganizationListMembersQuerySchema = t.Object({
+  limit: t.Integer({ default: 50, maximum: 100, minimum: 1 }),
+  offset: t.Integer({ default: 0, minimum: 0 }),
+});
+
+// ── Request bodies ─────────────────────────────────────────────────────────
+
+const organizationName = t.String({
+  maxLength: 120,
+  minLength: 2,
+  pattern: "^\\S.*\\S$",
+});
+
+const organizationSlug = t.String({
+  maxLength: 80,
+  minLength: 2,
+  pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+});
+
+export const AssignableRoleSchema = t.Union([
+  t.Literal("admin"),
+  t.Literal("issuer"),
+  t.Literal("viewer"),
+]);
+
+export const OrganizationCreateSchema = t.Object({
   name: organizationName,
   slug: organizationSlug,
 });
 
-export const OrganizationUpdateSchema = OrganizationDatabaseUpdateSchema.pick({
-  logo: true,
-  name: true,
-  slug: true,
-})
-  .extend({
-    logo: z.url().optional(),
-    name: organizationName.optional(),
-    slug: organizationSlug.optional(),
-  })
-  .refine((data) => Object.keys(data).length > 0, {
-    message: "At least one field must be provided",
-  });
+export const OrganizationUpdateSchema = t.Object(
+  {
+    logo: t.Optional(t.String({ format: "uri" })),
+    name: t.Optional(organizationName),
+    slug: t.Optional(organizationSlug),
+  },
+  { minProperties: 1 }
+);
 
-export const MemberRoleUpdateSchema = z.object({
+export const MemberRoleUpdateSchema = t.Object({
   role: AssignableRoleSchema,
 });
 
-export const InvitationCreateSchema = z.object({
-  email: z.email(),
-  role: AssignableRoleSchema.default("viewer"),
+export const InvitationCreateSchema = t.Object({
+  email: t.String({ format: "email" }),
+  role: t.Optional(AssignableRoleSchema),
 });
 
-export const OrganizationListMembersQuerySchema = z.object({
-  limit: z.coerce.number().int().min(1).max(100).default(50),
-  offset: z.coerce.number().int().min(0).default(0),
+export const SetActiveOrganizationSchema = t.Object({
+  organizationId: t.Union([t.String({ minLength: 1 }), t.Null()]),
 });
 
-export const SetActiveOrganizationSchema = z.object({
-  organizationId: organizationId.nullable(),
-});
+// ── Type helpers (unchanged, derived from Drizzle) ─────────────────────────
 
-export type OrganizationCreateType = z.infer<typeof OrganizationCreateSchema>;
-export type OrganizationUpdateType = z.infer<typeof OrganizationUpdateSchema>;
-export type MemberRoleUpdateType = z.infer<typeof MemberRoleUpdateSchema>;
-export type InvitationCreateType = z.infer<typeof InvitationCreateSchema>;
+export type OrganizationCreateType = typeof OrganizationCreateSchema.static;
+export type OrganizationUpdateType = typeof OrganizationUpdateSchema.static;
+export type MemberRoleUpdateType = typeof MemberRoleUpdateSchema.static;
+export type InvitationCreateType = typeof InvitationCreateSchema.static;
 
 export type OrganizationType = typeof organizations.$inferSelect;
 export type NewOrganizationType = typeof organizations.$inferInsert;

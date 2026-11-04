@@ -1,14 +1,14 @@
-import { z } from "zod";
+import { t } from "elysia";
 
-export const CompromisePrepareSchema = z.object({
-  cutoff: z.coerce.number().int().nonnegative().optional(),
+export const CompromisePrepareSchema = t.Object({
+  cutoff: t.Optional(t.Integer({ minimum: 0 })),
 });
 
-export const CompromisePrepareResponseSchema = z.object({
-  chainId: z.number(),
-  data: z.string().regex(/^0x[0-9a-fA-F]+$/),
-  from: z.string(),
-  to: z.string(),
+export const CompromisePrepareResponseSchema = t.Object({
+  chainId: t.Number(),
+  data: t.String({ pattern: "^0x[0-9a-fA-F]+$" }),
+  from: t.String(),
+  to: t.String(),
 });
 
-export type CompromisePrepareInput = z.infer<typeof CompromisePrepareSchema>;
+export type CompromisePrepareInput = typeof CompromisePrepareSchema.static;

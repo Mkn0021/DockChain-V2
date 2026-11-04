@@ -11,12 +11,12 @@ import {
   TemplateListResponseSchema,
   TemplatePreviewResponseSchema,
   TemplatePreviewSchema,
-  TemplateSelectSchema,
+  TemplateResponseSchema,
   TemplateUpdateSchema,
   TemplateVersionCreateSchema,
   TemplateVersionParamsSchema,
   TemplateVersionsResponseSchema,
-  TemplateVersionSelectSchema,
+  TemplateVersionResponseSchema,
   TemplateVersionUpdateSchema,
 } from "./template.model";
 import { TemplateService } from "./template.service";
@@ -106,7 +106,7 @@ export const templateController = new Elysia({
       params: TemplateIdParamsSchema,
       permission: { template: ["update"] },
       response: {
-        200: TemplateSelectSchema,
+        200: TemplateResponseSchema,
         404: ErrorResponse,
       },
     }
@@ -131,7 +131,7 @@ export const templateController = new Elysia({
       params: TemplateIdParamsSchema,
       permission: { template: ["update"] },
       response: {
-        200: TemplateVersionSelectSchema,
+        200: TemplateVersionResponseSchema,
         404: ErrorResponse,
       },
     }
@@ -149,7 +149,12 @@ export const templateController = new Elysia({
       },
       params: TemplateIdParamsSchema,
       permission: { template: ["read"] },
-      response: TemplateVersionsResponseSchema,
+      response: {
+        200: TemplateVersionsResponseSchema,
+        401: ErrorResponse,
+        403: ErrorResponse,
+        404: ErrorResponse,
+      },
     }
   )
 
@@ -172,7 +177,7 @@ export const templateController = new Elysia({
       params: TemplateVersionParamsSchema,
       permission: { template: ["update"] },
       response: {
-        200: TemplateVersionSelectSchema,
+        200: TemplateVersionResponseSchema,
         404: ErrorResponse,
         409: ErrorResponse,
       },
@@ -198,7 +203,7 @@ export const templateController = new Elysia({
       params: TemplateVersionParamsSchema,
       permission: { template: ["publish"] },
       response: {
-        200: TemplateVersionSelectSchema,
+        200: TemplateVersionResponseSchema,
         404: ErrorResponse,
         409: ErrorResponse,
       },
@@ -248,7 +253,7 @@ export const templateController = new Elysia({
       params: TemplateIdParamsSchema,
       permission: { template: ["delete"] },
       response: {
-        200: TemplateSelectSchema,
+        200: TemplateResponseSchema,
         404: ErrorResponse,
       },
     }

@@ -1,4 +1,4 @@
-import { Elysia } from "elysia";
+import { Elysia, t } from "elysia";
 
 import { ErrorResponse } from "../../shared/models";
 import { authPlugin, permissionPlugin } from "../../shared/plugins";
@@ -10,7 +10,7 @@ import {
   WebhookEndpointCreateResponseSchema,
   WebhookEndpointCreateSchema,
   WebhookEndpointIdParamsSchema,
-  WebhookEndpointSelectSchema,
+  WebhookEndpointResponseSchema,
   WebhookEndpointUpdateSchema,
   WebhookSecretResponseSchema,
 } from "./webhook.model";
@@ -51,6 +51,11 @@ export const webhookController = new Elysia({
     detail: { summary: "List webhook endpoints", tags: ["Webhooks"] },
     params: OrganizationParamsSchema,
     permission: { webhook: ["read"] },
+    response: {
+      200: t.Array(WebhookEndpointResponseSchema),
+      401: ErrorResponse,
+      403: ErrorResponse,
+    },
   })
 
   .get(
@@ -63,7 +68,7 @@ export const webhookController = new Elysia({
       params: WebhookEndpointIdParamsSchema,
       permission: { webhook: ["read"] },
       response: {
-        200: WebhookEndpointSelectSchema,
+        200: WebhookEndpointResponseSchema,
         404: ErrorResponse,
       },
     }
@@ -80,7 +85,7 @@ export const webhookController = new Elysia({
       params: WebhookEndpointIdParamsSchema,
       permission: { webhook: ["manage"] },
       response: {
-        200: WebhookEndpointSelectSchema,
+        200: WebhookEndpointResponseSchema,
         404: ErrorResponse,
         422: ErrorResponse,
       },
@@ -96,6 +101,12 @@ export const webhookController = new Elysia({
       detail: { summary: "Delete a webhook endpoint", tags: ["Webhooks"] },
       params: WebhookEndpointIdParamsSchema,
       permission: { webhook: ["manage"] },
+      response: {
+        200: t.Unknown(),
+        401: ErrorResponse,
+        403: ErrorResponse,
+        404: ErrorResponse,
+      },
     }
   )
 
@@ -133,6 +144,12 @@ export const webhookController = new Elysia({
       },
       params: WebhookEndpointIdParamsSchema,
       permission: { webhook: ["manage"] },
+      response: {
+        200: t.Unknown(),
+        401: ErrorResponse,
+        403: ErrorResponse,
+        404: ErrorResponse,
+      },
     }
   )
 

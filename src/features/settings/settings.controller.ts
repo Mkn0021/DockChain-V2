@@ -4,7 +4,7 @@ import { ErrorResponse } from "../../shared/models";
 import { authPlugin, permissionPlugin } from "../../shared/plugins";
 import {
   OrganizationParamsSchema,
-  SettingsSelectSchema,
+  SettingsResponseSchema,
   SettingsUpdateSchema,
 } from "./settings.model";
 import { SettingsService } from "./settings.service";
@@ -21,7 +21,7 @@ export const settingsController = new Elysia({
     params: OrganizationParamsSchema,
     permission: { settings: ["read"] },
     response: {
-      200: SettingsSelectSchema,
+      200: SettingsResponseSchema,
       401: ErrorResponse,
       403: ErrorResponse,
     },
@@ -37,7 +37,7 @@ export const settingsController = new Elysia({
       params: OrganizationParamsSchema,
       permission: { settings: ["update"] },
       response: {
-        200: SettingsSelectSchema,
+        200: SettingsResponseSchema,
         401: ErrorResponse,
         403: ErrorResponse,
         422: ErrorResponse,

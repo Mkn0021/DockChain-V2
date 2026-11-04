@@ -1,10 +1,13 @@
-import { Elysia, t } from "elysia";
+import { Elysia } from "elysia";
 
 import { ErrorResponse } from "../../shared/models";
 import { authPlugin, permissionPlugin } from "../../shared/plugins";
 import {
   AssetIdParamsSchema,
   AssetListResponseSchema,
+  AssetResponseSchema,
+  AssetDeleteResponseSchema,
+  AssetUploadSchema,
   OrganizationParamsSchema,
 } from "./asset.model";
 import { AssetService } from "./asset.service";
@@ -35,9 +38,7 @@ export const assetController = new Elysia({
     },
     {
       auth: true,
-      body: t.Object({
-        file: t.File({ maxSize: "2m" }),
-      }),
+      body: AssetUploadSchema,
       detail: {
         description:
           "Uploads an image asset (PNG, JPEG, or WebP, up to 2 MB). The MIME type is verified from magic bytes, not the Content-Type header.",
@@ -47,6 +48,7 @@ export const assetController = new Elysia({
       params: OrganizationParamsSchema,
       permission: { asset: ["create"] },
       response: {
+        200: AssetResponseSchema,
         401: ErrorResponse,
         403: ErrorResponse,
         409: ErrorResponse,
@@ -86,6 +88,7 @@ export const assetController = new Elysia({
       params: AssetIdParamsSchema,
       permission: { asset: ["delete"] },
       response: {
+        200: AssetDeleteResponseSchema,
         401: ErrorResponse,
         403: ErrorResponse,
         404: ErrorResponse,

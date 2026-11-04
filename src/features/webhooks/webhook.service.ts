@@ -1,4 +1,4 @@
-import type { Json } from "drizzle-zod";
+import type { Json } from "drizzle-typebox";
 
 import { and, desc, eq, sql } from "drizzle-orm";
 

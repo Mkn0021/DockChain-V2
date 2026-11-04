@@ -1,4 +1,4 @@
-import { Elysia } from "elysia";
+import { Elysia, t } from "elysia";
 
 import { AppError } from "../../shared/errors";
 import { ErrorResponse } from "../../shared/models";
@@ -20,7 +20,7 @@ import {
   DocumentListResponseSchema,
   DocumentPdfQuerySchema,
   DocumentResendResponseSchema,
-  DocumentSelectSchema,
+  DocumentResponseSchema,
   DocumentUpdateSchema,
   OrganizationParamsSchema,
   ProofBundleSchema,
@@ -50,7 +50,7 @@ export const documentController = new Elysia({
       params: OrganizationParamsSchema,
       permission: { document: ["create"] },
       response: {
-        200: DocumentSelectSchema,
+        200: DocumentResponseSchema,
         401: ErrorResponse,
         403: ErrorResponse,
         409: ErrorResponse,
@@ -149,7 +149,7 @@ export const documentController = new Elysia({
       params: DocumentIdParamsSchema,
       permission: { document: ["create"] },
       response: {
-        200: DocumentSelectSchema,
+        200: DocumentResponseSchema,
         404: ErrorResponse,
         409: ErrorResponse,
         422: ErrorResponse,
@@ -172,7 +172,7 @@ export const documentController = new Elysia({
       params: DocumentIdParamsSchema,
       permission: { document: ["create"] },
       response: {
-        200: DocumentSelectSchema,
+        200: DocumentResponseSchema,
         404: ErrorResponse,
         409: ErrorResponse,
       },
@@ -230,6 +230,12 @@ export const documentController = new Elysia({
       params: DocumentIdParamsSchema,
       permission: { document: ["read"] },
       query: DocumentPdfQuerySchema,
+      response: {
+        200: t.Unknown(),
+        401: ErrorResponse,
+        403: ErrorResponse,
+        404: ErrorResponse,
+      },
     }
   )
 

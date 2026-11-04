@@ -22,7 +22,7 @@ export const verifyController = new Elysia()
   .get(
     "/verify/:leaf",
     async ({ params, query, set }) => {
-      const live = query.live === true;
+      const live = query.live === true || query.live === "true";
 
       if (!live) {
         const cached = await redis.get(cacheKey(params.leaf));

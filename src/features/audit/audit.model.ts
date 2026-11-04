@@ -1,47 +1,47 @@
-import { createSelectSchema } from "drizzle-zod";
-import { z } from "zod";
+import { createSelectSchema } from "drizzle-typebox";
+import { t } from "elysia";
 
 import { auditLogs } from "../../db/schema/audit.schema";
 
-export const AuditLogSelectSchema = createSelectSchema(auditLogs);
+export const AuditLogResponseSchema = createSelectSchema(auditLogs);
 
-export const OrganizationParamsSchema = z.object({
-  organizationId: z.string().min(1),
+export const AuditLogListResponseSchema = t.Object({
+  data: t.Array(AuditLogResponseSchema),
+  meta: t.Object({ limit: t.Number(), offset: t.Number(), total: t.Number() }),
 });
 
-export const ActorTypeSchema = z.enum(["user", "api_key", "system", "wallet"]);
-
-export const AuditEventSchema = z.object({
-  action: z.string().min(1).max(100),
-  actorId: z.string().optional(),
-  actorType: ActorTypeSchema,
-  ip: z.string().optional(),
-  metadata: z.record(z.string(), z.unknown()).optional(),
-  organizationId: z.string().min(1),
-  requestId: z.string().optional(),
-  targetId: z.string().optional(),
-  targetType: z.string().min(1).max(50),
+export const OrganizationParamsSchema = t.Object({
+  organizationId: t.String({ minLength: 1 }),
 });
 
-export const AuditLogListQuerySchema = z.object({
-  action: z.string().min(1).optional(),
-  actorId: z.string().min(1).optional(),
-  from: z.coerce.date().optional(),
-  limit: z.coerce.number().int().min(1).max(100).default(50),
-  offset: z.coerce.number().int().min(0).default(0),
-  targetId: z.string().min(1).optional(),
-  targetType: z.string().min(1).optional(),
-  to: z.coerce.date().optional(),
+export const ActorTypeSchema = t.Union([
+  t.Literal("user"),
+  t.Literal("api_key"),
+  t.Literal("system"),
+  t.Literal("wallet"),
+]);
+
+export const AuditLogListQuerySchema = t.Object({
+  action: t.Optional(t.String({ minLength: 1 })),
+  actorId: t.Optional(t.String({ minLength: 1 })),
+  from: t.Optional(t.Date()),
+  limit: t.Integer({ default: 50, maximum: 100, minimum: 1 }),
+  offset: t.Integer({ default: 0, minimum: 0 }),
+  targetId: t.Optional(t.String({ minLength: 1 })),
+  targetType: t.Optional(t.String({ minLength: 1 })),
+  to: t.Optional(t.Date()),
 });
 
-export const AuditLogListResponseSchema = z.object({
-  data: z.array(AuditLogSelectSchema),
-  meta: z.object({
-    limit: z.number(),
-    offset: z.number(),
-    total: z.number(),
-  }),
-});
+export interface AuditEventType {
+  action: string;
+  actorId?: string;
+  actorType: "user" | "api_key" | "system" | "wallet";
+  ip?: string;
+  metadata?: Record<string, unknown>;
+  organizationId: string;
+  requestId?: string;
+  targetId?: string;
+  targetType: string;
+}
 
-export type AuditEventType = z.infer<typeof AuditEventSchema>;
-export type AuditLogListQueryType = z.infer<typeof AuditLogListQuerySchema>;
+export type AuditLogListQueryType = typeof AuditLogListQuerySchema.static;

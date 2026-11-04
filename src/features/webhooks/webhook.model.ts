@@ -1,78 +1,83 @@
-import { createSelectSchema } from "drizzle-zod";
-import { z } from "zod";
+import { createSelectSchema } from "drizzle-typebox";
+import { t } from "elysia";
 
 import {
   webhookDeliveries,
   webhookEndpoints,
 } from "../../db/schema/webhook.schema";
 
-export const WebhookEndpointSelectSchema = createSelectSchema(webhookEndpoints);
+// ── Response schemas (derived) ─────────────────────────────────────────────
 
-export const WebhookDeliverySelectSchema =
+export const WebhookEndpointResponseSchema =
+  createSelectSchema(webhookEndpoints);
+export const WebhookDeliveryResponseSchema =
   createSelectSchema(webhookDeliveries);
 
-export const WebhookEventSchema = z.enum([
-  "document.issued",
-  "document.revoked",
-  "batch.awaiting_signature",
-  "batch.confirmed",
-  "batch.failed",
-  "wallet.compromised",
+export const WebhookEndpointCreateResponseSchema = t.Object({
+  endpoint: WebhookEndpointResponseSchema,
+  secret: t.String(),
+});
+
+export const WebhookSecretResponseSchema = t.Object({
+  secret: t.String(),
+});
+
+export const WebhookDeliveryListResponseSchema = t.Object({
+  data: t.Array(WebhookDeliveryResponseSchema),
+  meta: t.Object({ limit: t.Number(), offset: t.Number(), total: t.Number() }),
+});
+
+// ── Params ─────────────────────────────────────────────────────────────────
+
+export const OrganizationParamsSchema = t.Object({
+  organizationId: t.String({ minLength: 1 }),
+});
+
+export const WebhookEndpointIdParamsSchema = t.Object({
+  endpointId: t.String({ minLength: 1 }),
+  organizationId: t.String({ minLength: 1 }),
+});
+
+export const WebhookDeliveryIdParamsSchema = t.Object({
+  deliveryId: t.String({ minLength: 1 }),
+  organizationId: t.String({ minLength: 1 }),
+});
+
+// ── Query ──────────────────────────────────────────────────────────────────
+
+export const WebhookDeliveryListQuerySchema = t.Object({
+  limit: t.Integer({ default: 50, maximum: 100, minimum: 1 }),
+  offset: t.Integer({ default: 0, minimum: 0 }),
+});
+
+// ── Request bodies ─────────────────────────────────────────────────────────
+
+export const WebhookEventSchema = t.Union([
+  t.Literal("document.issued"),
+  t.Literal("document.revoked"),
+  t.Literal("batch.awaiting_signature"),
+  t.Literal("batch.confirmed"),
+  t.Literal("batch.failed"),
+  t.Literal("wallet.compromised"),
 ]);
 
-export const OrganizationParamsSchema = z.object({
-  organizationId: z.string().min(1),
+export const WebhookEndpointCreateSchema = t.Object({
+  events: t.Array(WebhookEventSchema, { minItems: 1 }),
+  url: t.String({ format: "uri" }),
 });
 
-export const WebhookEndpointIdParamsSchema = OrganizationParamsSchema.extend({
-  endpointId: z.string().min(1),
-});
+export const WebhookEndpointUpdateSchema = t.Object(
+  {
+    events: t.Optional(t.Array(WebhookEventSchema, { minItems: 1 })),
+    status: t.Optional(t.Union([t.Literal("active"), t.Literal("disabled")])),
+    url: t.Optional(t.String({ format: "uri" })),
+  },
+  { minProperties: 1 }
+);
 
-export const WebhookDeliveryIdParamsSchema = OrganizationParamsSchema.extend({
-  deliveryId: z.string().min(1),
-});
+// ── Types ──────────────────────────────────────────────────────────────────
 
-export const WebhookEndpointCreateSchema = z.object({
-  events: z.array(WebhookEventSchema).min(1),
-  url: z.string().url(),
-});
-
-export const WebhookEndpointUpdateSchema = z
-  .object({
-    events: z.array(WebhookEventSchema).min(1).optional(),
-    status: z.enum(["active", "disabled"]).optional(),
-    url: z.string().url().optional(),
-  })
-  .refine((data) => Object.keys(data).length > 0, {
-    message: "At least one field must be provided",
-  });
-
-export const WebhookEndpointCreateResponseSchema = z.object({
-  endpoint: WebhookEndpointSelectSchema,
-  secret: z.string(),
-});
-
-export const WebhookSecretResponseSchema = z.object({
-  secret: z.string(),
-});
-
-export const WebhookDeliveryListResponseSchema = z.object({
-  data: z.array(WebhookDeliverySelectSchema),
-  meta: z.object({
-    limit: z.number(),
-    offset: z.number(),
-    total: z.number(),
-  }),
-});
-
-export const WebhookDeliveryListQuerySchema = z.object({
-  limit: z.coerce.number().int().min(1).max(100).default(50),
-  offset: z.coerce.number().int().min(0).default(0),
-});
-
-export type WebhookEndpointCreateType = z.infer<
-  typeof WebhookEndpointCreateSchema
->;
-export type WebhookEndpointUpdateType = z.infer<
-  typeof WebhookEndpointUpdateSchema
->;
+export type WebhookEndpointCreateType =
+  typeof WebhookEndpointCreateSchema.static;
+export type WebhookEndpointUpdateType =
+  typeof WebhookEndpointUpdateSchema.static;
