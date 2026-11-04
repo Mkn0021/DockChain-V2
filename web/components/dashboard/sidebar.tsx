@@ -1,76 +1,60 @@
 "use client";
 
 import { usePathname, useRouter } from "next/navigation";
+import { useCallback, useEffect, useState } from "react";
+import { FaArrowLeft } from "react-icons/fa";
 
-import Logo from "../_ui/logo";
 import { cn } from "@/lib/utils";
 
-import type { NavItem } from "./menu-config";
-
-import { MenuItem } from "./menu-item";
+import Logo from "../_ui/logo";
+import {
+  getPanelFromPath,
+  PANEL_KEYS,
+  PANELS,
+  type NavKey,
+} from "./menu-config";
+import { SidebarPanel } from "./sidebar-panel";
 import { useOrg } from "./org-provider";
+import { MenuItem } from "./menu-item";
+import { Separator } from "../_ui/separator";
 
 interface SidebarProps {
   open: boolean;
   onClose: () => void;
-  items: NavItem[];
-  label?: string;
 }
 
-const isActivePath = (
-  pathname: string,
-  slug: string,
-  itemPath: string,
-  items: NavItem[]
-) => {
-  const stripped = pathname.startsWith(`/${slug}`)
-    ? pathname.slice(slug.length + 1)
-    : pathname;
-
-  if (stripped === itemPath) {
-    return true;
-  }
-
-  const siblings = items
-    .map((i) => i.path)
-    .filter((p) => p !== itemPath && stripped.startsWith(`${p}/`));
-
-  if (siblings.some((p) => p.length >= itemPath.length)) {
-    return false;
-  }
-
-  return stripped.startsWith(`${itemPath}/`);
-};
-
-export function Sidebar({
-  open,
-  onClose,
-  items,
-  label = "Main navigation",
-}: SidebarProps) {
+export function Sidebar({ open, onClose }: SidebarProps) {
   const pathname = usePathname();
   const router = useRouter();
   const { organization } = useOrg();
+  const [panel, setPanel] = useState<NavKey>("app");
 
-  const navigate = (path: string) => {
-    router.push(`/${organization.slug}${path}`);
+  useEffect(() => {
+    setPanel(getPanelFromPath(pathname, organization.slug));
+  }, [pathname, organization.slug]);
+
+  useEffect(() => {
     if (typeof window !== "undefined" && window.innerWidth < 1024) {
       onClose();
     }
-  };
+  }, [pathname, onClose]);
+
+  const navigate = useCallback(
+    (path: string) => {
+      router.push(`/${organization.slug}${path}`);
+    },
+    [router, organization.slug]
+  );
 
   return (
     <>
-      <div
+      <aside
         className={cn(
           "fixed inset-y-0 left-0 z-50 w-64 shrink-0 transform border border-border bg-muted transition-transform duration-300 ease-in-out lg:static lg:transform-none lg:bg-muted/30 xl:w-72",
           open ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
         )}
       >
-        <nav
-          aria-label={label}
-          className="mx-auto flex h-full max-h-full w-[90%] flex-col"
-        >
+        <div className="mx-auto flex h-full max-h-full w-[90%] flex-col">
           <div className="flex h-44 w-full flex-col items-center justify-center gap-2">
             <Logo className="text-primary" />
             <span className="max-w-full truncate rounded-2xl bg-primary px-4 text-sm text-background">
@@ -78,26 +62,21 @@ export function Sidebar({
             </span>
           </div>
 
-          <ul className="flex flex-col">
-            {items.map((item) => (
-              <li key={item.id}>
-                <MenuItem
-                  icon={item.icon}
-                  label={item.label}
-                  isActive={isActivePath(
-                    pathname,
-                    organization.slug,
-                    item.path,
-                    items
-                  )}
-                  onClick={() => navigate(item.path)}
-                  className="rounded-full"
-                />
-              </li>
+          <div className="relative flex-1 overflow-hidden">
+            {PANEL_KEYS.map((panelKey) => (
+              <SidebarPanelContent
+                key={panelKey}
+                panelKey={panelKey}
+                activePanel={panel}
+                pathname={pathname}
+                slug={organization.slug}
+                onNavigate={navigate}
+                onDrill={setPanel}
+              />
             ))}
-          </ul>
-        </nav>
-      </div>
+          </div>
+        </div>
+      </aside>
 
       {open && (
         <div
@@ -107,5 +86,60 @@ export function Sidebar({
         />
       )}
     </>
+  );
+}
+
+interface SidebarPanelContentProps {
+  panelKey: NavKey;
+  activePanel: NavKey;
+  pathname: string;
+  slug: string;
+  onNavigate: (path: string) => void;
+  onDrill: (key: NavKey) => void;
+}
+
+function SidebarPanelContent({
+  panelKey,
+  activePanel,
+  pathname,
+  slug,
+  onNavigate,
+  onDrill,
+}: SidebarPanelContentProps) {
+  const config = PANELS[panelKey];
+  const isActive = activePanel === panelKey;
+  const isRoot = panelKey === "app";
+
+  return (
+    <div
+      inert={!isActive}
+      aria-hidden={!isActive}
+      className={cn(
+        "absolute inset-0 flex flex-col transition-transform duration-300 ease-in-out motion-reduce:transition-none",
+        isActive ? "translate-x-0" : "translate-x-full"
+      )}
+    >
+      <nav aria-label={config.label} className="flex-1">
+        <SidebarPanel
+          items={config.items}
+          pathname={pathname}
+          slug={slug}
+          onNavigate={onNavigate}
+          onDrill={onDrill}
+        />
+      </nav>
+
+      {!isRoot && (
+        <>
+          <Separator />
+          <MenuItem
+            as="button"
+            icon={FaArrowLeft}
+            label="Back to dashboard"
+            onClick={() => onNavigate("/dashboard")}
+          />
+        </>
+      )}
+    </div>
   );
 }

@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { FaExchangeAlt, FaPlus, FaSignOutAlt } from "react-icons/fa";
 
-import { cn } from "cn";
+import { cn } from "@/lib/utils";
 import { authClient } from "@/lib/auth-client";
 import { getInitialsAndColor } from "@/utils/profile-utils";
 
@@ -14,7 +14,7 @@ import { MenuItem } from "./menu-item";
 import { useOrg } from "./org-provider";
 
 function useClickOutside(
-  ref: React.RefObject<HTMLElement | null>,
+  ref: React.RefObject<HTMLDivElement | null>,
   enabled: boolean,
   onOutside: () => void
 ) {
@@ -22,41 +22,27 @@ function useClickOutside(
     if (!enabled) {
       return;
     }
-
     const handler = (event: MouseEvent) => {
       const target = event.target as Node;
       if (!ref.current?.contains(target)) {
         onOutside();
       }
     };
-
     document.addEventListener("mousedown", handler);
     return () => document.removeEventListener("mousedown", handler);
   }, [ref, enabled, onOutside]);
 }
 
-function useProfileHandlers(close: () => void) {
+function useLogout(handleClose: () => void) {
   const router = useRouter();
   const queryClient = useQueryClient();
 
-  const handleLogout = async () => {
-    close();
+  return async () => {
+    handleClose();
     await authClient.signOut();
     queryClient.clear();
     router.replace("/login");
   };
-
-  const handleSwitchOrg = (slug: string) => {
-    close();
-    router.push(`/${slug}/dashboard`);
-  };
-
-  const handleCreateOrg = () => {
-    close();
-    router.push("/onboarding?new=1");
-  };
-
-  return { handleLogout, handleSwitchOrg, handleCreateOrg };
 }
 
 function useProfileDropdown() {
@@ -65,25 +51,24 @@ function useProfileDropdown() {
   const { user, organization, organizations } = useOrg();
   const { initials, colorClass } = getInitialsAndColor(user.name);
 
-  const close = () => setIsOpen(false);
-  const handleToggle = () => setIsOpen((open) => !open);
+  const handleToggle = () => setIsOpen((v) => !v);
+  const handleClose = () => setIsOpen(false);
 
-  useClickOutside(containerRef, isOpen, close);
-  const { handleLogout, handleSwitchOrg, handleCreateOrg } =
-    useProfileHandlers(close);
+  useClickOutside(containerRef, isOpen, handleClose);
+
+  const handleLogout = useLogout(handleClose);
 
   return {
-    isOpen,
+    colorClass,
     containerRef,
-    user,
+    handleClose,
+    handleLogout,
+    handleToggle,
+    initials,
+    isOpen,
     organization,
     organizations,
-    initials,
-    colorClass,
-    handleToggle,
-    handleLogout,
-    handleSwitchOrg,
-    handleCreateOrg,
+    user,
   };
 }
 
@@ -154,75 +139,6 @@ function ProfileUserInfo({
   );
 }
 
-interface ProfileDropdownProps {
-  name: string;
-  email?: string | null;
-  initials: string;
-  colorClass: string;
-  organizations: { id: string; name: string; slug: string }[];
-  activeOrgId: string;
-  onSwitchOrg: (slug: string) => void;
-  onCreateOrg: () => void;
-  onLogout: () => void;
-}
-
-function ProfileDropdown({
-  name,
-  email,
-  initials,
-  colorClass,
-  organizations,
-  activeOrgId,
-  onSwitchOrg,
-  onCreateOrg,
-  onLogout,
-}: ProfileDropdownProps) {
-  return (
-    <div
-      role="menu"
-      className="absolute top-full right-0 z-50 mt-4 w-80 rounded-3xl border border-border bg-background p-2 shadow-large"
-    >
-      <ProfileUserInfo
-        name={name}
-        email={email}
-        initials={initials}
-        colorClass={colorClass}
-      />
-
-      <Separator className="my-2" />
-
-      <p className="px-2 py-2 text-xs font-medium text-foreground uppercase">
-        Organizations
-      </p>
-
-      {organizations.map((org) => (
-        <MenuItem
-          key={org.id}
-          icon={FaExchangeAlt}
-          label={org.name}
-          isActive={org.id === activeOrgId}
-          onClick={() => onSwitchOrg(org.slug)}
-        />
-      ))}
-
-      <MenuItem
-        icon={FaPlus}
-        label="Create organization"
-        onClick={onCreateOrg}
-      />
-
-      <Separator className="my-2" />
-
-      <MenuItem
-        icon={FaSignOutAlt}
-        label="Log Out"
-        onClick={onLogout}
-        className="rounded-t-none rounded-b-2xl text-red-600 hover:bg-red-50 hover:text-foreground"
-      />
-    </div>
-  );
-}
-
 export function ProfileContainer() {
   const s = useProfileDropdown();
 
@@ -236,17 +152,52 @@ export function ProfileContainer() {
       />
 
       {s.isOpen && (
-        <ProfileDropdown
-          name={s.user.name}
-          email={s.user.email}
-          initials={s.initials}
-          colorClass={s.colorClass}
-          organizations={s.organizations}
-          activeOrgId={s.organization.id}
-          onSwitchOrg={s.handleSwitchOrg}
-          onCreateOrg={s.handleCreateOrg}
-          onLogout={s.handleLogout}
-        />
+        <div
+          role="menu"
+          className="absolute top-full right-0 z-50 mt-4 w-80 rounded-3xl border border-border bg-background p-2 shadow-large"
+        >
+          <ProfileUserInfo
+            name={s.user.name}
+            email={s.user.email}
+            initials={s.initials}
+            colorClass={s.colorClass}
+          />
+
+          <Separator className="my-2" />
+
+          <p className="px-2 py-2 text-xs font-medium text-foreground uppercase">
+            Organizations
+          </p>
+
+          {s.organizations.map((org) => (
+            <MenuItem
+              key={org.id}
+              as="link"
+              href={`/${org.slug}/dashboard`}
+              icon={FaExchangeAlt}
+              label={org.name}
+              isActive={org.id === s.organization.id}
+              onClick={s.handleClose}
+            />
+          ))}
+
+          <MenuItem
+            as="link"
+            href="/onboarding?new=1"
+            icon={FaPlus}
+            label="Create organization"
+            onClick={s.handleClose}
+          />
+
+          <Separator className="my-2" />
+
+          <MenuItem
+            icon={FaSignOutAlt}
+            label="Log Out"
+            onClick={s.handleLogout}
+            className="rounded-t-none rounded-b-2xl text-red-600 hover:bg-red-50 hover:text-foreground"
+          />
+        </div>
       )}
     </div>
   );

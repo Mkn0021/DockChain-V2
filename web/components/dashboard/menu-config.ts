@@ -22,6 +22,14 @@ export interface NavItem {
   icon: IconType;
   path: string;
   subtitle?: string;
+  drillTo?: NavKey;
+}
+
+export interface PanelConfig {
+  items: NavItem[];
+  label: string;
+  backLabel: string;
+  match: (pathname: string, slug: string) => boolean;
 }
 
 export type NavKey = "app" | "settings";
@@ -69,7 +77,14 @@ export const APP_MENU_ITEMS: NavItem[] = [
     path: "/wallets",
     subtitle: "Issuer wallets registered to this organization",
   },
-  { id: "settings", label: "Settings", icon: FaCog, path: "/settings" },
+  {
+    id: "settings",
+    label: "Settings",
+    icon: FaCog,
+    path: "/settings",
+    drillTo: "settings",
+    subtitle: "Organization preferences",
+  },
   {
     id: "help",
     label: "Help & Support",
@@ -138,7 +153,29 @@ export const SETTINGS_NAV_ITEMS: NavItem[] = [
   },
 ];
 
-export const NAV_MAP: Record<NavKey, NavItem[]> = {
-  app: APP_MENU_ITEMS,
-  settings: SETTINGS_NAV_ITEMS,
+export const PANEL_KEYS: NavKey[] = ["app", "settings"];
+
+export const PANELS: Record<NavKey, PanelConfig> = {
+  app: {
+    items: APP_MENU_ITEMS,
+    label: "Main navigation",
+    backLabel: "",
+    match: () => false,
+  },
+  settings: {
+    items: SETTINGS_NAV_ITEMS,
+    label: "Settings navigation",
+    backLabel: "Settings",
+    match: (pathname, slug) => pathname.startsWith(`/${slug}/settings`),
+  },
+};
+
+export const getPanelFromPath = (pathname: string, slug: string): NavKey => {
+  const keys: NavKey[] = ["app", "settings"];
+  for (const key of keys) {
+    if (PANELS[key].match(pathname, slug)) {
+      return key;
+    }
+  }
+  return "app";
 };
