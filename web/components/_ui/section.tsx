@@ -40,3 +40,22 @@ export const SectionHeader = ({
     {children}
   </Component>
 );
+
+export const SectionSubheader = ({
+  as: Component = "p",
+  className,
+  children,
+}: {
+  as?: "h2" | "h3" | "h4" | "h5" | "p";
+  className?: string;
+  children: React.ReactNode;
+}) => (
+  <Component
+    className={cn(
+      "text-base font-light text-muted-foreground md:text-lg",
+      className
+    )}
+  >
+    {children}
+  </Component>
+);

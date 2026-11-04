@@ -2,17 +2,27 @@
 
 import { usePathname, useRouter } from "next/navigation";
 
-import { useOrg } from "./org-provider";
-import { MENU_ITEMS } from "./menu-config";
-import { MenuItem } from "./menu-item";
 import Logo from "../_ui/logo";
+import { cn } from "@/lib/utils";
+
+import type { NavItem } from "./menu-config";
+
+import { MenuItem } from "./menu-item";
+import { useOrg } from "./org-provider";
 
 interface SidebarProps {
   open: boolean;
   onClose: () => void;
+  items: NavItem[];
+  label?: string;
 }
 
-const isActivePath = (pathname: string, slug: string, itemPath: string) => {
+const isActivePath = (
+  pathname: string,
+  slug: string,
+  itemPath: string,
+  items: NavItem[]
+) => {
   const stripped = pathname.startsWith(`/${slug}`)
     ? pathname.slice(slug.length + 1)
     : pathname;
@@ -21,9 +31,9 @@ const isActivePath = (pathname: string, slug: string, itemPath: string) => {
     return true;
   }
 
-  const siblings = MENU_ITEMS.map((i) => i.path).filter(
-    (p) => p !== itemPath && stripped.startsWith(`${p}/`)
-  );
+  const siblings = items
+    .map((i) => i.path)
+    .filter((p) => p !== itemPath && stripped.startsWith(`${p}/`));
 
   if (siblings.some((p) => p.length >= itemPath.length)) {
     return false;
@@ -32,7 +42,12 @@ const isActivePath = (pathname: string, slug: string, itemPath: string) => {
   return stripped.startsWith(`${itemPath}/`);
 };
 
-export function Sidebar({ open, onClose }: SidebarProps) {
+export function Sidebar({
+  open,
+  onClose,
+  items,
+  label = "Main navigation",
+}: SidebarProps) {
   const pathname = usePathname();
   const router = useRouter();
   const { organization } = useOrg();
@@ -47,12 +62,13 @@ export function Sidebar({ open, onClose }: SidebarProps) {
   return (
     <>
       <div
-        className={`fixed inset-y-0 left-0 z-50 w-64 transform border border-border bg-muted transition-transform duration-300 ease-in-out lg:static lg:transform-none lg:bg-muted/30 xl:w-72 ${
+        className={cn(
+          "fixed inset-y-0 left-0 z-50 w-64 shrink-0 transform border border-border bg-muted transition-transform duration-300 ease-in-out lg:static lg:transform-none lg:bg-muted/30 xl:w-72",
           open ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
-        } shrink-0`}
+        )}
       >
         <nav
-          aria-label="Main navigation"
+          aria-label={label}
           className="mx-auto flex h-full max-h-full w-[90%] flex-col"
         >
           <div className="flex h-44 w-full flex-col items-center justify-center gap-2">
@@ -63,7 +79,7 @@ export function Sidebar({ open, onClose }: SidebarProps) {
           </div>
 
           <ul className="flex flex-col">
-            {MENU_ITEMS.map((item) => (
+            {items.map((item) => (
               <li key={item.id}>
                 <MenuItem
                   icon={item.icon}
@@ -71,7 +87,8 @@ export function Sidebar({ open, onClose }: SidebarProps) {
                   isActive={isActivePath(
                     pathname,
                     organization.slug,
-                    item.path
+                    item.path,
+                    items
                   )}
                   onClick={() => navigate(item.path)}
                   className="rounded-full"
