@@ -1,5 +1,6 @@
 "use client";
 
+import { motion } from "motion/react";
 import { usePathname, useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { FaArrowLeft } from "react-icons/fa";
@@ -7,21 +8,36 @@ import { FaArrowLeft } from "react-icons/fa";
 import { cn } from "@/lib/utils";
 
 import Logo from "../_ui/logo";
+import { Separator } from "../_ui/separator";
 import {
   getPanelFromPath,
   PANEL_KEYS,
   PANELS,
   type NavKey,
 } from "./menu-config";
+import { MenuItem } from "./menu-item";
 import { SidebarPanel } from "./sidebar-panel";
 import { useOrg } from "./org-provider";
-import { MenuItem } from "./menu-item";
-import { Separator } from "../_ui/separator";
 
 interface SidebarProps {
   open: boolean;
   onClose: () => void;
 }
+
+const panelTransition = {
+  duration: 0.3,
+  ease: [0.4, 0, 0.2, 1] as const,
+};
+
+const getPanelX = (isActive: boolean, isRoot: boolean): number | string => {
+  if (isActive) {
+    return 0;
+  }
+  if (isRoot) {
+    return "-100%";
+  }
+  return "100%";
+};
 
 export function Sidebar({ open, onClose }: SidebarProps) {
   const pathname = usePathname();
@@ -109,15 +125,15 @@ function SidebarPanelContent({
   const config = PANELS[panelKey];
   const isActive = activePanel === panelKey;
   const isRoot = panelKey === "app";
+  const x = getPanelX(isActive, isRoot);
 
   return (
-    <div
+    <motion.div
       inert={!isActive}
       aria-hidden={!isActive}
-      className={cn(
-        "absolute inset-0 flex flex-col transition-transform duration-300 ease-in-out motion-reduce:transition-none",
-        isActive ? "translate-x-0" : "translate-x-full"
-      )}
+      animate={{ x }}
+      transition={panelTransition}
+      className="absolute inset-0 flex flex-col"
     >
       <nav aria-label={config.label} className="flex-1">
         <SidebarPanel
@@ -140,6 +156,6 @@ function SidebarPanelContent({
           />
         </>
       )}
-    </div>
+    </motion.div>
   );
 }

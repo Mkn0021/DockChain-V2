@@ -4,6 +4,7 @@ import { useCallback, useState, type ReactNode } from "react";
 
 import { DashboardHeader } from "./dashboard-header";
 import { Sidebar } from "./sidebar";
+import { PageTransition } from "./page-transition";
 
 export function DashboardShell({ children }: { children: ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -18,7 +19,7 @@ export function DashboardShell({ children }: { children: ReactNode }) {
           onToggleSidebar={() => setSidebarOpen((v) => !v)}
         />
         <div className="w-full flex-1 overflow-auto px-6 md:px-12 lg:px-20">
-          {children}
+          <PageTransition>{children}</PageTransition>
         </div>
       </div>
     </div>

@@ -11,6 +11,20 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  redirects() {
+    return [
+      {
+        source: "/:slug/settings",
+        destination: "/:slug/settings/general",
+        permanent: false,
+      },
+      {
+        source: "/:slug",
+        destination: "/:slug/dashboard",
+        permanent: false,
+      },
+    ];
+  },
   rewrites: () => [
     {
       source: "/api/auth/:path*",

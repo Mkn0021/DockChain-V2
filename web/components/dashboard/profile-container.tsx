@@ -1,6 +1,7 @@
 "use client";
 
 import { useQueryClient } from "@tanstack/react-query";
+import { AnimatePresence, motion } from "motion/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { FaExchangeAlt, FaPlus, FaSignOutAlt } from "react-icons/fa";
@@ -139,6 +140,27 @@ function ProfileUserInfo({
   );
 }
 
+const dropdownVariants = {
+  enter: {
+    opacity: 0,
+    scale: 0.96,
+    y: -6,
+    transition: { duration: 0.15, ease: [0.4, 0, 0.2, 1] as const },
+  },
+  center: {
+    opacity: 1,
+    scale: 1,
+    y: 0,
+    transition: { duration: 0.18, ease: [0.4, 0, 0.2, 1] as const },
+  },
+  exit: {
+    opacity: 0,
+    scale: 0.96,
+    y: -6,
+    transition: { duration: 0.12, ease: [0.4, 0, 0.2, 1] as const },
+  },
+};
+
 export function ProfileContainer() {
   const s = useProfileDropdown();
 
@@ -151,54 +173,64 @@ export function ProfileContainer() {
         onClick={s.handleToggle}
       />
 
-      {s.isOpen && (
-        <div
-          role="menu"
-          className="absolute top-full right-0 z-50 mt-4 w-80 rounded-3xl border border-border bg-background p-2 shadow-large"
-        >
-          <ProfileUserInfo
-            name={s.user.name}
-            email={s.user.email}
-            initials={s.initials}
-            colorClass={s.colorClass}
-          />
+      <AnimatePresence>
+        {s.isOpen && (
+          <motion.div
+            role="menu"
+            variants={dropdownVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            style={{
+              transformOrigin: "top right",
+              willChange: "transform, opacity",
+            }}
+            className="absolute top-full right-0 z-50 mt-4 w-80 rounded-3xl border border-border bg-background p-2 shadow-large"
+          >
+            <ProfileUserInfo
+              name={s.user.name}
+              email={s.user.email}
+              initials={s.initials}
+              colorClass={s.colorClass}
+            />
 
-          <Separator className="my-2" />
+            <Separator className="my-2" />
 
-          <p className="px-2 py-2 text-xs font-medium text-foreground uppercase">
-            Organizations
-          </p>
+            <p className="px-2 py-2 text-xs font-medium text-foreground uppercase">
+              Organizations
+            </p>
 
-          {s.organizations.map((org) => (
+            {s.organizations.map((org) => (
+              <MenuItem
+                key={org.id}
+                as="link"
+                href={`/${org.slug}/dashboard`}
+                icon={FaExchangeAlt}
+                label={org.name}
+                isActive={org.id === s.organization.id}
+                onClick={s.handleClose}
+              />
+            ))}
+
             <MenuItem
-              key={org.id}
               as="link"
-              href={`/${org.slug}/dashboard`}
-              icon={FaExchangeAlt}
-              label={org.name}
-              isActive={org.id === s.organization.id}
+              href="/onboarding?new=1"
+              icon={FaPlus}
+              label="Create organization"
               onClick={s.handleClose}
             />
-          ))}
 
-          <MenuItem
-            as="link"
-            href="/onboarding?new=1"
-            icon={FaPlus}
-            label="Create organization"
-            onClick={s.handleClose}
-          />
+            <Separator className="my-2" />
 
-          <Separator className="my-2" />
-
-          <MenuItem
-            icon={FaSignOutAlt}
-            label="Log Out"
-            onClick={s.handleLogout}
-            className="rounded-t-none rounded-b-2xl text-red-600 hover:bg-red-50 hover:text-foreground"
-          />
-        </div>
-      )}
+            <MenuItem
+              icon={FaSignOutAlt}
+              label="Log Out"
+              onClick={s.handleLogout}
+              className="rounded-t-none rounded-b-2xl text-red-600 hover:bg-red-50 hover:text-foreground"
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

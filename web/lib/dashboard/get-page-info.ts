@@ -4,12 +4,15 @@ import {
   type NavItem,
 } from "@/components/dashboard/menu-config";
 
-const ALL_ITEMS: NavItem[] = [...APP_MENU_ITEMS, ...SETTINGS_NAV_ITEMS];
-
 interface PageInfo {
   title: string;
   subtitle?: string;
 }
+
+const ALL_ITEMS: NavItem[] = [
+  ...APP_MENU_ITEMS.filter((item) => !item.drillTo),
+  ...SETTINGS_NAV_ITEMS,
+];
 
 export const getPageInfo = (pathname: string, slug: string): PageInfo => {
   const stripped = pathname.startsWith(`/${slug}`)

@@ -1,6 +1,7 @@
 "use client";
 
 import { CircleCheck, CircleX, Info, type LucideIcon } from "lucide-react";
+import { AnimatePresence, motion } from "motion/react";
 import {
   createContext,
   useCallback,
@@ -59,6 +60,27 @@ const TOAST_STYLES: Record<
   },
 };
 
+const toastVariants = {
+  enter: {
+    opacity: 0,
+    x: 24,
+    scale: 0.98,
+    transition: { duration: 0.2, ease: [0.4, 0, 0.2, 1] as const },
+  },
+  center: {
+    opacity: 1,
+    x: 0,
+    scale: 1,
+    transition: { duration: 0.22, ease: [0.4, 0, 0.2, 1] as const },
+  },
+  exit: {
+    opacity: 0,
+    x: 24,
+    scale: 0.98,
+    transition: { duration: 0.15, ease: [0.4, 0, 0.2, 1] as const },
+  },
+};
+
 function useToastTimer({
   paused,
   onExpire,
@@ -88,27 +110,26 @@ function useToastTimer({
     return () => cancelAnimationFrame(frameRef.current);
   }, [paused, onExpire]);
 
-  return {
-    progress,
-    pause: () => {
-      remainingRef.current = Math.max(
-        remainingRef.current - (Date.now() - startedAt.current),
-        0
-      );
-    },
-    resume: () => {
-      startedAt.current = Date.now();
-    },
-  };
+  const pause = useCallback(() => {
+    remainingRef.current = Math.max(
+      remainingRef.current - (Date.now() - startedAt.current),
+      0
+    );
+  }, []);
+
+  const resume = useCallback(() => {
+    startedAt.current = Date.now();
+  }, []);
+
+  return { pause, progress, resume };
 }
 
-function ToastItem({
-  toast,
-  onDismiss,
-}: {
+interface ToastItemProps {
   toast: Toast;
   onDismiss: (id: string) => void;
-}) {
+}
+
+function ToastItem({ toast, onDismiss }: ToastItemProps) {
   const [paused, setPaused] = useState(false);
   const styles = TOAST_STYLES[toast.type];
   const Icon = styles.iconComponent;
@@ -117,7 +138,7 @@ function ToastItem({
     onDismiss(toast.id);
   }, [onDismiss, toast.id]);
 
-  const timer = useToastTimer({ paused, onExpire: handleExpire });
+  const timer = useToastTimer({ onExpire: handleExpire, paused });
 
   const handlePause = () => {
     timer.pause();
@@ -130,9 +151,14 @@ function ToastItem({
   };
 
   return (
-    <div
+    <motion.div
+      layout
+      variants={toastVariants}
+      initial="enter"
+      animate="center"
+      exit="exit"
+      style={{ willChange: "transform, opacity" }}
       className={`relative flex items-center gap-3 overflow-hidden rounded-lg border bg-white px-6 py-4 font-satoshi text-base shadow-[0_2px_4px_rgba(0,0,0,0.1)] ${styles.container}`}
-      style={{ animation: "slide-in-right 300ms ease-out" }}
       onMouseEnter={handlePause}
       onMouseLeave={handleResume}
       role="alert"
@@ -155,7 +181,7 @@ function ToastItem({
           style={{ width: `${timer.progress}%` }}
         />
       </div>
-    </div>
+    </motion.div>
   );
 }
 
@@ -187,28 +213,24 @@ export function ToastProvider({ children }: { children: ReactNode }) {
 
   const value = useMemo<ToastContextValue>(
     () => ({
-      success: (message) => push(message, "success"),
       error: (message) => push(message, "error"),
       info: (message) => push(message, "info"),
+      success: (message) => push(message, "success"),
     }),
     [push]
   );
 
   return (
     <ToastContext.Provider value={value}>
-      <style>{`
-        @keyframes slide-in-right {
-          from { transform: translateX(100%); opacity: 0; }
-          to   { transform: translateX(0); opacity: 1; }
-        }
-      `}</style>
       {children}
       <div className="pointer-events-none fixed top-8 right-4 z-50 flex w-[min(24rem,calc(100vw-2rem))] flex-col gap-3">
-        {toasts.map((toast) => (
-          <div key={toast.id} className="pointer-events-auto">
-            <ToastItem toast={toast} onDismiss={dismiss} />
-          </div>
-        ))}
+        <AnimatePresence mode="popLayout" initial={false}>
+          {toasts.map((toast) => (
+            <div key={toast.id} className="pointer-events-auto">
+              <ToastItem toast={toast} onDismiss={dismiss} />
+            </div>
+          ))}
+        </AnimatePresence>
       </div>
     </ToastContext.Provider>
   );
@@ -236,7 +258,7 @@ const emit = (message: string, type: ToastType) => {
 };
 
 export const toast = {
-  success: (message: string) => emit(message, "success"),
   error: (message: string) => emit(message, "error"),
   info: (message: string) => emit(message, "info"),
+  success: (message: string) => emit(message, "success"),
 };

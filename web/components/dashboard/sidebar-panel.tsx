@@ -1,5 +1,6 @@
 "use client";
 
+import { motion } from "motion/react";
 import { FaChevronRight } from "react-icons/fa";
 
 import { MenuItem } from "./menu-item";
@@ -12,6 +13,25 @@ interface SidebarPanelProps {
   onNavigate: (path: string) => void;
   onDrill: (key: NavKey) => void;
 }
+
+const listVariants = {
+  enter: {},
+  center: {
+    transition: {
+      delayChildren: 0.15,
+      staggerChildren: 0.06,
+    },
+  },
+};
+
+const itemVariants = {
+  enter: { opacity: 0, x: 12 },
+  center: {
+    opacity: 1,
+    x: 0,
+    transition: { duration: 0.25, ease: [0.4, 0, 0.2, 1] as const },
+  },
+};
 
 const isActivePath = (
   pathname: string,
@@ -46,12 +66,17 @@ export function SidebarPanel({
   onDrill,
 }: SidebarPanelProps) {
   return (
-    <ul className="flex flex-col">
+    <motion.ul
+      className="flex flex-col"
+      variants={listVariants}
+      initial="enter"
+      animate="center"
+    >
       {items.map((item) => {
         const { drillTo } = item;
         if (drillTo) {
           return (
-            <li key={item.id}>
+            <motion.li key={item.id} variants={itemVariants}>
               <MenuItem
                 icon={item.icon}
                 label={item.label}
@@ -60,16 +85,14 @@ export function SidebarPanel({
                   onNavigate(item.path);
                   onDrill(drillTo);
                 }}
-                trailing={
-                  <FaChevronRight className="size-4 shrink-0 text-foreground/70" />
-                }
+                trailing={<FaChevronRight className="size-3 shrink-0" />}
               />
-            </li>
+            </motion.li>
           );
         }
 
         return (
-          <li key={item.id}>
+          <motion.li key={item.id} variants={itemVariants}>
             <MenuItem
               as="link"
               href={`/${slug}${item.path}`}
@@ -78,9 +101,9 @@ export function SidebarPanel({
               isActive={isActivePath(pathname, slug, item.path, items)}
               onClick={() => onNavigate(item.path)}
             />
-          </li>
+          </motion.li>
         );
       })}
-    </ul>
+    </motion.ul>
   );
 }

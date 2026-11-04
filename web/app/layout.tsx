@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { QueryProvider } from "@/components/providers/query-provider";
 import { ToastProvider } from "@/components/providers/toast-provider";
 import { AppWagmiProvider } from "@/components/providers/wagmi-provider";
+import { MotionConfig } from "motion/react";
 
 export const metadata: Metadata = {
   title: "DockChain",
@@ -20,7 +21,9 @@ export default function RootLayout({
       <body className="antialiased">
         <AppWagmiProvider>
           <QueryProvider>
-            <ToastProvider>{children}</ToastProvider>
+            <ToastProvider>
+              <MotionConfig reducedMotion="user">{children}</MotionConfig>
+            </ToastProvider>
           </QueryProvider>
         </AppWagmiProvider>
       </body>

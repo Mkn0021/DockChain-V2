@@ -81,7 +81,7 @@ export const APP_MENU_ITEMS: NavItem[] = [
     id: "settings",
     label: "Settings",
     icon: FaCog,
-    path: "/settings",
+    path: "/settings/general",
     drillTo: "settings",
     subtitle: "Organization preferences",
   },
