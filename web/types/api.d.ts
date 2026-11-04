@@ -1165,7 +1165,9 @@ export interface paths {
             responses: {
                 /** @description Success */
                 200: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             user: components["schemas"]["User"];
@@ -1176,7 +1178,9 @@ export interface paths {
                 };
                 /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
                 400: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message: string;
@@ -1185,7 +1189,9 @@ export interface paths {
                 };
                 /** @description Unauthorized. Due to missing or invalid authentication. */
                 401: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message: string;
@@ -1194,7 +1200,9 @@ export interface paths {
                 };
                 /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
                 403: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -1203,7 +1211,9 @@ export interface paths {
                 };
                 /** @description Not Found. The requested resource was not found. */
                 404: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -1212,7 +1222,9 @@ export interface paths {
                 };
                 /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
                 429: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -1221,7 +1233,9 @@ export interface paths {
                 };
                 /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
                 500: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -1401,7 +1415,9 @@ export interface paths {
             responses: {
                 /** @description Success */
                 200: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             /** @description Indicates if the session was revoked successfully */
@@ -1411,7 +1427,9 @@ export interface paths {
                 };
                 /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
                 400: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message: string;
@@ -1420,7 +1438,9 @@ export interface paths {
                 };
                 /** @description Unauthorized. Due to missing or invalid authentication. */
                 401: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message: string;
@@ -1429,7 +1449,9 @@ export interface paths {
                 };
                 /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
                 403: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -1438,7 +1460,9 @@ export interface paths {
                 };
                 /** @description Not Found. The requested resource was not found. */
                 404: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -1447,7 +1471,9 @@ export interface paths {
                 };
                 /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
                 429: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -1456,7 +1482,9 @@ export interface paths {
                 };
                 /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
                 500: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -1496,7 +1524,9 @@ export interface paths {
             responses: {
                 /** @description Success */
                 200: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             /** @description Indicates if all sessions were revoked successfully */
@@ -1506,7 +1536,9 @@ export interface paths {
                 };
                 /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
                 400: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message: string;
@@ -1515,7 +1547,9 @@ export interface paths {
                 };
                 /** @description Unauthorized. Due to missing or invalid authentication. */
                 401: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message: string;
@@ -1524,7 +1558,9 @@ export interface paths {
                 };
                 /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
                 403: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -1533,7 +1569,9 @@ export interface paths {
                 };
                 /** @description Not Found. The requested resource was not found. */
                 404: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -1542,7 +1580,9 @@ export interface paths {
                 };
                 /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
                 429: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -1551,7 +1591,9 @@ export interface paths {
                 };
                 /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
                 500: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -1591,7 +1633,9 @@ export interface paths {
             responses: {
                 /** @description Success */
                 200: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             /** @description Indicates if all other sessions were revoked successfully */
@@ -1601,7 +1645,9 @@ export interface paths {
                 };
                 /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
                 400: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message: string;
@@ -1610,7 +1656,9 @@ export interface paths {
                 };
                 /** @description Unauthorized. Due to missing or invalid authentication. */
                 401: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message: string;
@@ -1619,7 +1667,9 @@ export interface paths {
                 };
                 /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
                 403: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -1628,7 +1678,9 @@ export interface paths {
                 };
                 /** @description Not Found. The requested resource was not found. */
                 404: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -1637,7 +1689,9 @@ export interface paths {
                 };
                 /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
                 429: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -1646,7 +1700,9 @@ export interface paths {
                 };
                 /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
                 500: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -1717,7 +1773,9 @@ export interface paths {
             responses: {
                 /** @description User successfully deleted */
                 200: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             /** @description Indicates if the deletion was successful */
@@ -1732,7 +1790,9 @@ export interface paths {
                 };
                 /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
                 400: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message: string;
@@ -1741,7 +1801,9 @@ export interface paths {
                 };
                 /** @description Unauthorized. Due to missing or invalid authentication. */
                 401: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message: string;
@@ -1750,7 +1812,9 @@ export interface paths {
                 };
                 /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
                 403: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -1759,7 +1823,9 @@ export interface paths {
                 };
                 /** @description Not Found. The requested resource was not found. */
                 404: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -1768,7 +1834,9 @@ export interface paths {
                 };
                 /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
                 429: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -1777,7 +1845,9 @@ export interface paths {
                 };
                 /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
                 500: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -1822,7 +1892,9 @@ export interface paths {
             responses: {
                 /** @description Success */
                 200: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             status?: boolean;
@@ -1831,7 +1903,9 @@ export interface paths {
                 };
                 /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
                 400: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message: string;
@@ -1840,7 +1914,9 @@ export interface paths {
                 };
                 /** @description Unauthorized. Due to missing or invalid authentication. */
                 401: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message: string;
@@ -1849,7 +1925,9 @@ export interface paths {
                 };
                 /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
                 403: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -1858,7 +1936,9 @@ export interface paths {
                 };
                 /** @description Not Found. The requested resource was not found. */
                 404: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -1867,7 +1947,9 @@ export interface paths {
                 };
                 /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
                 429: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -1876,7 +1958,9 @@ export interface paths {
                 };
                 /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
                 500: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -1923,7 +2007,9 @@ export interface paths {
             responses: {
                 /** @description Access token refreshed successfully */
                 200: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             tokenType?: string;
@@ -1939,12 +2025,16 @@ export interface paths {
                 };
                 /** @description Invalid refresh token or provider configuration */
                 400: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content?: never;
                 };
                 /** @description Unauthorized. Due to missing or invalid authentication. */
                 401: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message: string;
@@ -1953,7 +2043,9 @@ export interface paths {
                 };
                 /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
                 403: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -1962,7 +2054,9 @@ export interface paths {
                 };
                 /** @description Not Found. The requested resource was not found. */
                 404: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -1971,7 +2065,9 @@ export interface paths {
                 };
                 /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
                 429: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -1980,7 +2076,9 @@ export interface paths {
                 };
                 /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
                 500: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -2027,7 +2125,9 @@ export interface paths {
             responses: {
                 /** @description A Valid access token */
                 200: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             tokenType?: string;
@@ -2040,12 +2140,16 @@ export interface paths {
                 };
                 /** @description Invalid refresh token or provider configuration */
                 400: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content?: never;
                 };
                 /** @description Unauthorized. Due to missing or invalid authentication. */
                 401: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message: string;
@@ -2054,7 +2158,9 @@ export interface paths {
                 };
                 /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
                 403: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -2063,7 +2169,9 @@ export interface paths {
                 };
                 /** @description Not Found. The requested resource was not found. */
                 404: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -2072,7 +2180,9 @@ export interface paths {
                 };
                 /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
                 429: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -2081,7 +2191,9 @@ export interface paths {
                 };
                 /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
                 500: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -2115,7 +2227,9 @@ export interface paths {
             responses: {
                 /** @description Success */
                 200: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             user: {
@@ -2125,13 +2239,17 @@ export interface paths {
                                 image?: string;
                                 emailVerified: boolean;
                             };
-                            data: Record<string, unknown>;
+                            data: {
+                                [key: string]: unknown;
+                            };
                         };
                     };
                 };
                 /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
                 400: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message: string;
@@ -2140,7 +2258,9 @@ export interface paths {
                 };
                 /** @description Unauthorized. Due to missing or invalid authentication. */
                 401: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message: string;
@@ -2149,7 +2269,9 @@ export interface paths {
                 };
                 /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
                 403: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -2158,7 +2280,9 @@ export interface paths {
                 };
                 /** @description Not Found. The requested resource was not found. */
                 404: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -2167,7 +2291,9 @@ export interface paths {
                 };
                 /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
                 429: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -2176,7 +2302,9 @@ export interface paths {
                 };
                 /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
                 500: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -2212,7 +2340,9 @@ export interface paths {
             responses: {
                 /** @description API is working */
                 200: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             /** @description Indicates if the API is working */
@@ -2222,7 +2352,9 @@ export interface paths {
                 };
                 /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
                 400: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message: string;
@@ -2231,7 +2363,9 @@ export interface paths {
                 };
                 /** @description Unauthorized. Due to missing or invalid authentication. */
                 401: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message: string;
@@ -2240,7 +2374,9 @@ export interface paths {
                 };
                 /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
                 403: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -2249,7 +2385,9 @@ export interface paths {
                 };
                 /** @description Not Found. The requested resource was not found. */
                 404: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -2258,7 +2396,9 @@ export interface paths {
                 };
                 /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
                 429: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -2267,7 +2407,9 @@ export interface paths {
                 };
                 /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
                 500: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -2303,14 +2445,18 @@ export interface paths {
             responses: {
                 /** @description Success */
                 200: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "text/html": string;
                     };
                 };
                 /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
                 400: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message: string;
@@ -2319,7 +2465,9 @@ export interface paths {
                 };
                 /** @description Unauthorized. Due to missing or invalid authentication. */
                 401: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message: string;
@@ -2328,7 +2476,9 @@ export interface paths {
                 };
                 /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
                 403: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -2337,7 +2487,9 @@ export interface paths {
                 };
                 /** @description Not Found. The requested resource was not found. */
                 404: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -2346,7 +2498,9 @@ export interface paths {
                 };
                 /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
                 429: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -2355,7 +2509,9 @@ export interface paths {
                 };
                 /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
                 500: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -2410,14 +2566,18 @@ export interface paths {
             responses: {
                 /** @description Success */
                 200: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": components["schemas"]["Organization"];
                     };
                 };
                 /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
                 400: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message: string;
@@ -2426,7 +2586,9 @@ export interface paths {
                 };
                 /** @description Unauthorized. Due to missing or invalid authentication. */
                 401: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message: string;
@@ -2435,7 +2597,9 @@ export interface paths {
                 };
                 /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
                 403: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -2444,7 +2608,9 @@ export interface paths {
                 };
                 /** @description Not Found. The requested resource was not found. */
                 404: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -2453,7 +2619,9 @@ export interface paths {
                 };
                 /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
                 429: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -2462,7 +2630,9 @@ export interface paths {
                 };
                 /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
                 500: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -2515,14 +2685,18 @@ export interface paths {
             responses: {
                 /** @description Success */
                 200: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": components["schemas"]["Organization"];
                     };
                 };
                 /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
                 400: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message: string;
@@ -2531,7 +2705,9 @@ export interface paths {
                 };
                 /** @description Unauthorized. Due to missing or invalid authentication. */
                 401: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message: string;
@@ -2540,7 +2716,9 @@ export interface paths {
                 };
                 /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
                 403: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -2549,7 +2727,9 @@ export interface paths {
                 };
                 /** @description Not Found. The requested resource was not found. */
                 404: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -2558,7 +2738,9 @@ export interface paths {
                 };
                 /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
                 429: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -2567,7 +2749,9 @@ export interface paths {
                 };
                 /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
                 500: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -2610,14 +2794,18 @@ export interface paths {
             responses: {
                 /** @description Success */
                 200: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": string;
                     };
                 };
                 /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
                 400: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message: string;
@@ -2626,7 +2814,9 @@ export interface paths {
                 };
                 /** @description Unauthorized. Due to missing or invalid authentication. */
                 401: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message: string;
@@ -2635,7 +2825,9 @@ export interface paths {
                 };
                 /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
                 403: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -2644,7 +2836,9 @@ export interface paths {
                 };
                 /** @description Not Found. The requested resource was not found. */
                 404: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -2653,7 +2847,9 @@ export interface paths {
                 };
                 /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
                 429: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -2662,7 +2858,9 @@ export interface paths {
                 };
                 /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
                 500: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -2730,14 +2928,18 @@ export interface paths {
             responses: {
                 /** @description Success */
                 200: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": components["schemas"]["Organization"][];
                     };
                 };
                 /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
                 400: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message: string;
@@ -2746,7 +2948,9 @@ export interface paths {
                 };
                 /** @description Unauthorized. Due to missing or invalid authentication. */
                 401: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message: string;
@@ -2755,7 +2959,9 @@ export interface paths {
                 };
                 /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
                 403: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -2764,7 +2970,9 @@ export interface paths {
                 };
                 /** @description Not Found. The requested resource was not found. */
                 404: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -2773,7 +2981,9 @@ export interface paths {
                 };
                 /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
                 429: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -2782,7 +2992,9 @@ export interface paths {
                 };
                 /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
                 500: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -2843,7 +3055,9 @@ export interface paths {
             responses: {
                 /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
                 400: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message: string;
@@ -2852,7 +3066,9 @@ export interface paths {
                 };
                 /** @description Unauthorized. Due to missing or invalid authentication. */
                 401: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message: string;
@@ -2861,7 +3077,9 @@ export interface paths {
                 };
                 /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
                 403: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -2870,7 +3088,9 @@ export interface paths {
                 };
                 /** @description Not Found. The requested resource was not found. */
                 404: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -2879,7 +3099,9 @@ export interface paths {
                 };
                 /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
                 429: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -2888,7 +3110,9 @@ export interface paths {
                 };
                 /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
                 500: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -2931,7 +3155,9 @@ export interface paths {
             responses: {
                 /** @description Success */
                 200: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             invitation?: Record<string, never>;
@@ -2941,7 +3167,9 @@ export interface paths {
                 };
                 /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
                 400: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message: string;
@@ -2950,7 +3178,9 @@ export interface paths {
                 };
                 /** @description Unauthorized. Due to missing or invalid authentication. */
                 401: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message: string;
@@ -2959,7 +3189,9 @@ export interface paths {
                 };
                 /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
                 403: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -2968,7 +3200,9 @@ export interface paths {
                 };
                 /** @description Not Found. The requested resource was not found. */
                 404: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -2977,7 +3211,9 @@ export interface paths {
                 };
                 /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
                 429: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -2986,7 +3222,9 @@ export interface paths {
                 };
                 /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
                 500: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -3022,7 +3260,9 @@ export interface paths {
             responses: {
                 /** @description Success */
                 200: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             id: string;
@@ -3040,7 +3280,9 @@ export interface paths {
                 };
                 /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
                 400: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message: string;
@@ -3049,7 +3291,9 @@ export interface paths {
                 };
                 /** @description Unauthorized. Due to missing or invalid authentication. */
                 401: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message: string;
@@ -3058,7 +3302,9 @@ export interface paths {
                 };
                 /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
                 403: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -3067,7 +3313,9 @@ export interface paths {
                 };
                 /** @description Not Found. The requested resource was not found. */
                 404: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -3076,7 +3324,9 @@ export interface paths {
                 };
                 /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
                 429: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -3085,7 +3335,9 @@ export interface paths {
                 };
                 /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
                 500: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -3130,7 +3382,9 @@ export interface paths {
             responses: {
                 /** @description Success */
                 200: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             invitation?: Record<string, never>;
@@ -3140,7 +3394,9 @@ export interface paths {
                 };
                 /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
                 400: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message: string;
@@ -3149,7 +3405,9 @@ export interface paths {
                 };
                 /** @description Unauthorized. Due to missing or invalid authentication. */
                 401: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message: string;
@@ -3158,7 +3416,9 @@ export interface paths {
                 };
                 /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
                 403: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -3167,7 +3427,9 @@ export interface paths {
                 };
                 /** @description Not Found. The requested resource was not found. */
                 404: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -3176,7 +3438,9 @@ export interface paths {
                 };
                 /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
                 429: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -3185,7 +3449,9 @@ export interface paths {
                 };
                 /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
                 500: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -3218,7 +3484,9 @@ export interface paths {
             responses: {
                 /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
                 400: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message: string;
@@ -3227,7 +3495,9 @@ export interface paths {
                 };
                 /** @description Unauthorized. Due to missing or invalid authentication. */
                 401: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message: string;
@@ -3236,7 +3506,9 @@ export interface paths {
                 };
                 /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
                 403: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -3245,7 +3517,9 @@ export interface paths {
                 };
                 /** @description Not Found. The requested resource was not found. */
                 404: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -3254,7 +3528,9 @@ export interface paths {
                 };
                 /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
                 429: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -3263,7 +3539,9 @@ export interface paths {
                 };
                 /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
                 500: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -3299,7 +3577,9 @@ export interface paths {
             responses: {
                 /** @description Success */
                 200: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             id: string;
@@ -3311,7 +3591,9 @@ export interface paths {
                 };
                 /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
                 400: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message: string;
@@ -3320,7 +3602,9 @@ export interface paths {
                 };
                 /** @description Unauthorized. Due to missing or invalid authentication. */
                 401: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message: string;
@@ -3329,7 +3613,9 @@ export interface paths {
                 };
                 /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
                 403: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -3338,7 +3624,9 @@ export interface paths {
                 };
                 /** @description Not Found. The requested resource was not found. */
                 404: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -3347,7 +3635,9 @@ export interface paths {
                 };
                 /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
                 429: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -3356,7 +3646,9 @@ export interface paths {
                 };
                 /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
                 500: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -3400,7 +3692,9 @@ export interface paths {
             responses: {
                 /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
                 400: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message: string;
@@ -3409,7 +3703,9 @@ export interface paths {
                 };
                 /** @description Unauthorized. Due to missing or invalid authentication. */
                 401: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message: string;
@@ -3418,7 +3714,9 @@ export interface paths {
                 };
                 /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
                 403: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -3427,7 +3725,9 @@ export interface paths {
                 };
                 /** @description Not Found. The requested resource was not found. */
                 404: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -3436,7 +3736,9 @@ export interface paths {
                 };
                 /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
                 429: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -3445,7 +3747,9 @@ export interface paths {
                 };
                 /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
                 500: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -3490,7 +3794,9 @@ export interface paths {
             responses: {
                 /** @description Success */
                 200: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             member: {
@@ -3504,7 +3810,9 @@ export interface paths {
                 };
                 /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
                 400: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message: string;
@@ -3513,7 +3821,9 @@ export interface paths {
                 };
                 /** @description Unauthorized. Due to missing or invalid authentication. */
                 401: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message: string;
@@ -3522,7 +3832,9 @@ export interface paths {
                 };
                 /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
                 403: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -3531,7 +3843,9 @@ export interface paths {
                 };
                 /** @description Not Found. The requested resource was not found. */
                 404: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -3540,7 +3854,9 @@ export interface paths {
                 };
                 /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
                 429: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -3549,7 +3865,9 @@ export interface paths {
                 };
                 /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
                 500: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -3608,7 +3926,9 @@ export interface paths {
             responses: {
                 /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
                 400: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message: string;
@@ -3617,7 +3937,9 @@ export interface paths {
                 };
                 /** @description Unauthorized. Due to missing or invalid authentication. */
                 401: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message: string;
@@ -3626,7 +3948,9 @@ export interface paths {
                 };
                 /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
                 403: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -3635,7 +3959,9 @@ export interface paths {
                 };
                 /** @description Not Found. The requested resource was not found. */
                 404: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -3644,7 +3970,9 @@ export interface paths {
                 };
                 /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
                 429: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -3653,7 +3981,9 @@ export interface paths {
                 };
                 /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
                 500: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -3687,7 +4017,9 @@ export interface paths {
             responses: {
                 /** @description Success */
                 200: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             id: string;
@@ -3707,7 +4039,9 @@ export interface paths {
                 };
                 /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
                 400: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message: string;
@@ -3716,7 +4050,9 @@ export interface paths {
                 };
                 /** @description Unauthorized. Due to missing or invalid authentication. */
                 401: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message: string;
@@ -3725,7 +4061,9 @@ export interface paths {
                 };
                 /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
                 403: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -3734,7 +4072,9 @@ export interface paths {
                 };
                 /** @description Not Found. The requested resource was not found. */
                 404: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -3743,7 +4083,9 @@ export interface paths {
                 };
                 /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
                 429: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -3752,7 +4094,9 @@ export interface paths {
                 };
                 /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
                 500: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -3787,7 +4131,9 @@ export interface paths {
             responses: {
                 /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
                 400: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message: string;
@@ -3796,7 +4142,9 @@ export interface paths {
                 };
                 /** @description Unauthorized. Due to missing or invalid authentication. */
                 401: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message: string;
@@ -3805,7 +4153,9 @@ export interface paths {
                 };
                 /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
                 403: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -3814,7 +4164,9 @@ export interface paths {
                 };
                 /** @description Not Found. The requested resource was not found. */
                 404: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -3823,7 +4175,9 @@ export interface paths {
                 };
                 /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
                 429: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -3832,7 +4186,9 @@ export interface paths {
                 };
                 /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
                 500: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -3867,7 +4223,9 @@ export interface paths {
             responses: {
                 /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
                 400: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message: string;
@@ -3876,7 +4234,9 @@ export interface paths {
                 };
                 /** @description Unauthorized. Due to missing or invalid authentication. */
                 401: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message: string;
@@ -3885,7 +4245,9 @@ export interface paths {
                 };
                 /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
                 403: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -3894,7 +4256,9 @@ export interface paths {
                 };
                 /** @description Not Found. The requested resource was not found. */
                 404: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -3903,7 +4267,9 @@ export interface paths {
                 };
                 /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
                 429: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -3912,7 +4278,9 @@ export interface paths {
                 };
                 /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
                 500: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -3962,7 +4330,9 @@ export interface paths {
             responses: {
                 /** @description Success */
                 200: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             error?: string;
@@ -3972,7 +4342,9 @@ export interface paths {
                 };
                 /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
                 400: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message: string;
@@ -3981,7 +4353,9 @@ export interface paths {
                 };
                 /** @description Unauthorized. Due to missing or invalid authentication. */
                 401: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message: string;
@@ -3990,7 +4364,9 @@ export interface paths {
                 };
                 /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
                 403: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -3999,7 +4375,9 @@ export interface paths {
                 };
                 /** @description Not Found. The requested resource was not found. */
                 404: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -4008,7 +4386,9 @@ export interface paths {
                 };
                 /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
                 429: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -4017,7 +4397,9 @@ export interface paths {
                 };
                 /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
                 500: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -4081,7 +4463,9 @@ export interface paths {
             responses: {
                 /** @description API key created successfully */
                 200: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             /** @description Unique identifier of the API key */
@@ -4124,7 +4508,9 @@ export interface paths {
                              */
                             lastRequest?: string | null;
                             /** @description Metadata associated with the key */
-                            metadata?: Record<string, unknown> | null;
+                            metadata?: {
+                                [key: string]: unknown;
+                            } | null;
                             /** @description Maximum requests in time window */
                             rateLimitMax?: number | null;
                             /** @description Rate limit time window in milliseconds */
@@ -4140,13 +4526,17 @@ export interface paths {
                             /** @description Current request count in window */
                             requestCount: number;
                             /** @description Permissions associated with the key */
-                            permissions?: Record<string, string[]> | null;
+                            permissions?: {
+                                [key: string]: string[];
+                            } | null;
                         };
                     };
                 };
                 /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
                 400: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message: string;
@@ -4155,7 +4545,9 @@ export interface paths {
                 };
                 /** @description Unauthorized. Due to missing or invalid authentication. */
                 401: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message: string;
@@ -4164,7 +4556,9 @@ export interface paths {
                 };
                 /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
                 403: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -4173,7 +4567,9 @@ export interface paths {
                 };
                 /** @description Not Found. The requested resource was not found. */
                 404: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -4182,7 +4578,9 @@ export interface paths {
                 };
                 /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
                 429: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -4191,7 +4589,9 @@ export interface paths {
                 };
                 /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
                 500: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -4227,7 +4627,9 @@ export interface paths {
             responses: {
                 /** @description API key retrieved successfully */
                 200: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             /** @description ID */
@@ -4285,7 +4687,9 @@ export interface paths {
                              */
                             updatedAt: string;
                             /** @description Extra metadata about the apiKey */
-                            metadata?: Record<string, unknown> | null;
+                            metadata?: {
+                                [key: string]: unknown;
+                            } | null;
                             /** @description Permissions for the api key (stored as JSON string) */
                             permissions?: string | null;
                         };
@@ -4293,7 +4697,9 @@ export interface paths {
                 };
                 /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
                 400: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message: string;
@@ -4302,7 +4708,9 @@ export interface paths {
                 };
                 /** @description Unauthorized. Due to missing or invalid authentication. */
                 401: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message: string;
@@ -4311,7 +4719,9 @@ export interface paths {
                 };
                 /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
                 403: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -4320,7 +4730,9 @@ export interface paths {
                 };
                 /** @description Not Found. The requested resource was not found. */
                 404: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -4329,7 +4741,9 @@ export interface paths {
                 };
                 /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
                 429: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -4338,7 +4752,9 @@ export interface paths {
                 };
                 /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
                 500: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -4404,7 +4820,9 @@ export interface paths {
             responses: {
                 /** @description API key updated successfully */
                 200: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             /** @description ID */
@@ -4462,7 +4880,9 @@ export interface paths {
                              */
                             updatedAt: string;
                             /** @description Extra metadata about the apiKey */
-                            metadata?: Record<string, unknown> | null;
+                            metadata?: {
+                                [key: string]: unknown;
+                            } | null;
                             /** @description Permissions for the api key (stored as JSON string) */
                             permissions?: string | null;
                         };
@@ -4470,7 +4890,9 @@ export interface paths {
                 };
                 /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
                 400: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message: string;
@@ -4479,7 +4901,9 @@ export interface paths {
                 };
                 /** @description Unauthorized. Due to missing or invalid authentication. */
                 401: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message: string;
@@ -4488,7 +4912,9 @@ export interface paths {
                 };
                 /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
                 403: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -4497,7 +4923,9 @@ export interface paths {
                 };
                 /** @description Not Found. The requested resource was not found. */
                 404: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -4506,7 +4934,9 @@ export interface paths {
                 };
                 /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
                 429: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -4515,7 +4945,9 @@ export interface paths {
                 };
                 /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
                 500: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -4558,7 +4990,9 @@ export interface paths {
             responses: {
                 /** @description API key deleted successfully */
                 200: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             /** @description Indicates if the API key was successfully deleted */
@@ -4568,7 +5002,9 @@ export interface paths {
                 };
                 /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
                 400: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message: string;
@@ -4577,7 +5013,9 @@ export interface paths {
                 };
                 /** @description Unauthorized. Due to missing or invalid authentication. */
                 401: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message: string;
@@ -4586,7 +5024,9 @@ export interface paths {
                 };
                 /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
                 403: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -4595,7 +5035,9 @@ export interface paths {
                 };
                 /** @description Not Found. The requested resource was not found. */
                 404: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -4604,7 +5046,9 @@ export interface paths {
                 };
                 /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
                 429: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -4613,7 +5057,9 @@ export interface paths {
                 };
                 /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
                 500: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -4647,7 +5093,9 @@ export interface paths {
             responses: {
                 /** @description API keys retrieved successfully */
                 200: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             /** @description ID */
@@ -4705,7 +5153,9 @@ export interface paths {
                              */
                             updatedAt: string;
                             /** @description Extra metadata about the apiKey */
-                            metadata?: Record<string, unknown> | null;
+                            metadata?: {
+                                [key: string]: unknown;
+                            } | null;
                             /** @description Permissions for the api key (stored as JSON string) */
                             permissions?: string | null;
                         }[];
@@ -4713,7 +5163,9 @@ export interface paths {
                 };
                 /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
                 400: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message: string;
@@ -4722,7 +5174,9 @@ export interface paths {
                 };
                 /** @description Unauthorized. Due to missing or invalid authentication. */
                 401: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message: string;
@@ -4731,7 +5185,9 @@ export interface paths {
                 };
                 /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
                 403: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -4740,7 +5196,9 @@ export interface paths {
                 };
                 /** @description Not Found. The requested resource was not found. */
                 404: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -4749,7 +5207,9 @@ export interface paths {
                 };
                 /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
                 429: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -4758,7 +5218,9 @@ export interface paths {
                 };
                 /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
                 500: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "application/json": {
                             message?: string;
@@ -4940,9 +5402,34 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
+            /** @description Response for status 200 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        createdAt: Record<string, never> | string | number;
+                        expiresAt: (Record<string, never> | string | number) | null;
+                        id: string;
+                        key?: string;
+                        metadata?: {
+                            organizationId: string;
+                            permissions: {
+                                [key: string]: string[];
+                            };
+                        } | null;
+                        name?: string | null;
+                        prefix?: string | null;
+                        start?: string | null;
+                    }[];
+                };
+            };
             /** @description Response for status 401 */
             401: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -4952,7 +5439,9 @@ export interface operations {
             };
             /** @description Response for status 403 */
             403: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -4974,26 +5463,57 @@ export interface operations {
         requestBody: {
             content: {
                 "application/json": {
-                    expiresInDays?: number;
+                    expiresInDays?: string | number;
                     name: string;
-                    permissions?: Record<string, string[]>;
+                    permissions?: {
+                        [key: string]: string[];
+                    };
                 };
                 "application/x-www-form-urlencoded": {
-                    expiresInDays?: number;
+                    expiresInDays?: string | number;
                     name: string;
-                    permissions?: Record<string, string[]>;
+                    permissions?: {
+                        [key: string]: string[];
+                    };
                 };
                 "multipart/form-data": {
-                    expiresInDays?: number;
+                    expiresInDays?: string | number;
                     name: string;
-                    permissions?: Record<string, string[]>;
+                    permissions?: {
+                        [key: string]: string[];
+                    };
                 };
             };
         };
         responses: {
+            /** @description Response for status 200 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        createdAt: Record<string, never> | string | number;
+                        expiresAt: (Record<string, never> | string | number) | null;
+                        id: string;
+                        key?: string;
+                        metadata?: {
+                            organizationId: string;
+                            permissions: {
+                                [key: string]: string[];
+                            };
+                        } | null;
+                        name?: string | null;
+                        prefix?: string | null;
+                        start?: string | null;
+                    };
+                };
+            };
             /** @description Response for status 401 */
             401: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -5003,7 +5523,9 @@ export interface operations {
             };
             /** @description Response for status 403 */
             403: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -5013,7 +5535,9 @@ export interface operations {
             };
             /** @description Response for status 422 */
             422: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -5047,9 +5571,31 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
+            /** @description Response for status 200 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        createdAt: Record<string, never> | string | number;
+                        createdBy?: string | null;
+                        filename: string;
+                        /** Format: uuid */
+                        id: string;
+                        mimeType: string;
+                        organizationId: string;
+                        sha256: string;
+                        size: number;
+                        url: string;
+                    }[];
+                };
+            };
             /** @description Response for status 401 */
             401: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -5059,7 +5605,9 @@ export interface operations {
             };
             /** @description Response for status 403 */
             403: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -5104,9 +5652,31 @@ export interface operations {
             };
         };
         responses: {
+            /** @description Response for status 200 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        createdAt: Record<string, never> | string | number;
+                        createdBy?: string | null;
+                        filename: string;
+                        /** Format: uuid */
+                        id: string;
+                        mimeType: string;
+                        organizationId: string;
+                        sha256: string;
+                        size: number;
+                        url: string;
+                    };
+                };
+            };
             /** @description Response for status 401 */
             401: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -5116,7 +5686,9 @@ export interface operations {
             };
             /** @description Response for status 403 */
             403: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -5126,7 +5698,9 @@ export interface operations {
             };
             /** @description Response for status 409 */
             409: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -5136,7 +5710,9 @@ export interface operations {
             };
             /** @description Response for status 422 */
             422: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -5158,9 +5734,22 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
+            /** @description Response for status 200 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        id: string;
+                    };
+                };
+            };
             /** @description Response for status 401 */
             401: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -5170,7 +5759,9 @@ export interface operations {
             };
             /** @description Response for status 403 */
             403: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -5180,7 +5771,9 @@ export interface operations {
             };
             /** @description Response for status 404 */
             404: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -5190,7 +5783,9 @@ export interface operations {
             };
             /** @description Response for status 409 */
             409: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -5202,7 +5797,16 @@ export interface operations {
     };
     "getOrganizationsByOrganizationIdAudit-logs": {
         parameters: {
-            query?: never;
+            query: {
+                action?: string;
+                actorId?: string;
+                from?: Record<string, never> | string | number;
+                limit: string | number;
+                offset: string | number;
+                targetId?: string;
+                targetType?: string;
+                to?: Record<string, never> | string | number;
+            };
             header?: never;
             path: {
                 organizationId: string;
@@ -5211,9 +5815,42 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
+            /** @description Response for status 200 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: {
+                            action: string;
+                            actorId: string | null;
+                            /** @enum {string} */
+                            actorType: "user" | "api_key" | "system" | "wallet";
+                            createdAt: Record<string, never>;
+                            id: string;
+                            ip: string | null;
+                            metadata: ((string | number | boolean | null) | unknown[] | {
+                                [key: string]: unknown;
+                            }) | null;
+                            organizationId: string;
+                            requestId: string | null;
+                            targetId: string | null;
+                            targetType: string;
+                        }[];
+                        meta: {
+                            limit: number;
+                            offset: number;
+                            total: number;
+                        };
+                    };
+                };
+            };
             /** @description Response for status 401 */
             401: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -5223,7 +5860,9 @@ export interface operations {
             };
             /** @description Response for status 403 */
             403: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -5256,9 +5895,51 @@ export interface operations {
             };
         };
         responses: {
+            /** @description Response for status 200 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        attempts: number;
+                        blockNumber: string | null;
+                        blockTimestamp: Record<string, never> | null;
+                        cancelledAt: Record<string, never> | null;
+                        chainId: string;
+                        confirmedAt: Record<string, never> | null;
+                        createdAt: Record<string, never>;
+                        dataHash: string | null;
+                        dataObjectKey: string | null;
+                        id: string;
+                        issuerWalletId: string;
+                        lastError: string | null;
+                        leafCount: number | null;
+                        organizationId: string;
+                        registryAddress: string;
+                        registryVersion: string | null;
+                        root: string | null;
+                        sealedAt: Record<string, never> | null;
+                        signature: string | null;
+                        signedAt: Record<string, never> | null;
+                        /** @enum {string} */
+                        status: "open" | "awaiting_signature" | "signed" | "submitted" | "confirmed" | "failed" | "cancelled";
+                        submittedAt: Record<string, never> | null;
+                        txHash: string | null;
+                        typedData: ((string | number | boolean | null) | unknown[] | {
+                            [key: string]: unknown;
+                        }) | null;
+                        updatedAt: Record<string, never>;
+                        windowEnd: Record<string, never> | null;
+                        windowStart: Record<string, never> | null;
+                    };
+                };
+            };
             /** @description Response for status 401 */
             401: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -5268,7 +5949,9 @@ export interface operations {
             };
             /** @description Response for status 403 */
             403: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -5278,7 +5961,9 @@ export interface operations {
             };
             /** @description Response for status 404 */
             404: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -5288,7 +5973,9 @@ export interface operations {
             };
             /** @description Response for status 409 */
             409: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -5298,7 +5985,9 @@ export interface operations {
             };
             /** @description Response for status 422 */
             422: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -5312,8 +6001,8 @@ export interface operations {
         parameters: {
             query: {
                 issuerWalletId?: string;
-                limit: number;
-                offset: number;
+                limit: string | number;
+                offset: string | number;
                 status?: "open" | "awaiting_signature" | "signed" | "submitted" | "confirmed" | "failed" | "cancelled";
             };
             header?: never;
@@ -5324,9 +6013,58 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
+            /** @description Response for status 200 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: {
+                            attempts: number;
+                            blockNumber: string | null;
+                            blockTimestamp: Record<string, never> | null;
+                            cancelledAt: Record<string, never> | null;
+                            chainId: string;
+                            confirmedAt: Record<string, never> | null;
+                            createdAt: Record<string, never>;
+                            dataHash: string | null;
+                            dataObjectKey: string | null;
+                            id: string;
+                            issuerWalletId: string;
+                            lastError: string | null;
+                            leafCount: number | null;
+                            organizationId: string;
+                            registryAddress: string;
+                            registryVersion: string | null;
+                            root: string | null;
+                            sealedAt: Record<string, never> | null;
+                            signature: string | null;
+                            signedAt: Record<string, never> | null;
+                            /** @enum {string} */
+                            status: "open" | "awaiting_signature" | "signed" | "submitted" | "confirmed" | "failed" | "cancelled";
+                            submittedAt: Record<string, never> | null;
+                            txHash: string | null;
+                            typedData: ((string | number | boolean | null) | unknown[] | {
+                                [key: string]: unknown;
+                            }) | null;
+                            updatedAt: Record<string, never>;
+                            windowEnd: Record<string, never> | null;
+                            windowStart: Record<string, never> | null;
+                        }[];
+                        meta: {
+                            limit: number;
+                            offset: number;
+                            total: number;
+                        };
+                    };
+                };
+            };
             /** @description Response for status 401 */
             401: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -5336,7 +6074,9 @@ export interface operations {
             };
             /** @description Response for status 403 */
             403: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -5358,9 +6098,51 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
+            /** @description Response for status 200 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        attempts: number;
+                        blockNumber: string | null;
+                        blockTimestamp: Record<string, never> | null;
+                        cancelledAt: Record<string, never> | null;
+                        chainId: string;
+                        confirmedAt: Record<string, never> | null;
+                        createdAt: Record<string, never>;
+                        dataHash: string | null;
+                        dataObjectKey: string | null;
+                        id: string;
+                        issuerWalletId: string;
+                        lastError: string | null;
+                        leafCount: number | null;
+                        organizationId: string;
+                        registryAddress: string;
+                        registryVersion: string | null;
+                        root: string | null;
+                        sealedAt: Record<string, never> | null;
+                        signature: string | null;
+                        signedAt: Record<string, never> | null;
+                        /** @enum {string} */
+                        status: "open" | "awaiting_signature" | "signed" | "submitted" | "confirmed" | "failed" | "cancelled";
+                        submittedAt: Record<string, never> | null;
+                        txHash: string | null;
+                        typedData: ((string | number | boolean | null) | unknown[] | {
+                            [key: string]: unknown;
+                        }) | null;
+                        updatedAt: Record<string, never>;
+                        windowEnd: Record<string, never> | null;
+                        windowStart: Record<string, never> | null;
+                    };
+                };
+            };
             /** @description Response for status 404 */
             404: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -5384,7 +6166,9 @@ export interface operations {
         responses: {
             /** @description Response for status 200 */
             200: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         domain: {
@@ -5414,7 +6198,9 @@ export interface operations {
             };
             /** @description Response for status 404 */
             404: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -5424,7 +6210,9 @@ export interface operations {
             };
             /** @description Response for status 409 */
             409: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -5458,9 +6246,51 @@ export interface operations {
             };
         };
         responses: {
+            /** @description Response for status 200 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        attempts: number;
+                        blockNumber: string | null;
+                        blockTimestamp: Record<string, never> | null;
+                        cancelledAt: Record<string, never> | null;
+                        chainId: string;
+                        confirmedAt: Record<string, never> | null;
+                        createdAt: Record<string, never>;
+                        dataHash: string | null;
+                        dataObjectKey: string | null;
+                        id: string;
+                        issuerWalletId: string;
+                        lastError: string | null;
+                        leafCount: number | null;
+                        organizationId: string;
+                        registryAddress: string;
+                        registryVersion: string | null;
+                        root: string | null;
+                        sealedAt: Record<string, never> | null;
+                        signature: string | null;
+                        signedAt: Record<string, never> | null;
+                        /** @enum {string} */
+                        status: "open" | "awaiting_signature" | "signed" | "submitted" | "confirmed" | "failed" | "cancelled";
+                        submittedAt: Record<string, never> | null;
+                        txHash: string | null;
+                        typedData: ((string | number | boolean | null) | unknown[] | {
+                            [key: string]: unknown;
+                        }) | null;
+                        updatedAt: Record<string, never>;
+                        windowEnd: Record<string, never> | null;
+                        windowStart: Record<string, never> | null;
+                    };
+                };
+            };
             /** @description Response for status 404 */
             404: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -5470,7 +6300,9 @@ export interface operations {
             };
             /** @description Response for status 409 */
             409: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -5480,7 +6312,9 @@ export interface operations {
             };
             /** @description Response for status 422 */
             422: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -5502,9 +6336,51 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
+            /** @description Response for status 200 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        attempts: number;
+                        blockNumber: string | null;
+                        blockTimestamp: Record<string, never> | null;
+                        cancelledAt: Record<string, never> | null;
+                        chainId: string;
+                        confirmedAt: Record<string, never> | null;
+                        createdAt: Record<string, never>;
+                        dataHash: string | null;
+                        dataObjectKey: string | null;
+                        id: string;
+                        issuerWalletId: string;
+                        lastError: string | null;
+                        leafCount: number | null;
+                        organizationId: string;
+                        registryAddress: string;
+                        registryVersion: string | null;
+                        root: string | null;
+                        sealedAt: Record<string, never> | null;
+                        signature: string | null;
+                        signedAt: Record<string, never> | null;
+                        /** @enum {string} */
+                        status: "open" | "awaiting_signature" | "signed" | "submitted" | "confirmed" | "failed" | "cancelled";
+                        submittedAt: Record<string, never> | null;
+                        txHash: string | null;
+                        typedData: ((string | number | boolean | null) | unknown[] | {
+                            [key: string]: unknown;
+                        }) | null;
+                        updatedAt: Record<string, never>;
+                        windowEnd: Record<string, never> | null;
+                        windowStart: Record<string, never> | null;
+                    };
+                };
+            };
             /** @description Response for status 404 */
             404: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -5514,7 +6390,9 @@ export interface operations {
             };
             /** @description Response for status 409 */
             409: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -5536,9 +6414,51 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
+            /** @description Response for status 200 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        attempts: number;
+                        blockNumber: string | null;
+                        blockTimestamp: Record<string, never> | null;
+                        cancelledAt: Record<string, never> | null;
+                        chainId: string;
+                        confirmedAt: Record<string, never> | null;
+                        createdAt: Record<string, never>;
+                        dataHash: string | null;
+                        dataObjectKey: string | null;
+                        id: string;
+                        issuerWalletId: string;
+                        lastError: string | null;
+                        leafCount: number | null;
+                        organizationId: string;
+                        registryAddress: string;
+                        registryVersion: string | null;
+                        root: string | null;
+                        sealedAt: Record<string, never> | null;
+                        signature: string | null;
+                        signedAt: Record<string, never> | null;
+                        /** @enum {string} */
+                        status: "open" | "awaiting_signature" | "signed" | "submitted" | "confirmed" | "failed" | "cancelled";
+                        submittedAt: Record<string, never> | null;
+                        txHash: string | null;
+                        typedData: ((string | number | boolean | null) | unknown[] | {
+                            [key: string]: unknown;
+                        }) | null;
+                        updatedAt: Record<string, never>;
+                        windowEnd: Record<string, never> | null;
+                        windowStart: Record<string, never> | null;
+                    };
+                };
+            };
             /** @description Response for status 404 */
             404: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -5548,7 +6468,9 @@ export interface operations {
             };
             /** @description Response for status 409 */
             409: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -5562,12 +6484,12 @@ export interface operations {
         parameters: {
             query: {
                 batchId?: string;
-                createdFrom?: string;
-                createdTo?: string;
+                createdFrom?: Record<string, never> | string | number;
+                createdTo?: Record<string, never> | string | number;
                 externalRef?: string;
                 issuerWalletId?: string;
-                limit: number;
-                offset: number;
+                limit: string | number;
+                offset: string | number;
                 status?: "draft" | "ready" | "batched" | "issued" | "revoked";
                 templateId?: string;
                 templateVersionId?: string;
@@ -5580,9 +6502,48 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
+            /** @description Response for status 200 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: {
+                            batchId: string | null;
+                            claimedIssuedAt: Record<string, never> | null;
+                            createdAt: Record<string, never>;
+                            createdBy: string | null;
+                            expiresAt: Record<string, never> | null;
+                            externalRef: string | null;
+                            id: string;
+                            issuerWalletId: string;
+                            kekId: string;
+                            leaf: string | null;
+                            leafIndex: string | null;
+                            merkleProof: ((string | number | boolean | null) | unknown[] | {
+                                [key: string]: unknown;
+                            }) | null;
+                            organizationId: string;
+                            payloadEnc: string;
+                            /** @enum {string} */
+                            status: "draft" | "ready" | "batched" | "issued" | "revoked";
+                            templateVersionId: string;
+                            updatedAt: Record<string, never>;
+                        }[];
+                        meta: {
+                            limit: number;
+                            offset: number;
+                            total: number;
+                        };
+                    };
+                };
+            };
             /** @description Response for status 401 */
             401: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -5592,7 +6553,9 @@ export interface operations {
             };
             /** @description Response for status 403 */
             403: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -5614,65 +6577,91 @@ export interface operations {
         requestBody: {
             content: {
                 "application/json": {
-                    /** Format: date-time */
-                    expiresAt?: string;
+                    expiresAt?: Record<string, never> | string | number;
                     externalRef?: string;
-                    fields: Record<string, string | number | boolean | null>;
-                    issuerWalletId?: string;
-                    /**
-                     * @default ready
-                     * @enum {string}
-                     */
-                    mode: "draft" | "ready";
+                    fields: {
+                        [key: string]: string | number | boolean | null;
+                    };
                     recipient?: {
                         /** Format: email */
                         email: string;
                         name: string;
                     };
+                    issuerWalletId?: string;
+                    /** @enum {string} */
+                    mode?: "draft" | "ready";
                     templateVersionId: string;
                 };
                 "application/x-www-form-urlencoded": {
-                    /** Format: date-time */
-                    expiresAt?: string;
+                    expiresAt?: Record<string, never> | string | number;
                     externalRef?: string;
-                    fields: Record<string, string | number | boolean | null>;
-                    issuerWalletId?: string;
-                    /**
-                     * @default ready
-                     * @enum {string}
-                     */
-                    mode: "draft" | "ready";
+                    fields: {
+                        [key: string]: string | number | boolean | null;
+                    };
                     recipient?: {
                         /** Format: email */
                         email: string;
                         name: string;
                     };
+                    issuerWalletId?: string;
+                    /** @enum {string} */
+                    mode?: "draft" | "ready";
                     templateVersionId: string;
                 };
                 "multipart/form-data": {
-                    /** Format: date-time */
-                    expiresAt?: string;
+                    expiresAt?: Record<string, never> | string | number;
                     externalRef?: string;
-                    fields: Record<string, string | number | boolean | null>;
-                    issuerWalletId?: string;
-                    /**
-                     * @default ready
-                     * @enum {string}
-                     */
-                    mode: "draft" | "ready";
+                    fields: {
+                        [key: string]: string | number | boolean | null;
+                    };
                     recipient?: {
                         /** Format: email */
                         email: string;
                         name: string;
                     };
+                    issuerWalletId?: string;
+                    /** @enum {string} */
+                    mode?: "draft" | "ready";
                     templateVersionId: string;
                 };
             };
         };
         responses: {
+            /** @description Response for status 200 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        batchId: string | null;
+                        claimedIssuedAt: Record<string, never> | null;
+                        createdAt: Record<string, never>;
+                        createdBy: string | null;
+                        expiresAt: Record<string, never> | null;
+                        externalRef: string | null;
+                        id: string;
+                        issuerWalletId: string;
+                        kekId: string;
+                        leaf: string | null;
+                        leafIndex: string | null;
+                        merkleProof: ((string | number | boolean | null) | unknown[] | {
+                            [key: string]: unknown;
+                        }) | null;
+                        organizationId: string;
+                        payloadEnc: string;
+                        /** @enum {string} */
+                        status: "draft" | "ready" | "batched" | "issued" | "revoked";
+                        templateVersionId: string;
+                        updatedAt: Record<string, never>;
+                    };
+                };
+            };
             /** @description Response for status 401 */
             401: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -5682,7 +6671,9 @@ export interface operations {
             };
             /** @description Response for status 403 */
             403: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -5692,7 +6683,9 @@ export interface operations {
             };
             /** @description Response for status 409 */
             409: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -5702,7 +6695,9 @@ export interface operations {
             };
             /** @description Response for status 422 */
             422: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -5726,69 +6721,102 @@ export interface operations {
                 "application/json": {
                     issuerWalletId?: string;
                     items: {
-                        /** Format: date-time */
-                        expiresAt?: string;
+                        expiresAt?: Record<string, never> | string | number;
                         externalRef?: string;
-                        fields: Record<string, string | number | boolean | null>;
+                        fields: {
+                            [key: string]: string | number | boolean | null;
+                        };
                         recipient?: {
                             /** Format: email */
                             email: string;
                             name: string;
                         };
                     }[];
-                    /**
-                     * @default ready
-                     * @enum {string}
-                     */
-                    mode: "draft" | "ready";
+                    /** @enum {string} */
+                    mode?: "draft" | "ready";
                     templateVersionId: string;
                 };
                 "application/x-www-form-urlencoded": {
                     issuerWalletId?: string;
                     items: {
-                        /** Format: date-time */
-                        expiresAt?: string;
+                        expiresAt?: Record<string, never> | string | number;
                         externalRef?: string;
-                        fields: Record<string, string | number | boolean | null>;
+                        fields: {
+                            [key: string]: string | number | boolean | null;
+                        };
                         recipient?: {
                             /** Format: email */
                             email: string;
                             name: string;
                         };
                     }[];
-                    /**
-                     * @default ready
-                     * @enum {string}
-                     */
-                    mode: "draft" | "ready";
+                    /** @enum {string} */
+                    mode?: "draft" | "ready";
                     templateVersionId: string;
                 };
                 "multipart/form-data": {
                     issuerWalletId?: string;
                     items: {
-                        /** Format: date-time */
-                        expiresAt?: string;
+                        expiresAt?: Record<string, never> | string | number;
                         externalRef?: string;
-                        fields: Record<string, string | number | boolean | null>;
+                        fields: {
+                            [key: string]: string | number | boolean | null;
+                        };
                         recipient?: {
                             /** Format: email */
                             email: string;
                             name: string;
                         };
                     }[];
-                    /**
-                     * @default ready
-                     * @enum {string}
-                     */
-                    mode: "draft" | "ready";
+                    /** @enum {string} */
+                    mode?: "draft" | "ready";
                     templateVersionId: string;
                 };
             };
         };
         responses: {
+            /** @description Response for status 200 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        created: number;
+                        documents: {
+                            batchId: string | null;
+                            claimedIssuedAt: Record<string, never> | null;
+                            createdAt: Record<string, never>;
+                            createdBy: string | null;
+                            expiresAt: Record<string, never> | null;
+                            externalRef: string | null;
+                            id: string;
+                            issuerWalletId: string;
+                            kekId: string;
+                            leaf: string | null;
+                            leafIndex: string | null;
+                            merkleProof: ((string | number | boolean | null) | unknown[] | {
+                                [key: string]: unknown;
+                            }) | null;
+                            organizationId: string;
+                            payloadEnc: string;
+                            /** @enum {string} */
+                            status: "draft" | "ready" | "batched" | "issued" | "revoked";
+                            templateVersionId: string;
+                            updatedAt: Record<string, never>;
+                        }[];
+                        errors?: {
+                            index: number;
+                            message: string;
+                        }[];
+                    };
+                };
+            };
             /** @description Response for status 401 */
             401: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -5798,7 +6826,9 @@ export interface operations {
             };
             /** @description Response for status 403 */
             403: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -5808,7 +6838,9 @@ export interface operations {
             };
             /** @description Response for status 422 */
             422: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -5830,9 +6862,49 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
+            /** @description Response for status 200 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        batchId: string | null;
+                        claimedIssuedAt: Record<string, never> | null;
+                        createdAt: Record<string, never>;
+                        createdBy: string | null;
+                        expiresAt: Record<string, never> | null;
+                        externalRef: string | null;
+                        id: string;
+                        issuerWalletId: string;
+                        kekId: string;
+                        leaf: string | null;
+                        leafIndex: string | null;
+                        merkleProof: ((string | number | boolean | null) | unknown[] | {
+                            [key: string]: unknown;
+                        }) | null;
+                        organizationId: string;
+                        payloadEnc: string;
+                        /** @enum {string} */
+                        status: "draft" | "ready" | "batched" | "issued" | "revoked";
+                        templateVersionId: string;
+                        updatedAt: Record<string, never>;
+                        fields: {
+                            [key: string]: unknown;
+                        };
+                        recipient: {
+                            /** Format: email */
+                            email: string;
+                            name: string;
+                        } | null;
+                    };
+                };
+            };
             /** @description Response for status 404 */
             404: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -5854,9 +6926,41 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
+            /** @description Response for status 200 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        batchId: string | null;
+                        claimedIssuedAt: Record<string, never> | null;
+                        createdAt: Record<string, never>;
+                        createdBy: string | null;
+                        expiresAt: Record<string, never> | null;
+                        externalRef: string | null;
+                        id: string;
+                        issuerWalletId: string;
+                        kekId: string;
+                        leaf: string | null;
+                        leafIndex: string | null;
+                        merkleProof: ((string | number | boolean | null) | unknown[] | {
+                            [key: string]: unknown;
+                        }) | null;
+                        organizationId: string;
+                        payloadEnc: string;
+                        /** @enum {string} */
+                        status: "draft" | "ready" | "batched" | "issued" | "revoked";
+                        templateVersionId: string;
+                        updatedAt: Record<string, never>;
+                    };
+                };
+            };
             /** @description Response for status 404 */
             404: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -5866,7 +6970,9 @@ export interface operations {
             };
             /** @description Response for status 409 */
             409: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -5889,8 +6995,10 @@ export interface operations {
         requestBody: {
             content: {
                 "application/json": {
-                    expiresAt?: string | null;
-                    fields?: Record<string, string | number | boolean | null>;
+                    expiresAt?: (Record<string, never> | string | number) | null;
+                    fields?: {
+                        [key: string]: string | number | boolean | null;
+                    };
                     /** @constant */
                     finalize?: true;
                     recipient?: {
@@ -5900,8 +7008,10 @@ export interface operations {
                     } | null;
                 };
                 "application/x-www-form-urlencoded": {
-                    expiresAt?: string | null;
-                    fields?: Record<string, string | number | boolean | null>;
+                    expiresAt?: (Record<string, never> | string | number) | null;
+                    fields?: {
+                        [key: string]: string | number | boolean | null;
+                    };
                     /** @constant */
                     finalize?: true;
                     recipient?: {
@@ -5911,8 +7021,10 @@ export interface operations {
                     } | null;
                 };
                 "multipart/form-data": {
-                    expiresAt?: string | null;
-                    fields?: Record<string, string | number | boolean | null>;
+                    expiresAt?: (Record<string, never> | string | number) | null;
+                    fields?: {
+                        [key: string]: string | number | boolean | null;
+                    };
                     /** @constant */
                     finalize?: true;
                     recipient?: {
@@ -5924,9 +7036,41 @@ export interface operations {
             };
         };
         responses: {
+            /** @description Response for status 200 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        batchId: string | null;
+                        claimedIssuedAt: Record<string, never> | null;
+                        createdAt: Record<string, never>;
+                        createdBy: string | null;
+                        expiresAt: Record<string, never> | null;
+                        externalRef: string | null;
+                        id: string;
+                        issuerWalletId: string;
+                        kekId: string;
+                        leaf: string | null;
+                        leafIndex: string | null;
+                        merkleProof: ((string | number | boolean | null) | unknown[] | {
+                            [key: string]: unknown;
+                        }) | null;
+                        organizationId: string;
+                        payloadEnc: string;
+                        /** @enum {string} */
+                        status: "draft" | "ready" | "batched" | "issued" | "revoked";
+                        templateVersionId: string;
+                        updatedAt: Record<string, never>;
+                    };
+                };
+            };
             /** @description Response for status 404 */
             404: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -5936,7 +7080,9 @@ export interface operations {
             };
             /** @description Response for status 409 */
             409: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -5946,7 +7092,9 @@ export interface operations {
             };
             /** @description Response for status 422 */
             422: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -5970,21 +7118,26 @@ export interface operations {
         responses: {
             /** @description Response for status 200 */
             200: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         blockNumber: string | null;
                         chainId: number;
                         claimedIssuedAt: number;
                         expiresAt: number;
-                        fields: Record<string, unknown>;
+                        fields: {
+                            [key: string]: unknown;
+                        };
                         holderKey: string;
                         issuer: string;
                         issuerDomain?: string;
                         leaf: string;
-                        leafIndex: number;
+                        leafIndex: string | number;
                         proof: string[];
                         recipient: {
+                            /** Format: email */
                             email: string;
                             name: string;
                         } | null;
@@ -6002,7 +7155,9 @@ export interface operations {
             };
             /** @description Response for status 404 */
             404: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -6012,7 +7167,9 @@ export interface operations {
             };
             /** @description Response for status 409 */
             409: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -6024,7 +7181,9 @@ export interface operations {
     };
     getOrganizationsByOrganizationIdDocumentsByDocumentIdPdf: {
         parameters: {
-            query?: never;
+            query?: {
+                preview?: "true" | "false" | boolean;
+            };
             header?: never;
             path: {
                 organizationId: string;
@@ -6033,7 +7192,53 @@ export interface operations {
             cookie?: never;
         };
         requestBody?: never;
-        responses: never;
+        responses: {
+            /** @description Response for status 200 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Response for status 401 */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        code?: string;
+                        message: string;
+                    };
+                };
+            };
+            /** @description Response for status 403 */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        code?: string;
+                        message: string;
+                    };
+                };
+            };
+            /** @description Response for status 404 */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        code?: string;
+                        message: string;
+                    };
+                };
+            };
+        };
     };
     postOrganizationsByOrganizationIdDocumentsImport: {
         parameters: {
@@ -6076,9 +7281,48 @@ export interface operations {
             };
         };
         responses: {
+            /** @description Response for status 200 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        created: number;
+                        documents: {
+                            batchId: string | null;
+                            claimedIssuedAt: Record<string, never> | null;
+                            createdAt: Record<string, never>;
+                            createdBy: string | null;
+                            expiresAt: Record<string, never> | null;
+                            externalRef: string | null;
+                            id: string;
+                            issuerWalletId: string;
+                            kekId: string;
+                            leaf: string | null;
+                            leafIndex: string | null;
+                            merkleProof: ((string | number | boolean | null) | unknown[] | {
+                                [key: string]: unknown;
+                            }) | null;
+                            organizationId: string;
+                            payloadEnc: string;
+                            /** @enum {string} */
+                            status: "draft" | "ready" | "batched" | "issued" | "revoked";
+                            templateVersionId: string;
+                            updatedAt: Record<string, never>;
+                        }[];
+                        errors?: {
+                            index: number;
+                            message: string;
+                        }[];
+                    };
+                };
+            };
             /** @description Response for status 401 */
             401: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -6088,7 +7332,9 @@ export interface operations {
             };
             /** @description Response for status 403 */
             403: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -6098,7 +7344,9 @@ export interface operations {
             };
             /** @description Response for status 422 */
             422: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -6120,9 +7368,32 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
+            /** @description Response for status 200 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        attempts: number;
+                        /** @constant */
+                        channel: "email";
+                        createdAt: Record<string, never> | string | number;
+                        documentId: string;
+                        id: string;
+                        lastError: string | null;
+                        sentAt: (Record<string, never> | string | number) | null;
+                        /** @enum {string} */
+                        status: "queued" | "sent" | "failed";
+                        updatedAt: Record<string, never> | string | number;
+                    };
+                };
+            };
             /** @description Response for status 404 */
             404: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -6132,7 +7403,9 @@ export interface operations {
             };
             /** @description Response for status 409 */
             409: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -6142,7 +7415,9 @@ export interface operations {
             };
             /** @description Response for status 422 */
             422: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -6190,7 +7465,9 @@ export interface operations {
         responses: {
             /** @description Response for status 200 */
             200: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         chainId: number;
@@ -6205,21 +7482,29 @@ export interface operations {
                         mode: "signature";
                         revocationId: string;
                         typedData: {
-                            domain: Record<string, unknown>;
-                            message: Record<string, unknown>;
+                            domain: {
+                                [key: string]: unknown;
+                            };
+                            message: {
+                                [key: string]: unknown;
+                            };
                             /** @constant */
                             primaryType: "Revoke";
-                            types: Record<string, {
+                            types: {
+                                [key: string]: {
                                     name: string;
                                     type: string;
-                                }[]>;
+                                }[];
+                            };
                         };
                     };
                 };
             };
             /** @description Response for status 404 */
             404: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -6229,7 +7514,9 @@ export interface operations {
             };
             /** @description Response for status 409 */
             409: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -6239,7 +7526,9 @@ export interface operations {
             };
             /** @description Response for status 422 */
             422: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -6265,34 +7554,38 @@ export interface operations {
                     revocationId: string;
                     signature?: string;
                     txHash?: string;
-                };
+                } | unknown | unknown;
                 "application/x-www-form-urlencoded": {
                     revocationId: string;
                     signature?: string;
                     txHash?: string;
-                };
+                } | unknown | unknown;
                 "multipart/form-data": {
                     revocationId: string;
                     signature?: string;
                     txHash?: string;
-                };
+                } | unknown | unknown;
             };
         };
         responses: {
             /** @description Response for status 200 */
             200: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         revocationId: string;
-                        /** @enum {string} */
+                        /** @constant */
                         status: "submitted";
                     };
                 };
             };
             /** @description Response for status 404 */
             404: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -6302,7 +7595,9 @@ export interface operations {
             };
             /** @description Response for status 409 */
             409: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -6312,7 +7607,9 @@ export interface operations {
             };
             /** @description Response for status 422 */
             422: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -6333,7 +7630,9 @@ export interface operations {
         responses: {
             /** @description Response for status 200 */
             200: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         chain: {
@@ -6343,7 +7642,6 @@ export interface operations {
                                 haltedReason: string | null;
                                 lag: number | null;
                                 lastBlock: string;
-                                /** @enum {string} */
                                 status: "running" | "halted";
                             } | null;
                             registryCodeExists: boolean;
@@ -6369,7 +7667,36 @@ export interface operations {
             cookie?: never;
         };
         requestBody?: never;
-        responses: never;
+        responses: {
+            /** @description Response for status 200 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        createdAt: Record<string, never>;
+                        id: string;
+                        logo: string | null;
+                        metadata: string | null;
+                        name: string;
+                        slug: string;
+                    }[];
+                };
+            };
+            /** @description Response for status 401 */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        code?: string;
+                        message: string;
+                    };
+                };
+            };
+        };
     };
     postOrganizations: {
         parameters: {
@@ -6394,7 +7721,60 @@ export interface operations {
                 };
             };
         };
-        responses: never;
+        responses: {
+            /** @description Response for status 200 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        createdAt: Record<string, never>;
+                        id: string;
+                        logo: string | null;
+                        metadata: string | null;
+                        name: string;
+                        slug: string;
+                    };
+                };
+            };
+            /** @description Response for status 401 */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        code?: string;
+                        message: string;
+                    };
+                };
+            };
+            /** @description Response for status 409 */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        code?: string;
+                        message: string;
+                    };
+                };
+            };
+            /** @description Response for status 422 */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        code?: string;
+                        message: string;
+                    };
+                };
+            };
+        };
     };
     putOrganizationsActive: {
         parameters: {
@@ -6416,7 +7796,60 @@ export interface operations {
                 };
             };
         };
-        responses: never;
+        responses: {
+            /** @description Response for status 200 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        createdAt: Record<string, never>;
+                        id: string;
+                        logo: string | null;
+                        metadata: string | null;
+                        name: string;
+                        slug: string;
+                    } | null;
+                };
+            };
+            /** @description Response for status 401 */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        code?: string;
+                        message: string;
+                    };
+                };
+            };
+            /** @description Response for status 403 */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        code?: string;
+                        message: string;
+                    };
+                };
+            };
+            /** @description Response for status 422 */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        code?: string;
+                        message: string;
+                    };
+                };
+            };
+        };
     };
     getOrganizationsByOrganizationId: {
         parameters: {
@@ -6428,7 +7861,65 @@ export interface operations {
             cookie?: never;
         };
         requestBody?: never;
-        responses: never;
+        responses: {
+            /** @description Response for status 200 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        createdAt: Record<string, never>;
+                        id: string;
+                        logo: string | null;
+                        metadata: string | null;
+                        name: string;
+                        slug: string;
+                        members: {
+                            createdAt: Record<string, never>;
+                            id: string;
+                            organizationId: string;
+                            role: string;
+                            userId: string;
+                        }[];
+                        invitations: {
+                            createdAt: Record<string, never>;
+                            email: string;
+                            expiresAt: Record<string, never>;
+                            id: string;
+                            inviterId: string;
+                            organizationId: string;
+                            role: string | null;
+                            status: string;
+                        }[];
+                    };
+                };
+            };
+            /** @description Response for status 401 */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        code?: string;
+                        message: string;
+                    };
+                };
+            };
+            /** @description Response for status 404 */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        code?: string;
+                        message: string;
+                    };
+                };
+            };
+        };
     };
     deleteOrganizationsByOrganizationId: {
         parameters: {
@@ -6440,7 +7931,55 @@ export interface operations {
             cookie?: never;
         };
         requestBody?: never;
-        responses: never;
+        responses: {
+            /** @description Response for status 200 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        id: string;
+                    };
+                };
+            };
+            /** @description Response for status 401 */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        code?: string;
+                        message: string;
+                    };
+                };
+            };
+            /** @description Response for status 403 */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        code?: string;
+                        message: string;
+                    };
+                };
+            };
+            /** @description Response for status 404 */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        code?: string;
+                        message: string;
+                    };
+                };
+            };
+        };
     };
     patchOrganizationsByOrganizationId: {
         parameters: {
@@ -6473,13 +8012,90 @@ export interface operations {
                 };
             };
         };
-        responses: never;
+        responses: {
+            /** @description Response for status 200 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        createdAt: Record<string, never>;
+                        id: string;
+                        logo: string | null;
+                        metadata: string | null;
+                        name: string;
+                        slug: string;
+                    };
+                };
+            };
+            /** @description Response for status 401 */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        code?: string;
+                        message: string;
+                    };
+                };
+            };
+            /** @description Response for status 403 */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        code?: string;
+                        message: string;
+                    };
+                };
+            };
+            /** @description Response for status 404 */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        code?: string;
+                        message: string;
+                    };
+                };
+            };
+            /** @description Response for status 409 */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        code?: string;
+                        message: string;
+                    };
+                };
+            };
+            /** @description Response for status 422 */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        code?: string;
+                        message: string;
+                    };
+                };
+            };
+        };
     };
     getOrganizationsByOrganizationIdMembers: {
         parameters: {
             query: {
-                limit: number;
-                offset: number;
+                limit: string | number;
+                offset: string | number;
             };
             header?: never;
             path: {
@@ -6488,7 +8104,68 @@ export interface operations {
             cookie?: never;
         };
         requestBody?: never;
-        responses: never;
+        responses: {
+            /** @description Response for status 200 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        members: {
+                            createdAt: Record<string, never>;
+                            id: string;
+                            organizationId: string;
+                            role: string;
+                            userId: string;
+                            user: {
+                                id: string;
+                                name: string;
+                                email: string;
+                                image?: string | null;
+                            };
+                        }[];
+                        total: number;
+                    };
+                };
+            };
+            /** @description Response for status 401 */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        code?: string;
+                        message: string;
+                    };
+                };
+            };
+            /** @description Response for status 403 */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        code?: string;
+                        message: string;
+                    };
+                };
+            };
+            /** @description Response for status 404 */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        code?: string;
+                        message: string;
+                    };
+                };
+            };
+        };
     };
     deleteOrganizationsByOrganizationIdMembersByMemberId: {
         parameters: {
@@ -6501,7 +8178,61 @@ export interface operations {
             cookie?: never;
         };
         requestBody?: never;
-        responses: never;
+        responses: {
+            /** @description Response for status 200 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        member: {
+                            createdAt: Record<string, never>;
+                            id: string;
+                            organizationId: string;
+                            role: string;
+                            userId: string;
+                        };
+                    };
+                };
+            };
+            /** @description Response for status 401 */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        code?: string;
+                        message: string;
+                    };
+                };
+            };
+            /** @description Response for status 403 */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        code?: string;
+                        message: string;
+                    };
+                };
+            };
+            /** @description Response for status 404 */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        code?: string;
+                        message: string;
+                    };
+                };
+            };
+        };
     };
     patchOrganizationsByOrganizationIdMembersByMemberId: {
         parameters: {
@@ -6529,7 +8260,73 @@ export interface operations {
                 };
             };
         };
-        responses: never;
+        responses: {
+            /** @description Response for status 200 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        member: {
+                            createdAt: Record<string, never>;
+                            id: string;
+                            organizationId: string;
+                            role: string;
+                            userId: string;
+                        };
+                    };
+                };
+            };
+            /** @description Response for status 401 */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        code?: string;
+                        message: string;
+                    };
+                };
+            };
+            /** @description Response for status 403 */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        code?: string;
+                        message: string;
+                    };
+                };
+            };
+            /** @description Response for status 404 */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        code?: string;
+                        message: string;
+                    };
+                };
+            };
+            /** @description Response for status 422 */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        code?: string;
+                        message: string;
+                    };
+                };
+            };
+        };
     };
     postOrganizationsByOrganizationIdLeave: {
         parameters: {
@@ -6541,7 +8338,53 @@ export interface operations {
             cookie?: never;
         };
         requestBody?: never;
-        responses: never;
+        responses: {
+            /** @description Response for status 200 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Response for status 401 */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        code?: string;
+                        message: string;
+                    };
+                };
+            };
+            /** @description Response for status 403 */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        code?: string;
+                        message: string;
+                    };
+                };
+            };
+            /** @description Response for status 404 */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        code?: string;
+                        message: string;
+                    };
+                };
+            };
+        };
     };
     getOrganizationsByOrganizationIdInvitations: {
         parameters: {
@@ -6553,7 +8396,62 @@ export interface operations {
             cookie?: never;
         };
         requestBody?: never;
-        responses: never;
+        responses: {
+            /** @description Response for status 200 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        createdAt: Record<string, never>;
+                        email: string;
+                        expiresAt: Record<string, never>;
+                        id: string;
+                        inviterId: string;
+                        organizationId: string;
+                        role: string | null;
+                        status: string;
+                    }[];
+                };
+            };
+            /** @description Response for status 401 */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        code?: string;
+                        message: string;
+                    };
+                };
+            };
+            /** @description Response for status 403 */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        code?: string;
+                        message: string;
+                    };
+                };
+            };
+            /** @description Response for status 404 */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        code?: string;
+                        message: string;
+                    };
+                };
+            };
+        };
     };
     postOrganizationsByOrganizationIdInvitations: {
         parameters: {
@@ -6569,33 +8467,91 @@ export interface operations {
                 "application/json": {
                     /** Format: email */
                     email: string;
-                    /**
-                     * @default viewer
-                     * @enum {string}
-                     */
-                    role: "admin" | "issuer" | "viewer";
+                    /** @enum {string} */
+                    role?: "admin" | "issuer" | "viewer";
                 };
                 "application/x-www-form-urlencoded": {
                     /** Format: email */
                     email: string;
-                    /**
-                     * @default viewer
-                     * @enum {string}
-                     */
-                    role: "admin" | "issuer" | "viewer";
+                    /** @enum {string} */
+                    role?: "admin" | "issuer" | "viewer";
                 };
                 "multipart/form-data": {
                     /** Format: email */
                     email: string;
-                    /**
-                     * @default viewer
-                     * @enum {string}
-                     */
-                    role: "admin" | "issuer" | "viewer";
+                    /** @enum {string} */
+                    role?: "admin" | "issuer" | "viewer";
                 };
             };
         };
-        responses: never;
+        responses: {
+            /** @description Response for status 200 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        createdAt: Record<string, never>;
+                        email: string;
+                        expiresAt: Record<string, never>;
+                        id: string;
+                        inviterId: string;
+                        organizationId: string;
+                        role: string | null;
+                        status: string;
+                    };
+                };
+            };
+            /** @description Response for status 401 */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        code?: string;
+                        message: string;
+                    };
+                };
+            };
+            /** @description Response for status 403 */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        code?: string;
+                        message: string;
+                    };
+                };
+            };
+            /** @description Response for status 404 */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        code?: string;
+                        message: string;
+                    };
+                };
+            };
+            /** @description Response for status 422 */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        code?: string;
+                        message: string;
+                    };
+                };
+            };
+        };
     };
     deleteOrganizationsByOrganizationIdInvitationsByInvitationId: {
         parameters: {
@@ -6608,7 +8564,62 @@ export interface operations {
             cookie?: never;
         };
         requestBody?: never;
-        responses: never;
+        responses: {
+            /** @description Response for status 200 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        createdAt: Record<string, never>;
+                        email: string;
+                        expiresAt: Record<string, never>;
+                        id: string;
+                        inviterId: string;
+                        organizationId: string;
+                        role: string | null;
+                        status: string;
+                    };
+                };
+            };
+            /** @description Response for status 401 */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        code?: string;
+                        message: string;
+                    };
+                };
+            };
+            /** @description Response for status 403 */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        code?: string;
+                        message: string;
+                    };
+                };
+            };
+            /** @description Response for status 404 */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        code?: string;
+                        message: string;
+                    };
+                };
+            };
+        };
     };
     getOrganizationsByOrganizationIdSettings: {
         parameters: {
@@ -6621,9 +8632,32 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
+            /** @description Response for status 200 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        autoSeal: boolean;
+                        batchWindowMinutes: number;
+                        createdAt: Record<string, never>;
+                        /** @enum {string} */
+                        dataAvailability: "onchain_encrypted" | "offchain_only";
+                        defaultExpiryDays: number | null;
+                        defaultWalletId: string | null;
+                        organizationId: string;
+                        requireVerifiedDomain: boolean;
+                        updatedAt: Record<string, never>;
+                        updatedBy: string | null;
+                    };
+                };
+            };
             /** @description Response for status 401 */
             401: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -6633,7 +8667,9 @@ export interface operations {
             };
             /** @description Response for status 403 */
             403: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -6656,37 +8692,60 @@ export interface operations {
             content: {
                 "application/json": {
                     autoSeal?: boolean;
-                    batchWindowMinutes?: number;
+                    batchWindowMinutes?: string | number;
                     /** @enum {string} */
                     dataAvailability?: "onchain_encrypted" | "offchain_only";
-                    defaultExpiryDays?: number | null;
+                    defaultExpiryDays?: (string | number) | null;
                     defaultWalletId?: string | null;
                     requireVerifiedDomain?: boolean;
                 };
                 "application/x-www-form-urlencoded": {
                     autoSeal?: boolean;
-                    batchWindowMinutes?: number;
+                    batchWindowMinutes?: string | number;
                     /** @enum {string} */
                     dataAvailability?: "onchain_encrypted" | "offchain_only";
-                    defaultExpiryDays?: number | null;
+                    defaultExpiryDays?: (string | number) | null;
                     defaultWalletId?: string | null;
                     requireVerifiedDomain?: boolean;
                 };
                 "multipart/form-data": {
                     autoSeal?: boolean;
-                    batchWindowMinutes?: number;
+                    batchWindowMinutes?: string | number;
                     /** @enum {string} */
                     dataAvailability?: "onchain_encrypted" | "offchain_only";
-                    defaultExpiryDays?: number | null;
+                    defaultExpiryDays?: (string | number) | null;
                     defaultWalletId?: string | null;
                     requireVerifiedDomain?: boolean;
                 };
             };
         };
         responses: {
+            /** @description Response for status 200 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        autoSeal: boolean;
+                        batchWindowMinutes: number;
+                        createdAt: Record<string, never>;
+                        /** @enum {string} */
+                        dataAvailability: "onchain_encrypted" | "offchain_only";
+                        defaultExpiryDays: number | null;
+                        defaultWalletId: string | null;
+                        organizationId: string;
+                        requireVerifiedDomain: boolean;
+                        updatedAt: Record<string, never>;
+                        updatedBy: string | null;
+                    };
+                };
+            };
             /** @description Response for status 401 */
             401: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -6696,7 +8755,9 @@ export interface operations {
             };
             /** @description Response for status 403 */
             403: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -6706,7 +8767,9 @@ export interface operations {
             };
             /** @description Response for status 422 */
             422: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -6719,8 +8782,8 @@ export interface operations {
     getOrganizationsByOrganizationIdTemplates: {
         parameters: {
             query: {
-                limit: number;
-                offset: number;
+                limit: string | number;
+                offset: string | number;
             };
             header?: never;
             path: {
@@ -6730,9 +8793,36 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
+            /** @description Response for status 200 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: {
+                            archivedAt: Record<string, never> | null;
+                            createdAt: Record<string, never>;
+                            createdBy: string | null;
+                            description: string | null;
+                            id: string;
+                            name: string;
+                            organizationId: string;
+                            updatedAt: Record<string, never>;
+                        }[];
+                        meta: {
+                            limit: number;
+                            offset: number;
+                            total: number;
+                        };
+                    };
+                };
+            };
             /** @description Response for status 401 */
             401: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -6742,7 +8832,9 @@ export interface operations {
             };
             /** @description Response for status 403 */
             403: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -6769,11 +8861,11 @@ export interface operations {
                         fields: {
                             key: string;
                             label: string;
-                            maxLength?: number;
+                            maxLength?: string | number;
                             options?: string[];
                             pattern?: string;
                             /** @default true */
-                            required: boolean;
+                            required?: boolean;
                             /** @enum {string} */
                             type: "text" | "number" | "date" | "email" | "enum";
                         }[];
@@ -6787,11 +8879,11 @@ export interface operations {
                         fields: {
                             key: string;
                             label: string;
-                            maxLength?: number;
+                            maxLength?: string | number;
                             options?: string[];
                             pattern?: string;
                             /** @default true */
-                            required: boolean;
+                            required?: boolean;
                             /** @enum {string} */
                             type: "text" | "number" | "date" | "email" | "enum";
                         }[];
@@ -6805,11 +8897,11 @@ export interface operations {
                         fields: {
                             key: string;
                             label: string;
-                            maxLength?: number;
+                            maxLength?: string | number;
                             options?: string[];
                             pattern?: string;
                             /** @default true */
-                            required: boolean;
+                            required?: boolean;
                             /** @enum {string} */
                             type: "text" | "number" | "date" | "email" | "enum";
                         }[];
@@ -6820,9 +8912,45 @@ export interface operations {
             };
         };
         responses: {
+            /** @description Response for status 200 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        archivedAt: Record<string, never> | null;
+                        createdAt: Record<string, never>;
+                        createdBy: string | null;
+                        description: string | null;
+                        id: string;
+                        name: string;
+                        organizationId: string;
+                        updatedAt: Record<string, never>;
+                        versions: {
+                            createdAt: Record<string, never>;
+                            createdBy: string | null;
+                            fieldSchema: (string | number | boolean | null) | unknown[] | {
+                                [key: string]: unknown;
+                            };
+                            id: string;
+                            layout: string;
+                            publishedAt: Record<string, never> | null;
+                            schemaHash: string | null;
+                            /** @enum {string} */
+                            status: "draft" | "published";
+                            templateId: string;
+                            updatedAt: Record<string, never>;
+                            version: number;
+                        }[];
+                    };
+                };
+            };
             /** @description Response for status 400 */
             400: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -6832,7 +8960,9 @@ export interface operations {
             };
             /** @description Response for status 401 */
             401: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -6842,7 +8972,9 @@ export interface operations {
             };
             /** @description Response for status 403 */
             403: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -6852,7 +8984,9 @@ export interface operations {
             };
             /** @description Response for status 422 */
             422: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -6874,9 +9008,45 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
+            /** @description Response for status 200 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        archivedAt: Record<string, never> | null;
+                        createdAt: Record<string, never>;
+                        createdBy: string | null;
+                        description: string | null;
+                        id: string;
+                        name: string;
+                        organizationId: string;
+                        updatedAt: Record<string, never>;
+                        versions: {
+                            createdAt: Record<string, never>;
+                            createdBy: string | null;
+                            fieldSchema: (string | number | boolean | null) | unknown[] | {
+                                [key: string]: unknown;
+                            };
+                            id: string;
+                            layout: string;
+                            publishedAt: Record<string, never> | null;
+                            schemaHash: string | null;
+                            /** @enum {string} */
+                            status: "draft" | "published";
+                            templateId: string;
+                            updatedAt: Record<string, never>;
+                            version: number;
+                        }[];
+                    };
+                };
+            };
             /** @description Response for status 404 */
             404: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -6898,9 +9068,29 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
+            /** @description Response for status 200 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        archivedAt: Record<string, never> | null;
+                        createdAt: Record<string, never>;
+                        createdBy: string | null;
+                        description: string | null;
+                        id: string;
+                        name: string;
+                        organizationId: string;
+                        updatedAt: Record<string, never>;
+                    };
+                };
+            };
             /** @description Response for status 404 */
             404: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -6937,9 +9127,29 @@ export interface operations {
             };
         };
         responses: {
+            /** @description Response for status 200 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        archivedAt: Record<string, never> | null;
+                        createdAt: Record<string, never>;
+                        createdBy: string | null;
+                        description: string | null;
+                        id: string;
+                        name: string;
+                        organizationId: string;
+                        updatedAt: Record<string, never>;
+                    };
+                };
+            };
             /** @description Response for status 404 */
             404: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -6960,7 +9170,68 @@ export interface operations {
             cookie?: never;
         };
         requestBody?: never;
-        responses: never;
+        responses: {
+            /** @description Response for status 200 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        createdAt: Record<string, never>;
+                        createdBy: string | null;
+                        fieldSchema: (string | number | boolean | null) | unknown[] | {
+                            [key: string]: unknown;
+                        };
+                        id: string;
+                        layout: string;
+                        publishedAt: Record<string, never> | null;
+                        schemaHash: string | null;
+                        /** @enum {string} */
+                        status: "draft" | "published";
+                        templateId: string;
+                        updatedAt: Record<string, never>;
+                        version: number;
+                    }[];
+                };
+            };
+            /** @description Response for status 401 */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        code?: string;
+                        message: string;
+                    };
+                };
+            };
+            /** @description Response for status 403 */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        code?: string;
+                        message: string;
+                    };
+                };
+            };
+            /** @description Response for status 404 */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        code?: string;
+                        message: string;
+                    };
+                };
+            };
+        };
     };
     postOrganizationsByOrganizationIdTemplatesByTemplateIdVersions: {
         parameters: {
@@ -6979,11 +9250,11 @@ export interface operations {
                         fields: {
                             key: string;
                             label: string;
-                            maxLength?: number;
+                            maxLength?: string | number;
                             options?: string[];
                             pattern?: string;
                             /** @default true */
-                            required: boolean;
+                            required?: boolean;
                             /** @enum {string} */
                             type: "text" | "number" | "date" | "email" | "enum";
                         }[];
@@ -6995,11 +9266,11 @@ export interface operations {
                         fields: {
                             key: string;
                             label: string;
-                            maxLength?: number;
+                            maxLength?: string | number;
                             options?: string[];
                             pattern?: string;
                             /** @default true */
-                            required: boolean;
+                            required?: boolean;
                             /** @enum {string} */
                             type: "text" | "number" | "date" | "email" | "enum";
                         }[];
@@ -7011,11 +9282,11 @@ export interface operations {
                         fields: {
                             key: string;
                             label: string;
-                            maxLength?: number;
+                            maxLength?: string | number;
                             options?: string[];
                             pattern?: string;
                             /** @default true */
-                            required: boolean;
+                            required?: boolean;
                             /** @enum {string} */
                             type: "text" | "number" | "date" | "email" | "enum";
                         }[];
@@ -7025,9 +9296,35 @@ export interface operations {
             };
         };
         responses: {
+            /** @description Response for status 200 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        createdAt: Record<string, never>;
+                        createdBy: string | null;
+                        fieldSchema: (string | number | boolean | null) | unknown[] | {
+                            [key: string]: unknown;
+                        };
+                        id: string;
+                        layout: string;
+                        publishedAt: Record<string, never> | null;
+                        schemaHash: string | null;
+                        /** @enum {string} */
+                        status: "draft" | "published";
+                        templateId: string;
+                        updatedAt: Record<string, never>;
+                        version: number;
+                    };
+                };
+            };
             /** @description Response for status 404 */
             404: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -7055,11 +9352,11 @@ export interface operations {
                         fields: {
                             key: string;
                             label: string;
-                            maxLength?: number;
+                            maxLength?: string | number;
                             options?: string[];
                             pattern?: string;
                             /** @default true */
-                            required: boolean;
+                            required?: boolean;
                             /** @enum {string} */
                             type: "text" | "number" | "date" | "email" | "enum";
                         }[];
@@ -7071,11 +9368,11 @@ export interface operations {
                         fields: {
                             key: string;
                             label: string;
-                            maxLength?: number;
+                            maxLength?: string | number;
                             options?: string[];
                             pattern?: string;
                             /** @default true */
-                            required: boolean;
+                            required?: boolean;
                             /** @enum {string} */
                             type: "text" | "number" | "date" | "email" | "enum";
                         }[];
@@ -7087,11 +9384,11 @@ export interface operations {
                         fields: {
                             key: string;
                             label: string;
-                            maxLength?: number;
+                            maxLength?: string | number;
                             options?: string[];
                             pattern?: string;
                             /** @default true */
-                            required: boolean;
+                            required?: boolean;
                             /** @enum {string} */
                             type: "text" | "number" | "date" | "email" | "enum";
                         }[];
@@ -7101,9 +9398,35 @@ export interface operations {
             };
         };
         responses: {
+            /** @description Response for status 200 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        createdAt: Record<string, never>;
+                        createdBy: string | null;
+                        fieldSchema: (string | number | boolean | null) | unknown[] | {
+                            [key: string]: unknown;
+                        };
+                        id: string;
+                        layout: string;
+                        publishedAt: Record<string, never> | null;
+                        schemaHash: string | null;
+                        /** @enum {string} */
+                        status: "draft" | "published";
+                        templateId: string;
+                        updatedAt: Record<string, never>;
+                        version: number;
+                    };
+                };
+            };
             /** @description Response for status 404 */
             404: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -7113,7 +9436,9 @@ export interface operations {
             };
             /** @description Response for status 409 */
             409: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -7136,9 +9461,35 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
+            /** @description Response for status 200 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        createdAt: Record<string, never>;
+                        createdBy: string | null;
+                        fieldSchema: (string | number | boolean | null) | unknown[] | {
+                            [key: string]: unknown;
+                        };
+                        id: string;
+                        layout: string;
+                        publishedAt: Record<string, never> | null;
+                        schemaHash: string | null;
+                        /** @enum {string} */
+                        status: "draft" | "published";
+                        templateId: string;
+                        updatedAt: Record<string, never>;
+                        version: number;
+                    };
+                };
+            };
             /** @description Response for status 404 */
             404: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -7148,7 +9499,9 @@ export interface operations {
             };
             /** @description Response for status 409 */
             409: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -7172,20 +9525,28 @@ export interface operations {
         requestBody: {
             content: {
                 "application/json": {
-                    data: Record<string, string | number | boolean | null>;
+                    data: {
+                        [key: string]: string | number | boolean | null;
+                    };
                 };
                 "application/x-www-form-urlencoded": {
-                    data: Record<string, string | number | boolean | null>;
+                    data: {
+                        [key: string]: string | number | boolean | null;
+                    };
                 };
                 "multipart/form-data": {
-                    data: Record<string, string | number | boolean | null>;
+                    data: {
+                        [key: string]: string | number | boolean | null;
+                    };
                 };
             };
         };
         responses: {
             /** @description Response for status 200 */
             200: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         svg: string;
@@ -7194,7 +9555,9 @@ export interface operations {
             };
             /** @description Response for status 404 */
             404: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -7204,7 +9567,9 @@ export interface operations {
             };
             /** @description Response for status 422 */
             422: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -7216,7 +9581,9 @@ export interface operations {
     };
     getVerifyByLeaf: {
         parameters: {
-            query?: never;
+            query?: {
+                live?: "true" | "false" | boolean;
+            };
             header?: never;
             path: {
                 leaf: string;
@@ -7227,7 +9594,9 @@ export interface operations {
         responses: {
             /** @description Response for status 200 */
             200: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         anchor: {
@@ -7260,7 +9629,9 @@ export interface operations {
             };
             /** @description Response for status 404 */
             404: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -7280,20 +9651,28 @@ export interface operations {
         requestBody: {
             content: {
                 "application/json": {
-                    bundle: Record<string, unknown>;
+                    bundle: {
+                        [key: string]: unknown;
+                    };
                 };
                 "application/x-www-form-urlencoded": {
-                    bundle: Record<string, unknown>;
+                    bundle: {
+                        [key: string]: unknown;
+                    };
                 };
                 "multipart/form-data": {
-                    bundle: Record<string, unknown>;
+                    bundle: {
+                        [key: string]: unknown;
+                    };
                 };
             };
         };
         responses: {
             /** @description Response for status 200 */
             200: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         anchor: {
@@ -7331,7 +9710,9 @@ export interface operations {
             };
             /** @description Response for status 422 */
             422: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -7354,7 +9735,9 @@ export interface operations {
         responses: {
             /** @description Response for status 200 */
             200: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         address: string;
@@ -7370,7 +9753,9 @@ export interface operations {
             };
             /** @description Response for status 404 */
             404: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -7391,7 +9776,9 @@ export interface operations {
         responses: {
             /** @description Response for status 200 */
             200: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         abiHash: string;
@@ -7404,7 +9791,9 @@ export interface operations {
             };
             /** @description Response for status 404 */
             404: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -7423,11 +9812,31 @@ export interface operations {
             };
             cookie?: never;
         };
-        requestBody?: never;
+        requestBody: {
+            content: {
+                "application/json": {
+                    address: string;
+                    /** @default 31337 */
+                    chainId: string | number;
+                };
+                "application/x-www-form-urlencoded": {
+                    address: string;
+                    /** @default 31337 */
+                    chainId: string | number;
+                };
+                "multipart/form-data": {
+                    address: string;
+                    /** @default 31337 */
+                    chainId: string | number;
+                };
+            };
+        };
         responses: {
             /** @description Response for status 200 */
             200: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message: string;
@@ -7436,7 +9845,9 @@ export interface operations {
             };
             /** @description Response for status 401 */
             401: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -7446,7 +9857,9 @@ export interface operations {
             };
             /** @description Response for status 403 */
             403: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -7456,7 +9869,9 @@ export interface operations {
             };
             /** @description Response for status 422 */
             422: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -7477,9 +9892,34 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
+            /** @description Response for status 200 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        address: string;
+                        chainId: string;
+                        compromisedFrom: Record<string, never> | null;
+                        createdAt: Record<string, never>;
+                        createdBy: string | null;
+                        domain: string | null;
+                        domainVerifiedAt: Record<string, never> | null;
+                        id: string;
+                        label: string;
+                        organizationId: string;
+                        /** @enum {string} */
+                        status: "active" | "disabled" | "compromised";
+                        updatedAt: Record<string, never>;
+                    }[];
+                };
+            };
             /** @description Response for status 401 */
             401: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -7489,7 +9929,9 @@ export interface operations {
             };
             /** @description Response for status 403 */
             403: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -7508,11 +9950,60 @@ export interface operations {
             };
             cookie?: never;
         };
-        requestBody?: never;
+        requestBody: {
+            content: {
+                "application/json": {
+                    address: string;
+                    domain?: string;
+                    label?: string;
+                    message: string;
+                    signature: string;
+                };
+                "application/x-www-form-urlencoded": {
+                    address: string;
+                    domain?: string;
+                    label?: string;
+                    message: string;
+                    signature: string;
+                };
+                "multipart/form-data": {
+                    address: string;
+                    domain?: string;
+                    label?: string;
+                    message: string;
+                    signature: string;
+                };
+            };
+        };
         responses: {
+            /** @description Response for status 200 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        address: string;
+                        chainId: string;
+                        compromisedFrom: Record<string, never> | null;
+                        createdAt: Record<string, never>;
+                        createdBy: string | null;
+                        domain: string | null;
+                        domainVerifiedAt: Record<string, never> | null;
+                        id: string;
+                        label: string;
+                        organizationId: string;
+                        /** @enum {string} */
+                        status: "active" | "disabled" | "compromised";
+                        updatedAt: Record<string, never>;
+                    };
+                };
+            };
             /** @description Response for status 401 */
             401: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -7522,7 +10013,9 @@ export interface operations {
             };
             /** @description Response for status 403 */
             403: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -7532,7 +10025,9 @@ export interface operations {
             };
             /** @description Response for status 409 */
             409: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -7542,7 +10037,9 @@ export interface operations {
             };
             /** @description Response for status 422 */
             422: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -7564,9 +10061,34 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
+            /** @description Response for status 200 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        address: string;
+                        chainId: string;
+                        compromisedFrom: Record<string, never> | null;
+                        createdAt: Record<string, never>;
+                        createdBy: string | null;
+                        domain: string | null;
+                        domainVerifiedAt: Record<string, never> | null;
+                        id: string;
+                        label: string;
+                        organizationId: string;
+                        /** @enum {string} */
+                        status: "active" | "disabled" | "compromised";
+                        updatedAt: Record<string, never>;
+                    };
+                };
+            };
             /** @description Response for status 404 */
             404: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -7588,9 +10110,34 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
+            /** @description Response for status 200 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        address: string;
+                        chainId: string;
+                        compromisedFrom: Record<string, never> | null;
+                        createdAt: Record<string, never>;
+                        createdBy: string | null;
+                        domain: string | null;
+                        domainVerifiedAt: Record<string, never> | null;
+                        id: string;
+                        label: string;
+                        organizationId: string;
+                        /** @enum {string} */
+                        status: "active" | "disabled" | "compromised";
+                        updatedAt: Record<string, never>;
+                    };
+                };
+            };
             /** @description Response for status 404 */
             404: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -7612,9 +10159,37 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
+            /** @description Response for status 200 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        foundRecords: string[];
+                        wallet: {
+                            address: string;
+                            chainId: string;
+                            compromisedFrom: Record<string, never> | null;
+                            createdAt: Record<string, never>;
+                            createdBy: string | null;
+                            domain: string | null;
+                            domainVerifiedAt: Record<string, never> | null;
+                            id: string;
+                            label: string;
+                            organizationId: string;
+                            /** @enum {string} */
+                            status: "active" | "disabled" | "compromised";
+                            updatedAt: Record<string, never>;
+                        };
+                    };
+                };
+            };
             /** @description Response for status 401 */
             401: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -7624,7 +10199,9 @@ export interface operations {
             };
             /** @description Response for status 403 */
             403: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -7634,7 +10211,9 @@ export interface operations {
             };
             /** @description Response for status 404 */
             404: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -7644,7 +10223,9 @@ export interface operations {
             };
             /** @description Response for status 422 */
             422: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -7667,20 +10248,22 @@ export interface operations {
         requestBody: {
             content: {
                 "application/json": {
-                    cutoff?: number;
+                    cutoff?: string | number;
                 };
                 "application/x-www-form-urlencoded": {
-                    cutoff?: number;
+                    cutoff?: string | number;
                 };
                 "multipart/form-data": {
-                    cutoff?: number;
+                    cutoff?: string | number;
                 };
             };
         };
         responses: {
             /** @description Response for status 200 */
             200: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         chainId: number;
@@ -7692,7 +10275,9 @@ export interface operations {
             };
             /** @description Response for status 404 */
             404: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -7702,7 +10287,9 @@ export interface operations {
             };
             /** @description Response for status 409 */
             409: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -7712,7 +10299,9 @@ export interface operations {
             };
             /** @description Response for status 422 */
             422: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -7732,7 +10321,52 @@ export interface operations {
             cookie?: never;
         };
         requestBody?: never;
-        responses: never;
+        responses: {
+            /** @description Response for status 200 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        createdAt: Record<string, never>;
+                        createdBy: string | null;
+                        events: string[];
+                        id: string;
+                        organizationId: string;
+                        secretEnc: string;
+                        /** @enum {string} */
+                        status: "active" | "disabled";
+                        updatedAt: Record<string, never>;
+                        url: string;
+                    }[];
+                };
+            };
+            /** @description Response for status 401 */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        code?: string;
+                        message: string;
+                    };
+                };
+            };
+            /** @description Response for status 403 */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        code?: string;
+                        message: string;
+                    };
+                };
+            };
+        };
     };
     postOrganizationsByOrganizationIdWebhooks: {
         parameters: {
@@ -7763,9 +10397,34 @@ export interface operations {
             };
         };
         responses: {
+            /** @description Response for status 200 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        endpoint: {
+                            createdAt: Record<string, never>;
+                            createdBy: string | null;
+                            events: string[];
+                            id: string;
+                            organizationId: string;
+                            secretEnc: string;
+                            /** @enum {string} */
+                            status: "active" | "disabled";
+                            updatedAt: Record<string, never>;
+                            url: string;
+                        };
+                        secret: string;
+                    };
+                };
+            };
             /** @description Response for status 401 */
             401: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -7775,7 +10434,9 @@ export interface operations {
             };
             /** @description Response for status 403 */
             403: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -7785,7 +10446,9 @@ export interface operations {
             };
             /** @description Response for status 422 */
             422: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -7807,9 +10470,31 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
+            /** @description Response for status 200 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        createdAt: Record<string, never>;
+                        createdBy: string | null;
+                        events: string[];
+                        id: string;
+                        organizationId: string;
+                        secretEnc: string;
+                        /** @enum {string} */
+                        status: "active" | "disabled";
+                        updatedAt: Record<string, never>;
+                        url: string;
+                    };
+                };
+            };
             /** @description Response for status 404 */
             404: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -7830,7 +10515,53 @@ export interface operations {
             cookie?: never;
         };
         requestBody?: never;
-        responses: never;
+        responses: {
+            /** @description Response for status 200 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Response for status 401 */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        code?: string;
+                        message: string;
+                    };
+                };
+            };
+            /** @description Response for status 403 */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        code?: string;
+                        message: string;
+                    };
+                };
+            };
+            /** @description Response for status 404 */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        code?: string;
+                        message: string;
+                    };
+                };
+            };
+        };
     };
     patchOrganizationsByOrganizationIdWebhooksByEndpointId: {
         parameters: {
@@ -7868,9 +10599,31 @@ export interface operations {
             };
         };
         responses: {
+            /** @description Response for status 200 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        createdAt: Record<string, never>;
+                        createdBy: string | null;
+                        events: string[];
+                        id: string;
+                        organizationId: string;
+                        secretEnc: string;
+                        /** @enum {string} */
+                        status: "active" | "disabled";
+                        updatedAt: Record<string, never>;
+                        url: string;
+                    };
+                };
+            };
             /** @description Response for status 404 */
             404: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -7880,7 +10633,9 @@ export interface operations {
             };
             /** @description Response for status 422 */
             422: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -7904,7 +10659,9 @@ export interface operations {
         responses: {
             /** @description Response for status 200 */
             200: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         secret: string;
@@ -7913,7 +10670,9 @@ export interface operations {
             };
             /** @description Response for status 404 */
             404: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -7934,13 +10693,59 @@ export interface operations {
             cookie?: never;
         };
         requestBody?: never;
-        responses: never;
+        responses: {
+            /** @description Response for status 200 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Response for status 401 */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        code?: string;
+                        message: string;
+                    };
+                };
+            };
+            /** @description Response for status 403 */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        code?: string;
+                        message: string;
+                    };
+                };
+            };
+            /** @description Response for status 404 */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        code?: string;
+                        message: string;
+                    };
+                };
+            };
+        };
     };
     getOrganizationsByOrganizationIdWebhooksByEndpointIdDeliveries: {
         parameters: {
             query: {
-                limit: number;
-                offset: number;
+                limit: string | number;
+                offset: string | number;
             };
             header?: never;
             path: {
@@ -7951,9 +10756,42 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
+            /** @description Response for status 200 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: {
+                            attempts: number;
+                            createdAt: Record<string, never>;
+                            deliveredAt: Record<string, never> | null;
+                            endpointId: string;
+                            event: string;
+                            id: string;
+                            lastError: string | null;
+                            lastStatusCode: number | null;
+                            nextAttemptAt: Record<string, never>;
+                            payload: (string | number | boolean | null) | unknown[] | {
+                                [key: string]: unknown;
+                            };
+                            /** @enum {string} */
+                            status: "pending" | "delivered" | "failed";
+                        }[];
+                        meta: {
+                            limit: number;
+                            offset: number;
+                            total: number;
+                        };
+                    };
+                };
+            };
             /** @description Response for status 404 */
             404: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         code?: string;
@@ -8019,7 +10857,9 @@ export interface operations {
         responses: {
             /** @description Success - Returns either session details or redirect URL */
             200: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         token: string;
@@ -8032,7 +10872,9 @@ export interface operations {
             };
             /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
             400: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message: string;
@@ -8041,7 +10883,9 @@ export interface operations {
             };
             /** @description Unauthorized. Due to missing or invalid authentication. */
             401: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message: string;
@@ -8050,7 +10894,9 @@ export interface operations {
             };
             /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
             403: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message?: string;
@@ -8059,7 +10905,9 @@ export interface operations {
             };
             /** @description Not Found. The requested resource was not found. */
             404: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message?: string;
@@ -8068,7 +10916,9 @@ export interface operations {
             };
             /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
             429: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message?: string;
@@ -8077,7 +10927,9 @@ export interface operations {
             };
             /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
             500: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message?: string;
@@ -8097,7 +10949,9 @@ export interface operations {
         responses: {
             /** @description Success */
             200: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         session: components["schemas"]["Session"];
@@ -8107,7 +10961,9 @@ export interface operations {
             };
             /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
             400: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message: string;
@@ -8116,7 +10972,9 @@ export interface operations {
             };
             /** @description Unauthorized. Due to missing or invalid authentication. */
             401: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message: string;
@@ -8125,7 +10983,9 @@ export interface operations {
             };
             /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
             403: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message?: string;
@@ -8134,7 +10994,9 @@ export interface operations {
             };
             /** @description Not Found. The requested resource was not found. */
             404: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message?: string;
@@ -8143,7 +11005,9 @@ export interface operations {
             };
             /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
             429: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message?: string;
@@ -8152,7 +11016,9 @@ export interface operations {
             };
             /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
             500: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message?: string;
@@ -8176,7 +11042,9 @@ export interface operations {
         responses: {
             /** @description Success */
             200: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         success?: boolean;
@@ -8185,7 +11053,9 @@ export interface operations {
             };
             /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
             400: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message: string;
@@ -8194,7 +11064,9 @@ export interface operations {
             };
             /** @description Unauthorized. Due to missing or invalid authentication. */
             401: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message: string;
@@ -8203,7 +11075,9 @@ export interface operations {
             };
             /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
             403: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message?: string;
@@ -8212,7 +11086,9 @@ export interface operations {
             };
             /** @description Not Found. The requested resource was not found. */
             404: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message?: string;
@@ -8221,7 +11097,9 @@ export interface operations {
             };
             /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
             429: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message?: string;
@@ -8230,7 +11108,9 @@ export interface operations {
             };
             /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
             500: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message?: string;
@@ -8267,7 +11147,9 @@ export interface operations {
         responses: {
             /** @description Successfully created user */
             200: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         /** @description Authentication token for the session */
@@ -8305,7 +11187,9 @@ export interface operations {
             };
             /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
             400: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message: string;
@@ -8314,7 +11198,9 @@ export interface operations {
             };
             /** @description Unauthorized. Due to missing or invalid authentication. */
             401: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message: string;
@@ -8323,7 +11209,9 @@ export interface operations {
             };
             /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
             403: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message?: string;
@@ -8332,7 +11220,9 @@ export interface operations {
             };
             /** @description Not Found. The requested resource was not found. */
             404: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message?: string;
@@ -8341,7 +11231,9 @@ export interface operations {
             };
             /** @description Unprocessable Entity. User already exists or failed to create user. */
             422: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message?: string;
@@ -8350,7 +11242,9 @@ export interface operations {
             };
             /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
             429: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message?: string;
@@ -8359,7 +11253,9 @@ export interface operations {
             };
             /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
             500: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message?: string;
@@ -8395,7 +11291,9 @@ export interface operations {
         responses: {
             /** @description Success - Returns either session details or redirect URL */
             200: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         /** @enum {boolean} */
@@ -8409,7 +11307,9 @@ export interface operations {
             };
             /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
             400: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message: string;
@@ -8418,7 +11318,9 @@ export interface operations {
             };
             /** @description Unauthorized. Due to missing or invalid authentication. */
             401: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message: string;
@@ -8427,7 +11329,9 @@ export interface operations {
             };
             /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
             403: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message?: string;
@@ -8436,7 +11340,9 @@ export interface operations {
             };
             /** @description Not Found. The requested resource was not found. */
             404: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message?: string;
@@ -8445,7 +11351,9 @@ export interface operations {
             };
             /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
             429: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message?: string;
@@ -8454,7 +11362,9 @@ export interface operations {
             };
             /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
             500: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message?: string;
@@ -8483,7 +11393,9 @@ export interface operations {
         responses: {
             /** @description Success */
             200: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         status?: boolean;
@@ -8492,7 +11404,9 @@ export interface operations {
             };
             /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
             400: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message: string;
@@ -8501,7 +11415,9 @@ export interface operations {
             };
             /** @description Unauthorized. Due to missing or invalid authentication. */
             401: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message: string;
@@ -8510,7 +11426,9 @@ export interface operations {
             };
             /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
             403: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message?: string;
@@ -8519,7 +11437,9 @@ export interface operations {
             };
             /** @description Not Found. The requested resource was not found. */
             404: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message?: string;
@@ -8528,7 +11448,9 @@ export interface operations {
             };
             /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
             429: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message?: string;
@@ -8537,7 +11459,9 @@ export interface operations {
             };
             /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
             500: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message?: string;
@@ -8564,7 +11488,9 @@ export interface operations {
         responses: {
             /** @description Success */
             200: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         status?: boolean;
@@ -8573,7 +11499,9 @@ export interface operations {
             };
             /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
             400: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message: string;
@@ -8582,7 +11510,9 @@ export interface operations {
             };
             /** @description Unauthorized. Due to missing or invalid authentication. */
             401: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message: string;
@@ -8591,7 +11521,9 @@ export interface operations {
             };
             /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
             403: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message?: string;
@@ -8600,7 +11532,9 @@ export interface operations {
             };
             /** @description Not Found. The requested resource was not found. */
             404: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message?: string;
@@ -8609,7 +11543,9 @@ export interface operations {
             };
             /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
             429: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message?: string;
@@ -8618,7 +11554,9 @@ export interface operations {
             };
             /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
             500: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message?: string;
@@ -8653,7 +11591,9 @@ export interface operations {
         responses: {
             /** @description Success */
             200: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         /**
@@ -8666,7 +11606,9 @@ export interface operations {
             };
             /** @description Bad Request */
             400: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         /**
@@ -8679,7 +11621,9 @@ export interface operations {
             };
             /** @description Unauthorized. Due to missing or invalid authentication. */
             401: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message: string;
@@ -8688,7 +11632,9 @@ export interface operations {
             };
             /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
             403: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message?: string;
@@ -8697,7 +11643,9 @@ export interface operations {
             };
             /** @description Not Found. The requested resource was not found. */
             404: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message?: string;
@@ -8706,7 +11654,9 @@ export interface operations {
             };
             /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
             429: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message?: string;
@@ -8715,7 +11665,9 @@ export interface operations {
             };
             /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
             500: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message?: string;
@@ -8744,7 +11696,9 @@ export interface operations {
         responses: {
             /** @description Email change request processed successfully */
             200: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         user?: components["schemas"]["User"];
@@ -8760,7 +11714,9 @@ export interface operations {
             };
             /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
             400: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message: string;
@@ -8769,7 +11725,9 @@ export interface operations {
             };
             /** @description Unauthorized. Due to missing or invalid authentication. */
             401: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message: string;
@@ -8778,7 +11736,9 @@ export interface operations {
             };
             /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
             403: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message?: string;
@@ -8787,7 +11747,9 @@ export interface operations {
             };
             /** @description Not Found. The requested resource was not found. */
             404: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message?: string;
@@ -8796,7 +11758,9 @@ export interface operations {
             };
             /** @description Unprocessable Entity. Email already exists */
             422: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message?: string;
@@ -8805,7 +11769,9 @@ export interface operations {
             };
             /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
             429: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message?: string;
@@ -8814,7 +11780,9 @@ export interface operations {
             };
             /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
             500: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message?: string;
@@ -8845,7 +11813,9 @@ export interface operations {
         responses: {
             /** @description Password successfully changed */
             200: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         /** @description New session token if other sessions were revoked */
@@ -8883,7 +11853,9 @@ export interface operations {
             };
             /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
             400: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message: string;
@@ -8892,7 +11864,9 @@ export interface operations {
             };
             /** @description Unauthorized. Due to missing or invalid authentication. */
             401: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message: string;
@@ -8901,7 +11875,9 @@ export interface operations {
             };
             /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
             403: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message?: string;
@@ -8910,7 +11886,9 @@ export interface operations {
             };
             /** @description Not Found. The requested resource was not found. */
             404: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message?: string;
@@ -8919,7 +11897,9 @@ export interface operations {
             };
             /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
             429: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message?: string;
@@ -8928,7 +11908,9 @@ export interface operations {
             };
             /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
             500: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message?: string;
@@ -8957,7 +11939,9 @@ export interface operations {
         responses: {
             /** @description Success */
             200: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         user?: components["schemas"]["User"];
@@ -8966,7 +11950,9 @@ export interface operations {
             };
             /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
             400: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message: string;
@@ -8975,7 +11961,9 @@ export interface operations {
             };
             /** @description Unauthorized. Due to missing or invalid authentication. */
             401: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message: string;
@@ -8984,7 +11972,9 @@ export interface operations {
             };
             /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
             403: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message?: string;
@@ -8993,7 +11983,9 @@ export interface operations {
             };
             /** @description Not Found. The requested resource was not found. */
             404: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message?: string;
@@ -9002,7 +11994,9 @@ export interface operations {
             };
             /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
             429: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message?: string;
@@ -9011,7 +12005,9 @@ export interface operations {
             };
             /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
             500: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message?: string;
@@ -9042,7 +12038,9 @@ export interface operations {
         responses: {
             /** @description User deletion processed successfully */
             200: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         /** @description Indicates if the operation was successful */
@@ -9057,7 +12055,9 @@ export interface operations {
             };
             /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
             400: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message: string;
@@ -9066,7 +12066,9 @@ export interface operations {
             };
             /** @description Unauthorized. Due to missing or invalid authentication. */
             401: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message: string;
@@ -9075,7 +12077,9 @@ export interface operations {
             };
             /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
             403: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message?: string;
@@ -9084,7 +12088,9 @@ export interface operations {
             };
             /** @description Not Found. The requested resource was not found. */
             404: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message?: string;
@@ -9093,7 +12099,9 @@ export interface operations {
             };
             /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
             429: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message?: string;
@@ -9102,7 +12110,9 @@ export interface operations {
             };
             /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
             500: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message?: string;
@@ -9131,7 +12141,9 @@ export interface operations {
         responses: {
             /** @description Success */
             200: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         status?: boolean;
@@ -9141,7 +12153,9 @@ export interface operations {
             };
             /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
             400: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message: string;
@@ -9150,7 +12164,9 @@ export interface operations {
             };
             /** @description Unauthorized. Due to missing or invalid authentication. */
             401: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message: string;
@@ -9159,7 +12175,9 @@ export interface operations {
             };
             /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
             403: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message?: string;
@@ -9168,7 +12186,9 @@ export interface operations {
             };
             /** @description Not Found. The requested resource was not found. */
             404: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message?: string;
@@ -9177,7 +12197,9 @@ export interface operations {
             };
             /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
             429: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message?: string;
@@ -9186,7 +12208,9 @@ export interface operations {
             };
             /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
             500: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message?: string;
@@ -9212,7 +12236,9 @@ export interface operations {
         responses: {
             /** @description Success */
             200: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         token?: string;
@@ -9221,7 +12247,9 @@ export interface operations {
             };
             /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
             400: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message: string;
@@ -9230,7 +12258,9 @@ export interface operations {
             };
             /** @description Unauthorized. Due to missing or invalid authentication. */
             401: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message: string;
@@ -9239,7 +12269,9 @@ export interface operations {
             };
             /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
             403: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message?: string;
@@ -9248,7 +12280,9 @@ export interface operations {
             };
             /** @description Not Found. The requested resource was not found. */
             404: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message?: string;
@@ -9257,7 +12291,9 @@ export interface operations {
             };
             /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
             429: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message?: string;
@@ -9266,7 +12302,9 @@ export interface operations {
             };
             /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
             500: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message?: string;
@@ -9286,14 +12324,18 @@ export interface operations {
         responses: {
             /** @description Success */
             200: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": components["schemas"]["Session"][];
                 };
             };
             /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
             400: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message: string;
@@ -9302,7 +12344,9 @@ export interface operations {
             };
             /** @description Unauthorized. Due to missing or invalid authentication. */
             401: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message: string;
@@ -9311,7 +12355,9 @@ export interface operations {
             };
             /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
             403: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message?: string;
@@ -9320,7 +12366,9 @@ export interface operations {
             };
             /** @description Not Found. The requested resource was not found. */
             404: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message?: string;
@@ -9329,7 +12377,9 @@ export interface operations {
             };
             /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
             429: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message?: string;
@@ -9338,7 +12388,9 @@ export interface operations {
             };
             /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
             500: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message?: string;
@@ -9381,7 +12433,9 @@ export interface operations {
         responses: {
             /** @description Success */
             200: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         /** @description The authorization URL to redirect the user to */
@@ -9394,7 +12448,9 @@ export interface operations {
             };
             /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
             400: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message: string;
@@ -9403,7 +12459,9 @@ export interface operations {
             };
             /** @description Unauthorized. Due to missing or invalid authentication. */
             401: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message: string;
@@ -9412,7 +12470,9 @@ export interface operations {
             };
             /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
             403: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message?: string;
@@ -9421,7 +12481,9 @@ export interface operations {
             };
             /** @description Not Found. The requested resource was not found. */
             404: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message?: string;
@@ -9430,7 +12492,9 @@ export interface operations {
             };
             /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
             429: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message?: string;
@@ -9439,7 +12503,9 @@ export interface operations {
             };
             /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
             500: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message?: string;
@@ -9459,7 +12525,9 @@ export interface operations {
         responses: {
             /** @description Success */
             200: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         id: string;
@@ -9476,7 +12544,9 @@ export interface operations {
             };
             /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
             400: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message: string;
@@ -9485,7 +12555,9 @@ export interface operations {
             };
             /** @description Unauthorized. Due to missing or invalid authentication. */
             401: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message: string;
@@ -9494,7 +12566,9 @@ export interface operations {
             };
             /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
             403: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message?: string;
@@ -9503,7 +12577,9 @@ export interface operations {
             };
             /** @description Not Found. The requested resource was not found. */
             404: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message?: string;
@@ -9512,7 +12588,9 @@ export interface operations {
             };
             /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
             429: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message?: string;
@@ -9521,7 +12599,9 @@ export interface operations {
             };
             /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
             500: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message?: string;
@@ -9549,14 +12629,18 @@ export interface operations {
         responses: {
             /** @description Success */
             200: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": components["schemas"]["Organization"];
                 };
             };
             /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
             400: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message: string;
@@ -9565,7 +12649,9 @@ export interface operations {
             };
             /** @description Unauthorized. Due to missing or invalid authentication. */
             401: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message: string;
@@ -9574,7 +12660,9 @@ export interface operations {
             };
             /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
             403: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message?: string;
@@ -9583,7 +12671,9 @@ export interface operations {
             };
             /** @description Not Found. The requested resource was not found. */
             404: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message?: string;
@@ -9592,7 +12682,9 @@ export interface operations {
             };
             /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
             429: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message?: string;
@@ -9601,7 +12693,9 @@ export interface operations {
             };
             /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
             500: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message?: string;
@@ -9621,14 +12715,18 @@ export interface operations {
         responses: {
             /** @description Success */
             200: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": components["schemas"]["Organization"];
                 };
             };
             /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
             400: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message: string;
@@ -9637,7 +12735,9 @@ export interface operations {
             };
             /** @description Unauthorized. Due to missing or invalid authentication. */
             401: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message: string;
@@ -9646,7 +12746,9 @@ export interface operations {
             };
             /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
             403: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message?: string;
@@ -9655,7 +12757,9 @@ export interface operations {
             };
             /** @description Not Found. The requested resource was not found. */
             404: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message?: string;
@@ -9664,7 +12768,9 @@ export interface operations {
             };
             /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
             429: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message?: string;
@@ -9673,7 +12779,9 @@ export interface operations {
             };
             /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
             500: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message?: string;
@@ -9707,7 +12815,9 @@ export interface operations {
         responses: {
             /** @description Success */
             200: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         id: string;
@@ -9723,7 +12833,9 @@ export interface operations {
             };
             /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
             400: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message: string;
@@ -9732,7 +12844,9 @@ export interface operations {
             };
             /** @description Unauthorized. Due to missing or invalid authentication. */
             401: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message: string;
@@ -9741,7 +12855,9 @@ export interface operations {
             };
             /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
             403: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message?: string;
@@ -9750,7 +12866,9 @@ export interface operations {
             };
             /** @description Not Found. The requested resource was not found. */
             404: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message?: string;
@@ -9759,7 +12877,9 @@ export interface operations {
             };
             /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
             429: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message?: string;
@@ -9768,7 +12888,9 @@ export interface operations {
             };
             /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
             500: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message?: string;
@@ -9799,7 +12921,9 @@ export interface operations {
         responses: {
             /** @description Success */
             200: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         member: {
@@ -9813,7 +12937,9 @@ export interface operations {
             };
             /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
             400: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message: string;
@@ -9822,7 +12948,9 @@ export interface operations {
             };
             /** @description Unauthorized. Due to missing or invalid authentication. */
             401: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message: string;
@@ -9831,7 +12959,9 @@ export interface operations {
             };
             /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
             403: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message?: string;
@@ -9840,7 +12970,9 @@ export interface operations {
             };
             /** @description Not Found. The requested resource was not found. */
             404: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message?: string;
@@ -9849,7 +12981,9 @@ export interface operations {
             };
             /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
             429: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message?: string;
@@ -9858,7 +12992,9 @@ export interface operations {
             };
             /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
             500: {
-                headers: Record<string, unknown>;
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
                     "application/json": {
                         message?: string;
