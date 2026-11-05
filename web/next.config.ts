@@ -18,11 +18,6 @@ const nextConfig: NextConfig = {
         destination: "/:slug/settings/general",
         permanent: false,
       },
-      {
-        source: "/:slug",
-        destination: "/:slug/dashboard",
-        permanent: false,
-      },
     ];
   },
   rewrites: () => [
