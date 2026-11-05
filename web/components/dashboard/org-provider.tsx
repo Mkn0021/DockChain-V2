@@ -1,5 +1,6 @@
 "use client";
 
+import type { OrgRole } from "@/lib/permissions";
 import { createContext, useContext, type ReactNode } from "react";
 
 export interface OrgSummary {
@@ -20,6 +21,7 @@ interface OrgContextValue {
   organization: OrgSummary;
   organizations: OrgSummary[];
   user: OrgUser;
+  role: OrgRole | null;
 }
 
 const OrgContext = createContext<OrgContextValue | null>(null);

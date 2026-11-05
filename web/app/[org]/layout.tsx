@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 
 import { DashboardShell } from "@/components/dashboard/dashboard-shell";
 import { OrgProvider } from "@/components/dashboard/org-provider";
-import { getOrganizations, getSession } from "@/lib/server-auth";
+import { getMemberRole, getOrganizations, getSession } from "@/lib/server-auth";
 
 export default async function OrgLayout({
   children,
@@ -32,6 +32,8 @@ export default async function OrgLayout({
     notFound();
   }
 
+  const role = await getMemberRole(organization.id);
+
   return (
     <OrgProvider
       value={{
@@ -43,6 +45,7 @@ export default async function OrgLayout({
           email: session.user.email,
           image: session.user.image ?? null,
         },
+        role,
       }}
     >
       <DashboardShell>{children}</DashboardShell>
