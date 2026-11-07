@@ -7,7 +7,6 @@ import { Controller, useForm } from "react-hook-form";
 
 import { FormAlert } from "@/components/auth/form-alert";
 import { PasswordInput } from "@/components/auth/password-input";
-import { SubmitButton } from "@/components/auth/submit-button";
 import {
   Field,
   FieldError,
@@ -15,6 +14,7 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { SubmitButton } from "@/components/ui/submit-button";
 import { authClient } from "@/lib/auth-client";
 import { resolvePostAuthPath } from "@/lib/auth-redirect";
 import { toAuthError } from "@/lib/auth-utils";

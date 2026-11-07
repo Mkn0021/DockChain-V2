@@ -1,6 +1,6 @@
 import { cn } from "cn";
 
-import { Section, SectionHeader } from "../_ui/section";
+import { Section, SectionHeader } from "../ui/section";
 
 const FEATURES = [
   {

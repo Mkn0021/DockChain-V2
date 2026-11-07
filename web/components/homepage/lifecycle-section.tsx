@@ -1,4 +1,5 @@
-import { Section, SectionHeader } from "../_ui/section";
+import { Section, SectionHeader } from "../ui/section";
+
 import { DockChainFlow } from "./dockchain-flow";
 
 const DEFAULT_STEPS = [

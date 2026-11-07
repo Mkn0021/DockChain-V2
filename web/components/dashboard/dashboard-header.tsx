@@ -5,10 +5,11 @@ import { usePathname } from "next/navigation";
 
 import { getPageInfo } from "@/lib/dashboard/get-page-info";
 
-import { SectionHeader } from "../_ui/section";
+import { SectionHeader } from "../ui/section";
+
 import { HamburgerMenu } from "./hamburger-menu";
-import { ProfileContainer } from "./profile-container";
 import { useOrg } from "./org-provider";
+import { ProfileContainer } from "./profile-container";
 
 interface DashboardHeaderProps {
   sidebarOpen: boolean;

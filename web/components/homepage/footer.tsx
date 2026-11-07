@@ -8,10 +8,10 @@ import {
   FaLinkedin,
 } from "react-icons/fa";
 
-import Logo from "../_ui/logo";
-import { Section, SectionHeader } from "../_ui/section";
 import { buttonVariants } from "../ui/button";
-import { Separator } from "../_ui/separator";
+import Logo from "../ui/logo";
+import { Section, SectionHeader } from "../ui/section";
+import { Separator } from "../ui/separator";
 
 const socials = [
   { icon: FaTelegram, url: "https://t.me/mkn0021" },

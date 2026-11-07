@@ -4,8 +4,8 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
 import { useState, useEffect, useRef, useCallback } from "react";
 
-import { Section, SectionHeader } from "../_ui/section";
 import { Button } from "../ui/button";
+import { Section, SectionHeader } from "../ui/section";
 
 const TESTIMONIALS = [
   {

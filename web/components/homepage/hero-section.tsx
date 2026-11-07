@@ -2,9 +2,9 @@ import { cn } from "cn";
 import { Check } from "lucide-react";
 import Link from "next/link";
 
-import { GradientBackground } from "../_ui/gradient-background";
-import { Section } from "../_ui/section";
 import { buttonVariants } from "../ui/button";
+import { GradientBackground } from "../ui/gradient-background";
+import { Section } from "../ui/section";
 
 export const KEY_FEATURES = [
   "Create Organization",

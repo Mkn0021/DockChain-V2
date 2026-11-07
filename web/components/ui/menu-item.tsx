@@ -2,6 +2,7 @@
 
 import { cn } from "cn";
 import Link from "next/link";
+
 import type { ComponentProps, ReactNode } from "react";
 import type { IconType } from "react-icons";
 

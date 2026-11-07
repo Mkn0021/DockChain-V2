@@ -7,7 +7,20 @@
   "trailingComma": "es5",
   "arrowParens": "always",
   "endOfLine": "lf",
-  "experimentalSortImports": null,
+  "experimentalSortImports": {
+    "groups": [
+      ["react", "react-dom", "next", "next/**"],
+      ["builtin"],
+      ["external"],
+      ["internal"],
+      ["parent"],
+      ["sibling"],
+      ["index"],
+      ["object"],
+      ["type"],
+    ],
+    "newlinesBetween": true,
+  },
   "experimentalTailwindcss": {
     "stylesheet": "./app/globals.css",
     "functions": ["cn", "cva", "clsx"],

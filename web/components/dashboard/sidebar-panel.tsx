@@ -3,7 +3,8 @@
 import { motion } from "motion/react";
 import { FaChevronRight } from "react-icons/fa";
 
-import { MenuItem } from "./menu-item";
+import { MenuItem } from "../ui/menu-item";
+
 import type { NavItem, NavKey } from "./menu-config";
 
 interface SidebarPanelProps {

@@ -2,10 +2,10 @@ import { CheckCircle2 } from "lucide-react";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
-import { GradientBackground } from "@/components/_ui/gradient-background";
-import { Navbar } from "@/components/_ui/navbar";
-import { Section, SectionHeader } from "@/components/_ui/section";
 import { AuthPanel } from "@/components/auth/auth-panel";
+import { GradientBackground } from "@/components/ui/gradient-background";
+import { Navbar } from "@/components/ui/navbar";
+import { Section, SectionHeader } from "@/components/ui/section";
 import { safeRedirect } from "@/lib/auth-utils";
 import { getHomePath } from "@/lib/server-auth";
 

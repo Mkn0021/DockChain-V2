@@ -18,8 +18,9 @@ import {
   type GeneralFormValues,
 } from "@/lib/schemas/settings-general";
 import { useUpdateOrganization } from "@/lib/settings/queries";
-import { SubmitButton } from "../auth/submit-button";
+
 import { Button } from "../ui/button";
+import { SubmitButton } from "../ui/submit-button";
 
 interface GeneralFormProps {
   organizationId: string;

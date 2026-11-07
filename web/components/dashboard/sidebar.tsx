@@ -7,17 +7,18 @@ import { FaArrowLeft } from "react-icons/fa";
 
 import { cn } from "@/lib/utils";
 
-import Logo from "../_ui/logo";
-import { Separator } from "../_ui/separator";
+import Logo from "../ui/logo";
+import { MenuItem } from "../ui/menu-item";
+import { Separator } from "../ui/separator";
+
 import {
   getPanelFromPath,
   PANEL_KEYS,
   PANELS,
   type NavKey,
 } from "./menu-config";
-import { MenuItem } from "./menu-item";
-import { SidebarPanel } from "./sidebar-panel";
 import { useOrg } from "./org-provider";
+import { SidebarPanel } from "./sidebar-panel";
 
 interface SidebarProps {
   open: boolean;

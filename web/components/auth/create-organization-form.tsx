@@ -8,7 +8,6 @@ import { Controller, useForm } from "react-hook-form";
 
 import { AuthCard } from "@/components/auth/auth-card";
 import { FormAlert } from "@/components/auth/form-alert";
-import { SubmitButton } from "@/components/auth/submit-button";
 import { toast } from "@/components/providers/toast-provider";
 import {
   Field,
@@ -18,6 +17,7 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { SubmitButton } from "@/components/ui/submit-button";
 import { ApiError, apiFetch } from "@/lib/api";
 import { authClient } from "@/lib/auth-client";
 import { slugify } from "@/lib/auth-utils";

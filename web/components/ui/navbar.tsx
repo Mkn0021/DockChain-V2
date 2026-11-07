@@ -1,7 +1,8 @@
 import { cn } from "cn";
 import React from "react";
 
-import Logo from "./logo";
+import Logo from "../ui/logo";
+
 import { Section } from "./section";
 
 interface NavbarProps {
