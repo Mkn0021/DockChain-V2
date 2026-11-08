@@ -7,11 +7,12 @@ import type { ComponentProps, ReactNode } from "react";
 import type { IconType } from "react-icons";
 
 interface OwnProps {
-  icon: IconType;
+  icon?: IconType;
   label: string;
   isActive?: boolean;
   className?: string;
   trailing?: ReactNode;
+  size?: "default" | "sm";
 }
 
 type ButtonProps = OwnProps &
@@ -34,11 +35,13 @@ export function MenuItem(props: MenuItemProps) {
     className,
     trailing,
     as,
+    size = "default",
     ...rest
   } = props;
 
   const classes = cn(
-    "flex w-full items-center gap-4 rounded-md px-6 py-4 text-left font-medium transition-all duration-150",
+    "flex w-full items-center rounded-md text-left font-medium transition-all duration-150 disabled:pointer-events-none disabled:opacity-50",
+    size === "sm" ? "gap-2 px-3 py-2 text-sm" : "gap-4 px-6 py-4 text-base",
     isActive
       ? "bg-primary/10 text-primary"
       : "text-foreground/80 hover:bg-muted hover:text-foreground",
@@ -47,7 +50,11 @@ export function MenuItem(props: MenuItemProps) {
 
   const content = (
     <>
-      <Icon className="size-5 shrink-0" />
+      {Icon ? (
+        <Icon
+          className={size === "sm" ? "size-4 shrink-0" : "size-5 shrink-0"}
+        />
+      ) : null}
       <span className="flex-1">{label}</span>
       {trailing}
     </>

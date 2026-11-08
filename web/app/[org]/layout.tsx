@@ -1,9 +1,10 @@
 import { notFound, redirect } from "next/navigation";
-import type { ReactNode } from "react";
 
 import { DashboardShell } from "@/components/dashboard/dashboard-shell";
 import { OrgProvider } from "@/components/dashboard/org-provider";
 import { getMemberRole, getOrganizations, getSession } from "@/lib/server-auth";
+
+import type { ReactNode } from "react";
 
 export default async function OrgLayout({
   children,

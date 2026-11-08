@@ -1,9 +1,10 @@
-import type { IconType } from "react-icons";
 import {
   BsShieldCheck,
   BsXCircle,
   BsExclamationTriangle,
 } from "react-icons/bs";
+
+import type { IconType } from "react-icons";
 
 export const VERIFY_INSTRUCTIONS = [
   {

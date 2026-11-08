@@ -1,7 +1,8 @@
 "use client";
 
-import type { OrgRole } from "@/lib/permissions";
 import { createContext, useContext, type ReactNode } from "react";
+
+import type { OrgRole } from "@/lib/permissions";
 
 export interface OrgSummary {
   id: string;

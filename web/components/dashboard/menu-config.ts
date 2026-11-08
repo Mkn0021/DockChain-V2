@@ -1,4 +1,3 @@
-import type { IconType } from "react-icons";
 import {
   FaBuilding,
   FaChartPie,
@@ -15,6 +14,8 @@ import {
   FaUserPlus,
   FaWallet,
 } from "react-icons/fa";
+
+import type { IconType } from "react-icons";
 
 export interface NavItem {
   id: string;

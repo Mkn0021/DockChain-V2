@@ -1,9 +1,9 @@
 "use client";
 
+import { useOrg } from "@/components/dashboard/org-provider";
 import { DangerZone } from "@/components/settings/danger-zone";
 import { GeneralForm } from "@/components/settings/general-form";
 import { PageError, PageSkeleton } from "@/components/settings/page-states";
-import { useOrg } from "@/components/dashboard/org-provider";
 import { can } from "@/lib/permissions";
 import { useOrganization } from "@/lib/settings/queries";
 

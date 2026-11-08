@@ -1,8 +1,8 @@
-import { cache } from "react";
-
 import { createAuthClient } from "better-auth/client";
 import { organizationClient } from "better-auth/client/plugins";
 import { headers } from "next/headers";
+import { cache } from "react";
+
 import { isOrgRole, type OrgRole } from "./permissions";
 
 const serverAuthClient = createAuthClient({

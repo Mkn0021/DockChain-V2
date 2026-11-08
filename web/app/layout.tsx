@@ -1,10 +1,11 @@
 import "./globals.css";
-import type { Metadata } from "next";
+import { MotionConfig } from "motion/react";
 
 import { QueryProvider } from "@/components/providers/query-provider";
 import { ToastProvider } from "@/components/providers/toast-provider";
 import { AppWagmiProvider } from "@/components/providers/wagmi-provider";
-import { MotionConfig } from "motion/react";
+
+import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "DockChain",

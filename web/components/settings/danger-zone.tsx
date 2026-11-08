@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
+import { toast } from "@/components/providers/toast-provider";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -17,7 +18,6 @@ import {
 import { buttonVariants } from "@/components/ui/button";
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { toast } from "@/components/providers/toast-provider";
 import { useDeleteOrganization } from "@/lib/settings/queries";
 
 interface DangerZoneProps {

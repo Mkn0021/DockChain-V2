@@ -140,7 +140,7 @@ export function ProfileContainer() {
           icon={FaSignOutAlt}
           label="Log Out"
           onClick={s.handleLogout}
-          className="text-red-600"
+          className="text-destructive hover:bg-destructive/10 hover:text-destructive"
         />
       </DropdownMenuContent>
     </DropdownMenu>

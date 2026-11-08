@@ -3,8 +3,8 @@
 import { useCallback, useState, type ReactNode } from "react";
 
 import { DashboardHeader } from "./dashboard-header";
-import { Sidebar } from "./sidebar";
 import { PageTransition } from "./page-transition";
+import { Sidebar } from "./sidebar";
 
 export function DashboardShell({ children }: { children: ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
