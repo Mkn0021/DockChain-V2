@@ -169,10 +169,48 @@ export function useInviteMember(orgId: string) {
   return useMutation({
     mutationFn: (body: InvitationBody) => inviteMember(orgId, body),
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: invitationsKeys.all(orgId) });
       queryClient.invalidateQueries({ queryKey: membersKeys.all(orgId) });
-      queryClient.invalidateQueries({
-        queryKey: ["settings", "invitations", orgId],
-      });
+    },
+  });
+}
+
+// ---- Invitations ---------------------------------------------------------
+
+type InvitationsList = ResponseOf<InvitationsPath, "get">;
+type InvitationRow = InvitationsList[number];
+
+export const invitationsKeys = {
+  all: (orgId: string) => ["settings", "invitations", orgId] as const,
+};
+
+function fetchInvitations(orgId: string): Promise<InvitationsList> {
+  return apiFetch<InvitationsList>(`/organizations/${orgId}/invitations`);
+}
+
+function cancelInvitation(
+  orgId: string,
+  invitationId: string
+): Promise<InvitationRow> {
+  return apiFetch<InvitationRow>(
+    `/organizations/${orgId}/invitations/${invitationId}`,
+    { method: "DELETE" }
+  );
+}
+
+export function useInvitations(orgId: string) {
+  return useQuery({
+    queryKey: invitationsKeys.all(orgId),
+    queryFn: () => fetchInvitations(orgId),
+  });
+}
+
+export function useCancelInvitation(orgId: string) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (invitationId: string) => cancelInvitation(orgId, invitationId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: invitationsKeys.all(orgId) });
     },
   });
 }
