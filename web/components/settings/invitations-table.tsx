@@ -44,6 +44,7 @@ import {
 } from "@/components/ui/table";
 import { can } from "@/lib/permissions";
 import { useCancelInvitation, useInvitations } from "@/lib/settings/queries";
+import { formatDate } from "@/lib/utils";
 
 import type { ResponseOf } from "@/lib/api/response-of";
 
@@ -70,13 +71,6 @@ type InvitationRow = ResponseOf<
   "/organizations/{organizationId}/invitations",
   "get"
 >[number];
-
-function formatDate(value: unknown): string {
-  if (typeof value === "string" || typeof value === "number") {
-    return new Date(value).toLocaleDateString();
-  }
-  return "—";
-}
 
 function DataTableColumnHeader({
   column,
