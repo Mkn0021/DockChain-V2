@@ -263,3 +263,27 @@ export function useArchiveTemplate(orgId: string) {
     },
   });
 }
+
+type NewTemplatePath = "/organizations/{organizationId}/templates/";
+type NewTemplateBody = RequestBodyOf<NewTemplatePath, "post">;
+type NewTemplateResult = ResponseOf<NewTemplatePath, "post">;
+
+function createTemplate(
+  orgId: string,
+  body: NewTemplateBody
+): Promise<NewTemplateResult> {
+  return apiFetch<NewTemplateResult>(`/organizations/${orgId}/templates/`, {
+    method: "POST",
+    body,
+  });
+}
+
+export function useCreateTemplate(orgId: string) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (body: NewTemplateBody) => createTemplate(orgId, body),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: templatesKeys.all(orgId) });
+    },
+  });
+}
