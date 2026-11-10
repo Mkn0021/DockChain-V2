@@ -6,8 +6,8 @@ import { AuthPanel } from "@/components/auth/auth-panel";
 import { GradientBackground } from "@/components/ui/gradient-background";
 import { Navbar } from "@/components/ui/navbar";
 import { Section, SectionHeader } from "@/components/ui/section";
-import { safeRedirect } from "@/lib/auth-utils";
-import { getHomePath } from "@/lib/server-auth";
+import { getHomePath } from "@/lib/auth/server";
+import { safeRedirect } from "@/lib/auth/utils";
 
 const FEATURES = [
   "Issue certificates, degrees, and IDs from templates.",

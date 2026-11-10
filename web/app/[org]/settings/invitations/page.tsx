@@ -4,8 +4,8 @@ import { useOrg } from "@/components/dashboard/org-provider";
 import { AccessDenied } from "@/components/settings/access-denied";
 import { InvitationsTable } from "@/components/settings/invitations-table";
 import { InviteMemberDialog } from "@/components/settings/invite-member-dialog";
-import { can } from "@/lib/permissions";
-import { useMembers } from "@/lib/settings/queries";
+import { useMembers } from "@/lib/api/queries/members";
+import { can } from "@/lib/auth/permissions";
 
 export default function SettingsInvitationsPage() {
   const { organization, role } = useOrg();

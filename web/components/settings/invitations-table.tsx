@@ -42,8 +42,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { can } from "@/lib/permissions";
-import { useCancelInvitation, useInvitations } from "@/lib/settings/queries";
+import {
+  useCancelInvitation,
+  useInvitations,
+} from "@/lib/api/queries/invitations";
+import { can } from "@/lib/auth/permissions";
 import { formatDate } from "@/lib/utils";
 
 import type { ResponseOf } from "@/lib/api/response-of";

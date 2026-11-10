@@ -15,9 +15,9 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { SubmitButton } from "@/components/ui/submit-button";
-import { authClient } from "@/lib/auth-client";
-import { resolvePostAuthPath } from "@/lib/auth-redirect";
-import { toAuthError } from "@/lib/auth-utils";
+import { authClient } from "@/lib/auth/client";
+import { resolvePostAuthPath } from "@/lib/auth/redirect";
+import { toAuthError } from "@/lib/auth/utils";
 import { type LoginValues, loginSchema } from "@/lib/schemas/auth";
 
 export const LoginForm = ({ redirectTo }: { redirectTo: string | null }) => {

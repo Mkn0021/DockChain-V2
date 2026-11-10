@@ -44,13 +44,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { can } from "@/lib/permissions";
 import {
   type MemberRole,
   useMembers,
   useRemoveMember,
   useUpdateMemberRole,
-} from "@/lib/settings/queries";
+} from "@/lib/api/queries/members";
+import { can } from "@/lib/auth/permissions";
 
 const ASSIGNABLE_ROLES: MemberRole[] = ["admin", "issuer", "viewer"];
 export const MAX_MEMBERS = 100;

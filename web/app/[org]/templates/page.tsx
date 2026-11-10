@@ -8,7 +8,7 @@ import { useOrg } from "@/components/dashboard/org-provider";
 import { AccessDenied } from "@/components/settings/access-denied";
 import { TemplatesTable } from "@/components/templates/templates-table";
 import { buttonVariants } from "@/components/ui/button";
-import { can } from "@/lib/permissions";
+import { can } from "@/lib/auth/permissions";
 
 export default function TemplatesPage() {
   const { organization, role } = useOrg();

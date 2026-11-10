@@ -25,12 +25,12 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { SubmitButton } from "@/components/ui/submit-button";
+import { useInviteMember } from "@/lib/api/queries/invitations";
 import {
   INVITE_ROLES,
   inviteFormSchema,
   type InviteFormValues,
 } from "@/lib/schemas/invite-member";
-import { useInviteMember } from "@/lib/settings/queries";
 
 import {
   DropdownMenu,

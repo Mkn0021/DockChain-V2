@@ -4,9 +4,9 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { FaExchangeAlt, FaPlus, FaSignOutAlt } from "react-icons/fa";
 
-import { authClient } from "@/lib/auth-client";
+import { getInitialsAndColor } from "@/components/dashboard/profile-utils";
+import { authClient } from "@/lib/auth/client";
 import { cn } from "@/lib/utils";
-import { getInitialsAndColor } from "@/utils/profile-utils";
 
 import {
   DropdownMenu,

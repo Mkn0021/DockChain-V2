@@ -4,7 +4,7 @@ import { AcceptInvitationCard } from "@/components/auth/accept-invitation-card";
 import { GradientBackground } from "@/components/ui/gradient-background";
 import { Navbar } from "@/components/ui/navbar";
 import { Section } from "@/components/ui/section";
-import { getSession } from "@/lib/server-auth";
+import { getSession } from "@/lib/auth/server";
 
 export default async function AcceptInvitationPage({
   params,

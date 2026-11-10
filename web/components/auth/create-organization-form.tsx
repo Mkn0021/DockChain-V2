@@ -18,9 +18,9 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { SubmitButton } from "@/components/ui/submit-button";
-import { ApiError, apiFetch } from "@/lib/api";
-import { authClient } from "@/lib/auth-client";
-import { slugify } from "@/lib/auth-utils";
+import { ApiError, apiFetch } from "@/lib/api/client";
+import { authClient } from "@/lib/auth/client";
+import { slugify } from "@/lib/auth/utils";
 import {
   type OrganizationValues,
   organizationSchema,

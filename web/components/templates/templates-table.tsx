@@ -42,8 +42,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { can } from "@/lib/permissions";
-import { useArchiveTemplate, useTemplates } from "@/lib/settings/queries";
+import { useArchiveTemplate, useTemplates } from "@/lib/api/queries/templates";
+import { can } from "@/lib/auth/permissions";
 import { formatDate } from "@/lib/utils";
 
 const SORT_ICONS = {

@@ -2,7 +2,7 @@ import { notFound, redirect } from "next/navigation";
 
 import { DashboardShell } from "@/components/dashboard/dashboard-shell";
 import { OrgProvider } from "@/components/dashboard/org-provider";
-import { getMemberRole, getOrganizations, getSession } from "@/lib/server-auth";
+import { getMemberRole, getOrganizations, getSession } from "@/lib/auth/server";
 
 import type { ReactNode } from "react";
 

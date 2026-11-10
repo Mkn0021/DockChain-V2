@@ -3,8 +3,8 @@
 import { useOrg } from "@/components/dashboard/org-provider";
 import { InviteMemberDialog } from "@/components/settings/invite-member-dialog";
 import { MembersTable } from "@/components/settings/members-table";
-import { can } from "@/lib/permissions";
-import { useMembers } from "@/lib/settings/queries";
+import { useMembers } from "@/lib/api/queries/members";
+import { can } from "@/lib/auth/permissions";
 
 export default function SettingsMembersPage() {
   const { organization, role } = useOrg();

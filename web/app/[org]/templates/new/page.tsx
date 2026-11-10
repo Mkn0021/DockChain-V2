@@ -3,7 +3,7 @@
 import { useOrg } from "@/components/dashboard/org-provider";
 import { AccessDenied } from "@/components/settings/access-denied";
 import { NewTemplateForm } from "@/components/templates/new-template-form";
-import { can } from "@/lib/permissions";
+import { can } from "@/lib/auth/permissions";
 
 export default function NewTemplatePage() {
   const { organization, role } = useOrg();

@@ -2,7 +2,7 @@
 
 import { createContext, useContext, type ReactNode } from "react";
 
-import type { OrgRole } from "@/lib/permissions";
+import type { OrgRole } from "@/lib/auth/permissions";
 
 export interface OrgSummary {
   id: string;

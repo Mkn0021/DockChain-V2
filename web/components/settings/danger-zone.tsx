@@ -18,7 +18,7 @@ import {
 import { buttonVariants } from "@/components/ui/button";
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { useDeleteOrganization } from "@/lib/settings/queries";
+import { useDeleteOrganization } from "@/lib/api/queries/organization";
 
 interface DangerZoneProps {
   organizationId: string;

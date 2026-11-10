@@ -5,7 +5,7 @@ import { CreateOrganizationForm } from "@/components/auth/create-organization-fo
 import { GradientBackground } from "@/components/ui/gradient-background";
 import { Navbar } from "@/components/ui/navbar";
 import { Section } from "@/components/ui/section";
-import { getHomePath, getOrganizations, getSession } from "@/lib/server-auth";
+import { getHomePath, getOrganizations, getSession } from "@/lib/auth/server";
 
 export default async function OnboardingPage({
   searchParams,

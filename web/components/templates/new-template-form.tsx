@@ -15,13 +15,13 @@ import {
 import { Input } from "@/components/ui/input";
 import { SubmitButton } from "@/components/ui/submit-button";
 import { Textarea } from "@/components/ui/textarea";
+import { useCreateTemplate } from "@/lib/api/queries/templates";
 import {
   newTemplateSchema,
   templateFieldSchemaObject,
   type NewTemplateValues,
   type TemplateField,
 } from "@/lib/schemas/template";
-import { useCreateTemplate } from "@/lib/settings/queries";
 
 import { SvgDropzone } from "./svg-dropzone";
 

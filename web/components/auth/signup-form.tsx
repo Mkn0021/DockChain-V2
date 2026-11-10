@@ -16,9 +16,9 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { SubmitButton } from "@/components/ui/submit-button";
-import { authClient } from "@/lib/auth-client";
-import { resolvePostAuthPath } from "@/lib/auth-redirect";
-import { AuthError, toAuthError } from "@/lib/auth-utils";
+import { authClient } from "@/lib/auth/client";
+import { resolvePostAuthPath } from "@/lib/auth/redirect";
+import { AuthError, toAuthError } from "@/lib/auth/utils";
 import { type SignupValues, signupSchema } from "@/lib/schemas/auth";
 
 const DUPLICATE_CODES = new Set([

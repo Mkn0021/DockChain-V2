@@ -4,8 +4,8 @@ import { useOrg } from "@/components/dashboard/org-provider";
 import { DangerZone } from "@/components/settings/danger-zone";
 import { GeneralForm } from "@/components/settings/general-form";
 import { PageError, PageSkeleton } from "@/components/settings/page-states";
-import { can } from "@/lib/permissions";
-import { useOrganization } from "@/lib/settings/queries";
+import { useOrganization } from "@/lib/api/queries/organization";
+import { can } from "@/lib/auth/permissions";
 
 export default function SettingsGeneralPage() {
   const { organization, role } = useOrg();

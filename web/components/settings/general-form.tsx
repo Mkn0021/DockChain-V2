@@ -13,11 +13,11 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { useUpdateOrganization } from "@/lib/api/queries/organization";
 import {
   generalFormSchema,
   type GeneralFormValues,
 } from "@/lib/schemas/settings-general";
-import { useUpdateOrganization } from "@/lib/settings/queries";
 
 import { Button } from "../ui/button";
 import { SubmitButton } from "../ui/submit-button";
