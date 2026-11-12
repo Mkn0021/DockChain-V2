@@ -2,9 +2,11 @@
 
 import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import { FaExchangeAlt, FaPlus, FaSignOutAlt } from "react-icons/fa";
+import { FaExchangeAlt, FaPlus, FaSignOutAlt, FaWallet } from "react-icons/fa";
 
 import { getInitialsAndColor } from "@/components/dashboard/profile-utils";
+import { useSettings } from "@/lib/api/queries/settings";
+import { useWallets } from "@/lib/api/queries/wallets";
 import { authClient } from "@/lib/auth/client";
 import { cn } from "@/lib/utils";
 
@@ -97,6 +99,46 @@ function ProfileUserInfo({
   );
 }
 
+function truncateAddress(address: string): string {
+  return `${address.slice(0, 6)}…${address.slice(-4)}`;
+}
+
+function ProfileWalletInfo({ organizationId }: { organizationId: string }) {
+  const settings = useSettings(organizationId);
+  const wallets = useWallets(organizationId);
+
+  const defaultWallet =
+    (wallets.data ?? []).find((w) => w.id === settings.data?.defaultWalletId) ??
+    null;
+
+  return (
+    <div className="px-6 py-3">
+      <p className="mb-1 text-xs font-medium text-muted-foreground uppercase">
+        Issuer wallet
+      </p>
+      {defaultWallet ? (
+        <div className="flex items-start gap-3">
+          <div className="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
+            <FaWallet className="size-3.5" />
+          </div>
+          <div className="min-w-0">
+            <p className="truncate text-sm font-medium">
+              {defaultWallet.label}
+            </p>
+            <p className="truncate font-mono text-xs text-muted-foreground">
+              {truncateAddress(defaultWallet.address)}
+            </p>
+          </div>
+        </div>
+      ) : (
+        <p className="text-xs text-muted-foreground">
+          No default wallet configured.
+        </p>
+      )}
+    </div>
+  );
+}
+
 export function ProfileContainer() {
   const s = useProfileDropdown();
 
@@ -111,6 +153,10 @@ export function ProfileContainer() {
           initials={s.initials}
           colorClass={s.colorClass}
         />
+
+        <DropdownMenuSeparator />
+
+        <ProfileWalletInfo organizationId={s.organization.id} />
 
         <DropdownMenuSeparator />
 
