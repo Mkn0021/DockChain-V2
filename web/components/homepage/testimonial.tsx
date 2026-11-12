@@ -2,9 +2,9 @@
 
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
-import { useState, useEffect, useRef, useCallback } from "react";
 
 import { Button } from "../ui/button";
+import { CarouselViewport, useCarousel } from "../ui/carousel";
 import { Section, SectionHeader } from "../ui/section";
 
 const TESTIMONIALS = [
@@ -50,91 +50,75 @@ const TESTIMONIALS = [
   },
 ];
 
+interface TestimonialCardProps {
+  quote: string;
+  name: string;
+  role: string;
+  org: string;
+  avatar: string;
+}
+
+function TestimonialCard({
+  quote,
+  name,
+  role,
+  org,
+  avatar,
+}: TestimonialCardProps) {
+  return (
+    <div className="flex h-full flex-col justify-between rounded-3xl border border-neutral-200/70 bg-neutral-100 p-8 shadow-sm dark:border-neutral-800 dark:bg-neutral-900">
+      <blockquote className="text-lg leading-relaxed text-foreground">
+        &ldquo;{quote}&rdquo;
+      </blockquote>
+
+      <div className="mt-8 flex items-center gap-4">
+        <div className="relative flex size-12 shrink-0 overflow-hidden rounded-full border border-border bg-primary/10">
+          <Image
+            src={avatar}
+            alt={name}
+            width={48}
+            height={48}
+            className="aspect-square h-full w-full object-cover"
+          />
+        </div>
+        <div>
+          <div className="font-semibold text-foreground">{name}</div>
+          <div className="text-sm text-muted-foreground">
+            {role}, {org}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export function TestimonialSection() {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [visibleCards, setVisibleCards] = useState(3);
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const handleResize = () => {
-      const width = window.innerWidth;
-      if (width < 640) {
-        setVisibleCards(1);
-      } else if (width < 1024) {
-        setVisibleCards(2);
-      } else {
-        setVisibleCards(3);
-      }
-    };
-
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  const maxIndex = Math.max(0, TESTIMONIALS.length - visibleCards);
-
-  const handleNext = useCallback(() => {
-    setCurrentIndex((prev) => Math.min(prev + 1, maxIndex));
-  }, [maxIndex]);
-
-  const handlePrev = useCallback(() => {
-    setCurrentIndex((prev) => Math.max(prev - 1, 0));
-  }, []);
+  const carousel = useCarousel(TESTIMONIALS.length);
+  const handlePrev = () => carousel.prev();
+  const handleNext = () => carousel.next();
 
   return (
     <Section className="overflow-hidden">
       <SectionHeader>Verifiable credentials adoption worldwide</SectionHeader>
 
       <div className="relative w-full">
-        <div className="overflow-hidden py-4" ref={containerRef}>
-          <div
-            className="flex transition-transform duration-500 ease-in-out"
-            style={{
-              transform: `translateX(-${currentIndex * (100 / visibleCards)}%)`,
-            }}
-          >
-            {TESTIMONIALS.map((testimonial) => (
-              <div
-                key={testimonial.name}
-                className="w-full shrink-0 px-3 sm:w-1/2 lg:w-1/3"
-              >
-                <div className="flex h-full flex-col justify-between rounded-3xl border border-neutral-200/70 bg-neutral-100 p-8 shadow-sm dark:border-neutral-800 dark:bg-neutral-900">
-                  <blockquote className="text-lg leading-relaxed text-foreground">
-                    &ldquo;{testimonial.quote}&rdquo;
-                  </blockquote>
-
-                  <div className="mt-8 flex items-center gap-4">
-                    <div className="relative flex size-12 shrink-0 overflow-hidden rounded-full border border-border bg-primary/10">
-                      <Image
-                        src={testimonial.avatar}
-                        alt={testimonial.name}
-                        width={48}
-                        height={48}
-                        className="aspect-square h-full w-full object-cover"
-                      />
-                    </div>
-                    <div>
-                      <div className="font-semibold text-foreground">
-                        {testimonial.name}
-                      </div>
-                      <div className="text-sm text-muted-foreground">
-                        {testimonial.role}, {testimonial.org}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+        <CarouselViewport carousel={carousel} className="py-4">
+          {TESTIMONIALS.map((testimonial) => (
+            <div
+              key={testimonial.name}
+              className="w-full shrink-0 px-3 sm:w-1/2 lg:w-1/3"
+            >
+              <TestimonialCard {...testimonial} />
+            </div>
+          ))}
+        </CarouselViewport>
 
         <div className="mx-auto mt-8 flex w-full max-w-7xl justify-end px-4 md:px-8">
           <div className="flex gap-3">
             <Button
               variant="secondary"
               onClick={handlePrev}
-              disabled={currentIndex === 0}
+              disabled={!carousel.canPrev}
               aria-label="Previous testimonials"
             >
               <ChevronLeft className="size-6" />
@@ -142,7 +126,7 @@ export function TestimonialSection() {
             <Button
               variant="secondary"
               onClick={handleNext}
-              disabled={currentIndex === maxIndex}
+              disabled={!carousel.canNext}
               aria-label="Next testimonials"
             >
               <ChevronRight className="size-6" />

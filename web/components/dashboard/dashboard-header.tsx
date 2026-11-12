@@ -36,7 +36,7 @@ export function DashboardHeader({
   const { title, subtitle } = getPageInfo(pathname, organization.slug);
 
   return (
-    <header className="flex h-44 w-full items-center justify-between px-6 md:px-12 lg:px-20">
+    <header className="flex h-40 w-full items-center justify-between px-6 md:px-12 lg:px-20">
       <div className="flex items-center gap-4">
         <HamburgerMenu open={sidebarOpen} onToggle={onToggleSidebar} />
         <div className="relative flex flex-col overflow-hidden">

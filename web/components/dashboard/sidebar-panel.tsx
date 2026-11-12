@@ -50,7 +50,9 @@ const isActivePath = (
 
   const siblings = items
     .map((i) => i.path)
-    .filter((p) => p !== itemPath && stripped.startsWith(`${p}/`));
+    .filter(
+      (p) => p !== itemPath && (stripped === p || stripped.startsWith(`${p}/`))
+    );
 
   if (siblings.some((p) => p.length >= itemPath.length)) {
     return false;

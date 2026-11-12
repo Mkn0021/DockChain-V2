@@ -20,14 +20,21 @@ export const apiFetch = async <T>(
   path: string,
   init: ApiInit = {}
 ): Promise<T> => {
+  const isFormData = init.body instanceof FormData;
   const headers = new Headers(init.headers);
-  if (init.body !== undefined) {
+
+  if (init.body !== undefined && !isFormData) {
     headers.set("content-type", "application/json");
   }
 
+  const requestBody =
+    init.body === undefined || isFormData
+      ? (init.body as BodyInit | undefined)
+      : JSON.stringify(init.body);
+
   const response = await fetch(`/backend${path}`, {
     ...init,
-    body: init.body === undefined ? undefined : JSON.stringify(init.body),
+    body: requestBody,
     credentials: "include",
     headers,
   });
