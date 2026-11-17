@@ -3,12 +3,12 @@
 import { cn } from "cn";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useState } from "react";
-import { MdNavigateNext } from "react-icons/md";
 
 import { useStepper } from "@/components/documents/stepper";
 import { toast } from "@/components/providers/toast-provider";
 import { Button } from "@/components/ui/button";
 import { CarouselViewport, useCarousel } from "@/components/ui/carousel";
+import { Pagination } from "@/components/ui/pagination";
 import {
   selectLatestPublishedVersion,
   useTemplateDetail,
@@ -28,56 +28,6 @@ interface SelectionStepProps {
     fieldSchema: unknown,
     name: string
   ) => void;
-}
-
-function Pagination({
-  currentPage,
-  totalPages,
-  onPageChange,
-}: {
-  currentPage: number;
-  totalPages: number;
-  onPageChange: (page: number) => void;
-}) {
-  const start = Math.max(1, currentPage - 1);
-  const end = Math.min(totalPages, currentPage + 1);
-  const pages = Array.from({ length: end - start + 1 }, (_, i) => start + i);
-
-  return (
-    <div className="flex items-center gap-1">
-      <button
-        type="button"
-        onClick={() => onPageChange(Math.max(1, currentPage - 1))}
-        disabled={currentPage === 1}
-        className="rounded-sm p-2 text-muted-foreground hover:bg-muted disabled:cursor-not-allowed disabled:opacity-50"
-      >
-        <MdNavigateNext size={36} className="rotate-180" />
-      </button>
-      {pages.map((page) => (
-        <button
-          type="button"
-          key={page}
-          onClick={() => onPageChange(page)}
-          className={cn(
-            "rounded-sm px-3 py-1 text-sm",
-            page === currentPage
-              ? "bg-primary text-primary-foreground"
-              : "text-muted-foreground hover:bg-muted"
-          )}
-        >
-          {page}
-        </button>
-      ))}
-      <button
-        type="button"
-        onClick={() => onPageChange(Math.min(totalPages, currentPage + 1))}
-        disabled={currentPage === totalPages}
-        className="rounded-sm p-2 text-muted-foreground hover:bg-muted disabled:cursor-not-allowed disabled:opacity-50"
-      >
-        <MdNavigateNext size={36} />
-      </button>
-    </div>
-  );
 }
 
 interface TemplateCardProps {
