@@ -4,11 +4,13 @@ import { cn } from "cn";
 import { MdNavigateNext } from "react-icons/md";
 
 export function Pagination({
+  className,
   currentPage,
   totalPages,
   onPageChange,
   disabled = false,
 }: {
+  className?: string;
   currentPage: number;
   totalPages: number;
   onPageChange: (page: number) => void;
@@ -19,7 +21,7 @@ export function Pagination({
   const pages = Array.from({ length: end - start + 1 }, (_, i) => start + i);
 
   return (
-    <div className="flex items-center gap-1">
+    <div className={cn("flex items-center gap-1", className)}>
       <button
         type="button"
         onClick={() => onPageChange(Math.max(1, currentPage - 1))}

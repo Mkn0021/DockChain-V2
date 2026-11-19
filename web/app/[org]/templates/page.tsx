@@ -4,26 +4,21 @@ import { cn } from "cn";
 import { PlusIcon } from "lucide-react";
 import Link from "next/link";
 
+import { DataTablePage } from "@/components/dashboard/data-table";
 import { useOrg } from "@/components/dashboard/org-provider";
-import { AccessDenied } from "@/components/settings/access-denied";
 import { TemplatesTable } from "@/components/templates/templates-table";
 import { buttonVariants } from "@/components/ui/button";
 import { can } from "@/lib/auth/permissions";
 
 export default function TemplatesPage() {
   const { organization, role } = useOrg();
-
-  const canRead = can(role, "template", "read");
   const canCreate = can(role, "template", "create");
 
-  if (!canRead) {
-    return <AccessDenied />;
-  }
-
   return (
-    <div className="space-y-4">
-      {canCreate ? (
-        <div className="flex justify-end">
+    <DataTablePage
+      canRead={can(role, "template", "read")}
+      headerAction={
+        canCreate ? (
           <Link
             className={cn(
               buttonVariants(),
@@ -34,12 +29,13 @@ export default function TemplatesPage() {
             <PlusIcon className="size-5" />
             New template
           </Link>
-        </div>
-      ) : null}
+        ) : null
+      }
+    >
       <TemplatesTable
         organizationId={organization.id}
         organizationSlug={organization.slug}
       />
-    </div>
+    </DataTablePage>
   );
 }

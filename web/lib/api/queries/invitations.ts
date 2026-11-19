@@ -10,7 +10,7 @@ import type { RequestBodyOf, ResponseOf } from "@/lib/api/response-of";
 
 type InvitationsPath = "/organizations/{organizationId}/invitations";
 type InvitationsList = ResponseOf<InvitationsPath, "get">;
-type InvitationRow = InvitationsList[number];
+export type InvitationRow = InvitationsList[number];
 type InvitationBody = RequestBodyOf<InvitationsPath, "post">;
 
 export const invitationsKeys = {

@@ -1,29 +1,12 @@
 "use client";
 
-import {
-  columnFilteringFeature,
-  createFilteredRowModel,
-  createSortedRowModel,
-  filterFn_includesString,
-  flexRender,
-  globalFilteringFeature,
-  rowSortingFeature,
-  sortFn_alphanumeric,
-  tableFeatures,
-  useTable,
-  type ColumnDef,
-} from "@tanstack/react-table";
-import { cn } from "cn";
-import {
-  ArrowDown,
-  ArrowUp,
-  ArrowUpDown,
-  MoreHorizontal,
-  Search,
-  Trash2,
-} from "lucide-react";
-import { useState, type ReactNode } from "react";
+import { MoreHorizontal, Trash2 } from "lucide-react";
+import { useState } from "react";
 
+import {
+  DataTable,
+  DataTableColumnHeader,
+} from "@/components/dashboard/data-table";
 import { useOrg } from "@/components/dashboard/org-provider";
 import { toast } from "@/components/providers/toast-provider";
 import { PageError } from "@/components/settings/page-states";
@@ -34,16 +17,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
 import { MenuItem } from "@/components/ui/menu-item";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { StatusBadge, type BadgeTone } from "@/components/ui/status-badge";
 import {
   type MemberRole,
   useMembers,
@@ -55,24 +30,12 @@ import { can } from "@/lib/auth/permissions";
 const ASSIGNABLE_ROLES: MemberRole[] = ["admin", "issuer", "viewer"];
 export const MAX_MEMBERS = 100;
 
-const SORT_ICONS = {
-  asc: ArrowUp,
-  desc: ArrowDown,
-} as const;
-
-const features = tableFeatures({
-  columnFilteringFeature,
-  globalFilteringFeature,
-  rowSortingFeature,
-  filteredRowModel: createFilteredRowModel(),
-  sortedRowModel: createSortedRowModel(),
-  filterFns: { includesString: filterFn_includesString },
-  sortFns: { alphanumeric: sortFn_alphanumeric },
-});
-
-interface MembersTableProps {
-  organizationId: string;
-}
+const ROLE_TONE: Record<string, BadgeTone> = {
+  owner: "info",
+  admin: "warning",
+  issuer: "success",
+  viewer: "default",
+};
 
 interface MemberRow {
   id: string;
@@ -84,57 +47,6 @@ interface MemberRow {
     email: string;
     image?: string | null;
   };
-}
-
-function DataTableColumnHeader({
-  column,
-  title,
-}: {
-  column: {
-    getIsSorted: () => false | "asc" | "desc";
-    getCanSort: () => boolean;
-    getToggleSortingHandler: () => ((event: unknown) => void) | undefined;
-  };
-  title: string;
-}) {
-  const sorted = column.getIsSorted();
-  const Icon = sorted ? SORT_ICONS[sorted] : ArrowUpDown;
-
-  if (!column.getCanSort()) {
-    return <span className="text-sm font-medium">{title}</span>;
-  }
-
-  return (
-    <button
-      type="button"
-      onClick={column.getToggleSortingHandler()}
-      className="-ml-2 inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-sm font-medium hover:bg-muted"
-    >
-      {title}
-      <Icon className="size-3.5 text-muted-foreground" />
-    </button>
-  );
-}
-
-function RoleBadge({ role }: { role: string }) {
-  const styles: Record<string, string> = {
-    owner: "border-primary/30 bg-primary/10 text-primary",
-    admin: "border-blue-500/30 bg-blue-500/10 text-blue-600 dark:text-blue-400",
-    issuer:
-      "border-amber-500/30 bg-amber-500/10 text-amber-600 dark:text-amber-400",
-    viewer: "border-border bg-muted text-foreground/80",
-  };
-
-  return (
-    <span
-      className={cn(
-        "inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium capitalize",
-        styles[role] ?? styles.viewer
-      )}
-    >
-      {role}
-    </span>
-  );
 }
 
 function MemberActionsMenu({
@@ -206,13 +118,16 @@ function MemberActionsMenu({
   );
 }
 
-export function MembersTable({ organizationId }: MembersTableProps) {
+export function MembersTable({ organizationId }: { organizationId: string }) {
   const { user, role } = useOrg();
-  const query = useMembers(organizationId, MAX_MEMBERS, 0);
+  const [search, setSearch] = useState("");
+  const [pageSize, setPageSize] = useState(10);
+  const [page, setPage] = useState(1);
+
+  const offset = (page - 1) * pageSize;
+  const query = useMembers(organizationId, pageSize, offset);
   const updateRole = useUpdateMemberRole(organizationId);
   const removeMutation = useRemoveMember(organizationId);
-
-  const [roleFilter] = useState<string>("all");
 
   const canUpdate = can(role, "member", "update");
   const canRemove = can(role, "member", "delete");
@@ -241,18 +156,21 @@ export function MembersTable({ organizationId }: MembersTableProps) {
   }
 
   const rows = (query.data?.members ?? []) as MemberRow[];
-  const total = query.data?.total ?? rows.length;
-  const filteredRows =
-    roleFilter === "all" ? rows : rows.filter((r) => r.role === roleFilter);
+  const total = query.data?.total ?? 0;
+  const totalPages = Math.max(1, Math.ceil(total / pageSize));
+  const firstRow = total === 0 ? 0 : offset + 1;
+  const lastRow = Math.min(offset + rows.length, total);
 
-  const columns: ColumnDef<typeof features, MemberRow>[] = [
+  const columns = [
     {
       id: "name",
-      accessorFn: (row) => row.user.name,
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Member" />
-      ),
-      cell: ({ row }) => (
+      accessorFn: (row: MemberRow) => row.user.name,
+      header: ({
+        column,
+      }: {
+        column: Parameters<typeof DataTableColumnHeader>[0]["column"];
+      }) => <DataTableColumnHeader column={column} title="Member" />,
+      cell: ({ row }: { row: { original: MemberRow } }) => (
         <div className="flex flex-col">
           <span className="text-sm font-medium">{row.original.user.name}</span>
           <span className="text-xs text-muted-foreground md:hidden">
@@ -263,13 +181,17 @@ export function MembersTable({ organizationId }: MembersTableProps) {
     },
     {
       id: "email",
-      accessorFn: (row) => row.user.email,
-      header: ({ column }) => (
+      accessorFn: (row: MemberRow) => row.user.email,
+      header: ({
+        column,
+      }: {
+        column: Parameters<typeof DataTableColumnHeader>[0]["column"];
+      }) => (
         <div className="hidden md:block">
           <DataTableColumnHeader column={column} title="Email" />
         </div>
       ),
-      cell: ({ row }) => (
+      cell: ({ row }: { row: { original: MemberRow } }) => (
         <span className="hidden text-sm text-foreground/60 md:block">
           {row.original.user.email}
         </span>
@@ -277,22 +199,28 @@ export function MembersTable({ organizationId }: MembersTableProps) {
     },
     {
       id: "role",
-      accessorFn: (row) => row.role,
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Role" />
+      accessorFn: (row: MemberRow) => row.role,
+      header: ({
+        column,
+      }: {
+        column: Parameters<typeof DataTableColumnHeader>[0]["column"];
+      }) => <DataTableColumnHeader column={column} title="Role" />,
+      cell: ({ row }: { row: { original: MemberRow } }) => (
+        <StatusBadge
+          label={row.original.role}
+          tone={ROLE_TONE[row.original.role] ?? "default"}
+        />
       ),
-      cell: ({ row }) => <RoleBadge role={row.original.role} />,
     },
     {
       id: "actions",
       header: "",
-      cell: ({ row }) => {
+      cell: ({ row }: { row: { original: MemberRow } }) => {
         const isSelf = row.original.userId === user.id;
         const isOwner = row.original.role === "owner";
         if (isSelf || isOwner) {
           return null;
         }
-
         return (
           <MemberActionsMenu
             member={row.original}
@@ -308,13 +236,6 @@ export function MembersTable({ organizationId }: MembersTableProps) {
     },
   ];
 
-  const table = useTable({
-    features,
-    data: filteredRows,
-    columns,
-    globalFilterFn: "includesString",
-  });
-
   if (query.isError) {
     return (
       <PageError
@@ -324,90 +245,37 @@ export function MembersTable({ organizationId }: MembersTableProps) {
     );
   }
 
-  let bodyContent: ReactNode;
-
-  if (query.isPending) {
-    bodyContent = (
-      <TableRow>
-        <TableCell
-          colSpan={columns.length}
-          className="h-24 px-6 text-center text-sm text-muted-foreground"
-        >
-          Loading…
-        </TableCell>
-      </TableRow>
-    );
-  } else if (table.getRowModel().rows.length === 0) {
-    bodyContent = (
-      <TableRow>
-        <TableCell
-          colSpan={columns.length}
-          className="h-24 px-6 text-center text-sm text-muted-foreground"
-        >
-          No members match.
-        </TableCell>
-      </TableRow>
-    );
-  } else {
-    bodyContent = table.getRowModel().rows.map((row) => (
-      <TableRow key={row.id}>
-        {row.getAllCells().map((cell) => (
-          <TableCell
-            key={cell.id}
-            className={cn(
-              "px-6 py-4",
-              cell.column.id === "email" && "hidden md:table-cell"
-            )}
-          >
-            {flexRender(cell.column.columnDef.cell, cell.getContext())}
-          </TableCell>
-        ))}
-      </TableRow>
-    ));
-  }
-
   return (
-    <div className="space-y-4">
-      <div className="flex items-center justify-between gap-3">
-        <div className="relative max-w-sm flex-1">
-          <Search className="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
-          <Input
-            placeholder="Search by name or email…"
-            value={(table.state.globalFilter as string) ?? ""}
-            onChange={(e) => table.setGlobalFilter(e.target.value)}
-            className="pl-9"
-          />
-        </div>
-        <span className="text-xs text-foreground/80">
-          {total} / {MAX_MEMBERS} members
-        </span>
-      </div>
-
-      <div className="overflow-hidden rounded-3xl border">
-        <Table>
-          <TableHeader>
-            {table.getHeaderGroups().map((hg) => (
-              <TableRow key={hg.id} className="hover:bg-transparent">
-                {hg.headers.map((header) => (
-                  <TableHead
-                    key={header.id}
-                    className={cn(
-                      "h-12 px-6",
-                      header.column.id === "email" && "hidden md:table-cell"
-                    )}
-                  >
-                    {flexRender(
-                      header.column.columnDef.header,
-                      header.getContext()
-                    )}
-                  </TableHead>
-                ))}
-              </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody>{bodyContent}</TableBody>
-        </Table>
-      </div>
-    </div>
+    <DataTable
+      data={rows}
+      columns={columns as never}
+      isPending={query.isPending}
+      emptyMessage="No members match."
+      skeletonRows={Math.min(pageSize, 10)}
+      skeletonWidths={["w-24", "w-32", "w-16", "w-8"]}
+      searchValue={search}
+      onSearchChange={(value) => {
+        setSearch(value);
+        setPage(1);
+      }}
+      searchPlaceholder="Search by name or email…"
+      unit="members"
+      pagination={{
+        first: firstRow,
+        last: lastRow,
+        total,
+        pageSize,
+        onPageSizeChange: (size) => {
+          setPageSize(size);
+          setPage(1);
+        },
+        currentPage: page,
+        totalPages,
+        onPageChange: setPage,
+        disabled: query.isPending,
+      }}
+      dimWhenRefetching
+      isRefetching={query.isFetching && !query.isPending}
+    />
   );
 }

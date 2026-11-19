@@ -1,5 +1,6 @@
 "use client";
 
+import { DataTablePage } from "@/components/dashboard/data-table";
 import { useOrg } from "@/components/dashboard/org-provider";
 import { InviteMemberDialog } from "@/components/settings/invite-member-dialog";
 import { MembersTable } from "@/components/settings/members-table";
@@ -13,17 +14,18 @@ export default function SettingsMembersPage() {
   const total = membersQuery.data?.total ?? 0;
 
   return (
-    <div className="space-y-4">
-      {canInvite ? (
-        <div className="flex justify-end">
+    <DataTablePage
+      canRead={can(role, "settings", "read")}
+      headerAction={
+        canInvite ? (
           <InviteMemberDialog
             organizationId={organization.id}
             currentMemberCount={total}
           />
-        </div>
-      ) : null}
-
+        ) : null
+      }
+    >
       <MembersTable organizationId={organization.id} />
-    </div>
+    </DataTablePage>
   );
 }
